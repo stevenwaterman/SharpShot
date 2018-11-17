@@ -34,6 +34,7 @@ public class Grid extends Application {
     public Grid() {
         container = new Container(10, 5);
         container.getBullets().put(new Coordinate(1, 3), new Bullet(Direction.DOWN, BigInteger.ONE));
+        container.getBullets().put(new Coordinate(1, 4), new Bullet(Direction.DOWN, BigInteger.ONE));
         container.getNodes().put(new Coordinate(1, 2), new NodeAdd());
     }
 
