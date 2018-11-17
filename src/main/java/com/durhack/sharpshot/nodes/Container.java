@@ -5,6 +5,7 @@ import com.durhack.sharpshot.INode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Container implements INode {
@@ -12,8 +13,9 @@ public class Container implements INode {
     private List<Bullet> bullets;
 
 
+    @NotNull
     @Override
-    public @Nullable Bullet run(@NotNull Bullet bullet) {
-        return null;
+    public List<Bullet> run(@NotNull Bullet bullet) {
+        return new ArrayList<>();
     }
 }
