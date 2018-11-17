@@ -1,39 +1,46 @@
 package com.durhack.sharpshot.nodes;
 
 import com.durhack.sharpshot.Bullet;
+import com.durhack.sharpshot.Coordinate;
 import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 //TODO how do we deal with the container returning multiple outputs over multiple ticks?
 
 public class Container implements INode {
-    private Direction dir = Direction.UP;
+    private int width;
+    private int height;
+
+    private Direction rotation = Direction.UP;
 
     @NotNull
-    private INode[][] nodes;
+    private Map<Coordinate, INode> nodes = new HashMap<>();
 
     @NotNull
-    private List<Bullet> bullets = new ArrayList<>();
+    private Map<Coordinate, Bullet> bullets = new HashMap<>();
 
-    public Container(@NotNull INode[][] nodes) {
-        this.nodes = nodes;
+    public Container(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     @Override
     public @NotNull Direction getRotation() {
-        return dir;
+        return rotation;
     }
 
     @Override
     public void rotateClockwise() {
-        dir = Direction.clockwiseOf(dir);
+        rotation = Direction.clockwiseOf(rotation);
     }
 
     @NotNull
@@ -43,12 +50,25 @@ public class Container implements INode {
     }
 
     @NotNull
-    public INode[][] getNodes() {
+    public Map<Coordinate, INode> getNodes() {
         return nodes;
     }
 
     @NotNull
-    public List<Bullet> getBullets() {
+    public Map<Coordinate, Bullet> getBullets() {
         return bullets;
+    }
+
+    public void tick() {
+        for (Map.Entry<Coordinate, Bullet> enrty: bullets.entrySet()) {
+            Bullet bullet = enrty.getValue();
+            Coordinate coordinate = enrty.getKey();
+            //bullet.tick();
+            //TODO check for bullets colliding / hitting nodes
+        }
+    }
+
+    public int getWidth() {
+        return width;
     }
 }

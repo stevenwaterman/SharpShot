@@ -2,6 +2,9 @@ package com.durhack.sharpshot;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum Direction {
     UP(0,-1),
     RIGHT(1,0),
@@ -34,5 +37,20 @@ public enum Direction {
         }
 
         throw new RuntimeException("Cannot find clockwise of " + d.toString());
+    }
+
+    public static Direction inverseOf(@NotNull Direction d) {
+        return Direction.clockwiseOf(Direction.clockwiseOf(d));
+    }
+
+    @NotNull
+    public static List<Direction> others(@NotNull Direction d) {
+        List<Direction> dirs = new ArrayList<>();
+        for(int i = 0; i < 3; i++) {
+            d = Direction.clockwiseOf(d);
+            dirs.add(d);
+        }
+
+        return dirs;
     }
 }
