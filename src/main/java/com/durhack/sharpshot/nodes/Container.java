@@ -7,11 +7,11 @@ import com.durhack.sharpshot.INode;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 import java.util.*;
-import java.util.stream.Collectors;
 
 //TODO how do we deal with the container returning multiple outputs over multiple ticks?
 
@@ -90,7 +90,7 @@ public class Container implements INode {
      * all bullets -> check
      */
     public void tick() {
-        List<Movement> movements = new ArrayList<>();
+        List<Pair<Movement, Bullet>> movements = new ArrayList<>();
 
         //Bullets on nodes
         Map<Coordinate, Bullet> capturedBullets = new HashMap<>(bullets);
@@ -105,7 +105,7 @@ public class Container implements INode {
             Bullet bullet = entry.getValue();
             Coordinate coord = entry.getKey();
             Coordinate newCoord = entry.getKey().plus(bullet.getDirection()).wrap(width, height);
-            movements.add(new Movement(coord, newCoord));
+            movements.add(new Pair<>(new Movement(coord, newCoord), bullet));
         }
 
         //Update captured bullets
@@ -134,17 +134,17 @@ public class Container implements INode {
                 }
 
                 Bullet newBullet = new Bullet(bulletDirection, newBulletEntry.getValue());
-                bullets.put(coordinate, newBullet);
-
-                Coordinate newCoordinate = coordinate.plus(newBullet.getDirection());
-                movements.add(new Movement(coordinate, newCoordinate));
+                Coordinate newCoordinate = coordinate.plus(newBullet.getDirection()).wrap(width, height);
+                Movement movement = new Movement(coordinate, newCoordinate);
+                movements.add(new Pair<>(movement, newBullet));
             }
         }
 
         //Remove swapping bullets
         List<Movement> read = new ArrayList<>();
         Set<Coordinate> toDelete = new HashSet<>();
-        for (Movement movement : movements) {
+        for (Pair<Movement, Bullet> pair : movements) {
+            Movement movement = pair.getKey();
             Coordinate from = movement.getFrom();
             Coordinate to = movement.getTo();
             boolean foundSwaps = read.stream().anyMatch(other -> from.equals(other.getTo()) && to.equals(other.getFrom()));
@@ -154,13 +154,13 @@ public class Container implements INode {
             }
             read.add(movement);
         }
-        movements.removeIf(movement -> toDelete.contains(movement.getFrom()) || toDelete.contains(movement.getTo()));
+        movements.removeIf(pair -> toDelete.contains(pair.getKey().getFrom()) || toDelete.contains(pair.getKey().getTo()));
 
         //Remove bullets that end in the same place
         read.clear();
         toDelete.clear();
-        for (Movement movement : movements) {
-            Coordinate from = movement.getFrom();
+        for (Pair<Movement, Bullet> pair: movements) {
+            Movement movement = pair.getKey();
             Coordinate to = movement.getTo();
             boolean foundSameFinal = read.stream().anyMatch(other -> to.equals(other.getTo()));
             if(foundSameFinal){
@@ -168,12 +168,14 @@ public class Container implements INode {
             }
             read.add(movement);
         }
-        movements.removeIf(movement -> toDelete.contains(movement.getTo()));
+        movements.removeIf(pair -> toDelete.contains(pair.getKey().getTo()));
 
         //Move bullets
         Map<Coordinate, Bullet> newBullets = new HashMap<>();
-        for (Movement movement : movements) {
-            newBullets.put(movement.getTo(), bullets.get(movement.getFrom()));
+        for (Pair<Movement, Bullet> pair: movements) {
+            Movement movement = pair.getKey();
+            Bullet bullet = pair.getValue();
+            newBullets.put(movement.getTo(), bullet);
         }
         bullets.clear();
         bullets.putAll(newBullets);
@@ -193,21 +195,5 @@ public class Container implements INode {
         bullets.clear();
         for (INode n : getNodes().values())
             n.reset();
-    }
-
-    private static <T> Set<T> collisions(List<T> collection) {
-        Set<T> found = new HashSet<>();
-        Set<T> banned = new HashSet<>();
-
-        for (T elem : collection) {
-            if (found.contains(elem)) {
-                found.remove(elem);
-                banned.add(elem);
-            } else if (!banned.contains(elem)) {
-                found.add(elem);
-            }
-        }
-
-        return banned;
     }
 }

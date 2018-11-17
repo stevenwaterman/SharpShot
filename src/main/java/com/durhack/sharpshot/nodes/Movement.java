@@ -15,7 +15,6 @@ public class Movement {
     }
 
     public Movement(Coordinate from, Coordinate to) {
-
         this.from = from;
         this.to = to;
     }
