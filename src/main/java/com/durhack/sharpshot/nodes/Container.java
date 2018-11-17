@@ -65,10 +65,10 @@ public class Container implements INode {
     public void start(List<BigInteger> input) {
         // In nodes add input
         Map<Coordinate, Bullet> newBullets = new HashMap<>();
-        for(int i = 0; i < input.size(); i++) {
-            for(Coordinate coordinate : getNodes().keySet()) {
+        for (int i = 0; i < input.size(); i++) {
+            for (Coordinate coordinate : getNodes().keySet()) {
                 INode x = getNodes().get(coordinate);
-                if(x instanceof NodeIn && ((NodeIn) x).getIndex() == i) {
+                if (x instanceof NodeIn && ((NodeIn) x).getIndex() == i) {
                     Map<Direction, BigInteger> bulletParams = ((NodeIn) x).into(input.get(i));
 
                     for (Map.Entry<Direction, BigInteger> newBulletEntry : bulletParams.entrySet()) {
@@ -116,7 +116,7 @@ public class Container implements INode {
             //TODO this brings great shame onto my family
             Direction bulletDirection = entry.getValue().getDirection();
             Direction dir = Direction.UP;
-            while(dir != node.getRotation()){
+            while (dir != node.getRotation()) {
                 dir = dir.clockwise();
                 bulletDirection = bulletDirection.antiClockwise();
             }
@@ -128,7 +128,7 @@ public class Container implements INode {
                 //TODO this too
                 bulletDirection = newBulletEntry.getKey();
                 dir = Direction.UP;
-                while(dir != node.getRotation()) {
+                while (dir != node.getRotation()) {
                     dir = dir.clockwise();
                     bulletDirection = bulletDirection.clockwise();
                 }
@@ -142,21 +142,33 @@ public class Container implements INode {
         }
 
         //Remove swapping bullets
-        List<SwapCollisionTest> swapCollisions = movements.stream().map(Movement::swapCollisionTest).collect(Collectors.toList());
-        Set<SwapCollisionTest> toDeleteSwap = collisions(swapCollisions);
-        for (SwapCollisionTest test: toDeleteSwap) {
-            bullets.remove(test.getFrom());
-            bullets.remove(test.getTo());
+        List<Movement> read = new ArrayList<>();
+        Set<Coordinate> toDelete = new HashSet<>();
+        for (Movement movement : movements) {
+            Coordinate from = movement.getFrom();
+            Coordinate to = movement.getTo();
+            boolean foundSwaps = read.stream().anyMatch(other -> from.equals(other.getTo()) && to.equals(other.getFrom()));
+            if(foundSwaps){
+                toDelete.add(from);
+                toDelete.add(to);
+            }
+            read.add(movement);
         }
-        movements.removeAll(toDeleteSwap.stream().map(SwapCollisionTest::toMovement).collect(Collectors.toList()));
+        movements.removeIf(movement -> toDelete.contains(movement.getFrom()) || toDelete.contains(movement.getTo()));
 
-        //Remove bullets that will end in the same placecom.durhack.sharpshot.nodes
-        List<FinalCollisionTest> finalCollisions = movements.stream().map(Movement::finalCollisionTest).collect(Collectors.toList());
-        Set<FinalCollisionTest> toDeleteFinal = collisions(finalCollisions);
-        for (FinalCollisionTest movement : toDeleteFinal) {
-            bullets.remove(movement.getTo());
+        //Remove bullets that end in the same place
+        read.clear();
+        toDelete.clear();
+        for (Movement movement : movements) {
+            Coordinate from = movement.getFrom();
+            Coordinate to = movement.getTo();
+            boolean foundSameFinal = read.stream().anyMatch(other -> to.equals(other.getTo()));
+            if(foundSameFinal){
+                toDelete.add(to);
+            }
+            read.add(movement);
         }
-        movements.removeAll(toDeleteFinal.stream().map(FinalCollisionTest::toMovement).collect(Collectors.toList()));
+        movements.removeIf(movement -> toDelete.contains(movement.getTo()));
 
         //Move bullets
         Map<Coordinate, Bullet> newBullets = new HashMap<>();
@@ -179,122 +191,23 @@ public class Container implements INode {
 
     public void reset() {
         bullets.clear();
-        for(INode n : getNodes().values())
+        for (INode n : getNodes().values())
             n.reset();
     }
 
-    private static <T> Set<T> collisions(List<T> collection){
+    private static <T> Set<T> collisions(List<T> collection) {
         Set<T> found = new HashSet<>();
         Set<T> banned = new HashSet<>();
 
         for (T elem : collection) {
-            if(!banned.contains(elem)){
-                if(found.contains(elem)){
-                    found.remove(elem);
-                    banned.add(elem);
-                }
-                else{
-                    found.add(elem);
-                }
+            if (found.contains(elem)) {
+                found.remove(elem);
+                banned.add(elem);
+            } else if (!banned.contains(elem)) {
+                found.add(elem);
             }
         }
 
         return banned;
-    }
-
-    public static class FinalCollisionTest {
-        private Coordinate from;
-        private Coordinate to;
-
-        FinalCollisionTest(Coordinate from, Coordinate to) {
-            this.from = from;
-            this.to = to;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            FinalCollisionTest collision = (FinalCollisionTest) o;
-            return to.equals(collision.to);
-        }
-
-        @Override
-        public int hashCode() {
-            return to.hashCode();
-        }
-
-        public Coordinate getFrom() {
-            return from;
-        }
-
-        Coordinate getTo() {
-            return to;
-        }
-
-        Movement toMovement() {
-            return new Movement(from, to);
-        }
-    }
-
-    public static class Movement {
-        private Coordinate from;
-        private Coordinate to;
-
-        Movement(Coordinate from, Coordinate to) {
-            this.from = from;
-            this.to = to;
-        }
-
-        SwapCollisionTest swapCollisionTest(){
-            return new SwapCollisionTest(from, to);
-        }
-
-        FinalCollisionTest finalCollisionTest(){
-            return new FinalCollisionTest(from, to);
-        }
-
-        Coordinate getFrom() {
-            return from;
-        }
-
-        Coordinate getTo() {
-            return to;
-        }
-    }
-
-    public static class SwapCollisionTest {
-        private Coordinate from;
-        private Coordinate to;
-
-        SwapCollisionTest(Coordinate from, Coordinate to) {
-            this.from = from;
-            this.to = to;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            SwapCollisionTest collision = (SwapCollisionTest) o;
-            return(from.equals(collision.to) && to.equals(collision.from));
-        }
-
-        @Override
-        public int hashCode() {
-            return from.hashCode() + to.hashCode();
-        }
-
-        Coordinate getFrom() {
-            return from;
-        }
-
-        Coordinate getTo() {
-            return to;
-        }
-
-        Movement toMovement() {
-            return new Movement(from, to);
-        }
     }
 }
