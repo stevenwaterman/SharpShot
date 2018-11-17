@@ -61,13 +61,34 @@ public class Container implements INode {
         return bullets;
     }
 
+    public void start(List<BigInteger> input) {
+        // In nodes add input
+        Map<Coordinate, Bullet> newBullets = new HashMap<>();
+        for(int i = 0; i < input.size(); i++) {
+            for(Coordinate coordinate : getNodes().keySet()) {
+                INode x = getNodes().get(coordinate);
+                if(x instanceof NodeIn && ((NodeIn) x).getIndex() == i) {
+                    Map<Direction, BigInteger> bulletParams = ((NodeIn) x).into(input.get(i));
+
+                    for (Map.Entry<Direction, BigInteger> newBulletEntry : bulletParams.entrySet()) {
+                        Bullet newBullet = new Bullet(x.getRotation(), newBulletEntry.getValue());
+                        Coordinate newCoordinate = coordinate.plus(newBullet.getDirection());
+                        newBullets.put(newCoordinate, newBullet);
+                    }
+                }
+            }
+        }
+
+        bullets.putAll(newBullets);
+    }
+
     /**
      * Bullets on top of node -> store
      * Other bullets -> tick
      * stored bullets -> process and output
      * all bullets -> check
      */
-    public void tick(List<BigInteger> pendingInput) {
+    public void tick() {
         //Bullets on nodes
         Map<Coordinate, Bullet> capturedBullets = new HashMap<>(bullets);
         capturedBullets.keySet().retainAll(nodes.keySet());
@@ -90,28 +111,6 @@ public class Container implements INode {
             else{
                 newBullets.put(coordinate, bullet);
             }
-        }
-
-        // In nodes add input
-        if(pendingInput.size() > 0) {
-            for(Coordinate coordinate : getNodes().keySet()) {
-                INode x = getNodes().get(coordinate);
-                if(x instanceof NodeIn) {
-                    Map<Direction, BigInteger> bulletParams = ((NodeIn) x).into(pendingInput.get(0));
-
-                    for (Map.Entry<Direction, BigInteger> newBulletEntry : bulletParams.entrySet()) {
-                        Bullet newBullet = new Bullet(x.getRotation(), newBulletEntry.getValue());
-                        Coordinate newCoordinate = coordinate.plus(newBullet.getDirection());
-
-                        if(newBullets.containsKey(newCoordinate)) {
-                            collisions.add(newCoordinate);
-                        } else {
-                            newBullets.put(newCoordinate, newBullet);
-                        }
-                    }
-                }
-            }
-            pendingInput.remove(0);
         }
 
         //Update captured bullets
