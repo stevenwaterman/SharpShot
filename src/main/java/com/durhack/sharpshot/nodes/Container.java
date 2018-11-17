@@ -8,6 +8,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO how do we deal with the container returning multiple outputs over multiple ticks?
+
 public class Container implements INode {
     @NotNull
     private INode[][] nodes;
