@@ -5,24 +5,22 @@ import com.durhack.sharpshot.Coordinate;
 import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
 import com.durhack.sharpshot.nodes.*;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
-import java.util.*;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Grid extends Application {
     private GridPane pane = new GridPane();
@@ -32,10 +30,25 @@ public class Grid extends Application {
         container = new Container(50, 30);
         container.getBullets().put(new Coordinate(1, 3), new Bullet(Direction.DOWN, BigInteger.ONE));
         container.getBullets().put(new Coordinate(1, 4), new Bullet(Direction.DOWN, BigInteger.ONE));
-        container.getNodes().put(new Coordinate(1, 2), new NodeAdd());
-        container.getNodes().put(new Coordinate(2, 2), new NodeSub());
-        container.getNodes().put(new Coordinate(3, 2), new NodeMult());
-        container.getNodes().put(new Coordinate(4, 2), new NodeDiv());
+        Map<Coordinate, INode> nodes = container.getNodes();
+        nodes.put(new Coordinate(1, 2), new NodeAdd());
+        nodes.put(new Coordinate(2, 2), new NodeBranch());
+        nodes.put(new Coordinate(3, 2), new NodeConstant(new BigInteger("11")));
+        NodeDiv div = new NodeDiv();
+        div.rotateClockwise();
+        nodes.put(new Coordinate(4, 2), div);
+        nodes.put(new Coordinate(5, 2), new NodeIf0());
+        nodes.put(new Coordinate(6, 2), new NodeIfPositive());
+        nodes.put(new Coordinate(7, 2), new NodeIn());
+        nodes.put(new Coordinate(8, 2), new NodeMult());
+        nodes.put(new Coordinate(9, 2), new NodeOut());
+        nodes.put(new Coordinate(10, 2), new NodeRotateAnticlockwise());
+        nodes.put(new Coordinate(11, 2), new NodeRotateClockwise());
+        nodes.put(new Coordinate(12, 2), new NodeSplitter());
+        nodes.put(new Coordinate(13, 2), new NodeSub());
+        nodes.put(new Coordinate(14, 2), new NodeVoid());
+
+
     }
 
     private void render() {

@@ -1,5 +1,6 @@
 package com.durhack.sharpshot.nodes;
 
+import com.durhack.sharpshot.gui.Triangle;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -18,8 +19,6 @@ public class NodeMult extends NodeArithmetic {
 
     @Override
     public @NotNull Node toGraphic() {
-        Rectangle rectangle = new Rectangle(32.0, 32.0, Color.LIGHTGREEN);
-        Label label = new Label("X");
-        return new StackPane(rectangle, label);
+        return new Triangle(getRotation(), Color.LIGHTBLUE, "x");
     }
 }

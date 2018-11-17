@@ -1,5 +1,6 @@
 package com.durhack.sharpshot.nodes;
 
+import com.durhack.sharpshot.gui.Triangle;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -13,6 +14,6 @@ public class NodeIfPositive extends NodeConditional {
 
     @Override
     public @NotNull Node toGraphic() {
-        return new Rectangle(32.0, 32.0, Color.GREEN);
+        return new Triangle(getRotation(), Color.GREEN, "+");
     }
 }

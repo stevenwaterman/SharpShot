@@ -6,18 +6,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum Direction {
-    UP(0,-1),
-    RIGHT(1,0),
-    DOWN(0,1),
-    LEFT(-1,0);
+    UP(0,-1, 0.0),
+    RIGHT(1,0, 90.0),
+    DOWN(0,1, 180.0),
+    LEFT(-1,0, 270.0);
 
-    Direction(int deltaX, int deltaY) {
+    Direction(int deltaX, int deltaY, double degrees) {
         this.deltaX = deltaX;
         this.deltaY = deltaY;
+        this.degrees = degrees;
     }
 
     private int deltaX;
     private int deltaY;
+    private double degrees;
 
     public int getDeltaX() {
         return deltaX;
@@ -60,5 +62,9 @@ public enum Direction {
 
     public Direction clockwise() {
         return Direction.clockwiseOf(this);
+    }
+
+    public double getDegrees() {
+        return degrees;
     }
 }
