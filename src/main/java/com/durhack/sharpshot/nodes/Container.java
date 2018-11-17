@@ -8,12 +8,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 //TODO how do we deal with the container returning multiple outputs over multiple ticks?
 
 public class Container implements INode {
+    private int width;
+    private int height;
+
     private Direction rotation = Direction.UP;
 
     @NotNull
@@ -22,7 +24,13 @@ public class Container implements INode {
     @NotNull
     private Map<Coordinate, Bullet> bullets = new HashMap<>();
 
-    public Container() {
+    public Container(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     @Override
@@ -58,5 +66,9 @@ public class Container implements INode {
             //bullet.tick();
             //TODO check for bullets colliding / hitting nodes
         }
+    }
+
+    public int getWidth() {
+        return width;
     }
 }
