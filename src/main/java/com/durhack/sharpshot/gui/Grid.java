@@ -7,13 +7,10 @@ import com.durhack.sharpshot.INode;
 import com.durhack.sharpshot.nodes.*;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceDialog;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -31,7 +28,9 @@ public class Grid extends Application {
     private GridPane pane = new GridPane();
     private Container container;
 
-    private List<BigInteger> pendingInput;
+    Timer timer = new Timer();
+
+    private List<BigInteger> pendingInput = new ArrayList<>();
 
     public Grid() {
         container = new Container(50, 30);
@@ -81,15 +80,30 @@ public class Grid extends Application {
         }
 
         for(Node n : pane.getChildren()) {
-            n.setOnMouseClicked(mouseEvent -> nodeClicked((int) n.getLayoutX() / 32, (int) n.getLayoutY() / 32));
+            n.setOnMouseClicked(mouseEvent -> {
+                if(mouseEvent.getButton() == MouseButton.PRIMARY)
+                    nodeLeftClicked((int) n.getLayoutX() / 32, (int) n.getLayoutY() / 32);
+                if(mouseEvent.getButton() == MouseButton.SECONDARY)
+                    nodeRightClicked((int) n.getLayoutX() / 32, (int) n.getLayoutY() / 32);
+
+            });
         }
     }
 
-    private void nodeClicked(int x, int y) {
+    private void nodeRightClicked(int x, int y) {
+        if(container.getNodes().get(new Coordinate(x, y)) != null)
+            container.getNodes().get(new Coordinate(x, y)).rotateClockwise();
+        render();
+    }
+
+    private void nodeLeftClicked(int x, int y) {
         if(container.getNodes().get(new Coordinate(x, y)) != null) {
             container.getNodes().remove(new Coordinate(x, y));
         } else {
             List<String> choices = new ArrayList<>();
+
+            choices.add("in");
+            choices.add("out");
 
             choices.add("add");
             choices.add("sub");
@@ -117,12 +131,15 @@ public class Grid extends Application {
                 INode newNode;
 
                 switch(choice) {
+                    case "in":  newNode = new NodeIn(); break;
+                    case "out": newNode = new NodeOut(); break;
+
                     case "add": newNode = new NodeAdd(); break;
                     case "sub": newNode = new NodeSub(); break;
                     case "mul": newNode = new NodeMult(); break;
                     case "div": newNode = new NodeDiv(); break;
 
-                    case "branch": newNode = new NodeBranch(); break;
+                    case "branch":   newNode = new NodeBranch(); break;
                     case "splitter": newNode = new NodeSplitter(); break;
 
                     case "const": newNode = new NodeConstant(getNumberInput()); break;
@@ -163,7 +180,13 @@ public class Grid extends Application {
     }
 
     private void tick() {
-        container.tick();
+        container.tick(pendingInput);
+        render();
+    }
+
+    private void reset() {
+        timer.cancel();
+        container.reset();
         render();
     }
 
@@ -177,23 +200,37 @@ public class Grid extends Application {
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(pane);
 
-        Button tickButton = new Button("Tick");
-        tickButton.setOnAction(actionEvent -> tick());
-        pane.add(tickButton, 0, container.getHeight());
+        //Button tickButton = new Button("Tick");
+        //tickButton.setOnAction(actionEvent -> tick());
+        //pane.add(tickButton, 0, container.getHeight());
 
+        Button resetButton = new Button("Reset");
         Button runButton = new Button("Run");
+        TextField inputText = new TextField();
+
+        resetButton.setOnAction(actionEvent -> {
+            runButton.setDisable(false);
+            reset();
+        });
+
         runButton.setOnAction(actionEvent -> {
             runButton.setDisable(true);
-            Timer timer = new Timer();
+            timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     Platform.runLater(() -> tick());
                 }
             }, 0, 250);
+
+            pendingInput.clear();
+            for(String x : inputText.getText().split(" "))
+                if(x.length() > 0)
+                    pendingInput.add(new BigInteger(x));
+
         });
 
-        HBox hBox = new HBox(tickButton, runButton);
+        HBox hBox = new HBox(resetButton, runButton, inputText);
         borderPane.setBottom(hBox);
 
         Scene rootScene = new Scene(borderPane);

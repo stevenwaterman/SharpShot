@@ -67,7 +67,7 @@ public class Container implements INode {
      * stored bullets -> process and output
      * all bullets -> check
      */
-    public void tick() {
+    public void tick(List<BigInteger> pendingInput) {
         //Bullets on nodes
         Map<Coordinate, Bullet> capturedBullets = new HashMap<>(bullets);
         capturedBullets.keySet().retainAll(nodes.keySet());
@@ -92,6 +92,28 @@ public class Container implements INode {
             }
         }
 
+        // In nodes add input
+        if(pendingInput.size() > 0) {
+            for(Coordinate coordinate : getNodes().keySet()) {
+                INode x = getNodes().get(coordinate);
+                if(x instanceof NodeIn) {
+                    Map<Direction, BigInteger> bulletParams = ((NodeIn) x).into(pendingInput.get(0));
+
+                    for (Map.Entry<Direction, BigInteger> newBulletEntry : bulletParams.entrySet()) {
+                        Bullet newBullet = new Bullet(x.getRotation(), newBulletEntry.getValue());
+                        Coordinate newCoordinate = coordinate.plus(newBullet.getDirection());
+
+                        if(newBullets.containsKey(newCoordinate)) {
+                            collisions.add(newCoordinate);
+                        } else {
+                            newBullets.put(newCoordinate, newBullet);
+                        }
+                    }
+                }
+            }
+            pendingInput.remove(0);
+        }
+
         //Update captured bullets
         for (Map.Entry<Coordinate, Bullet> entry : capturedBullets.entrySet()) {
             Coordinate coordinate = entry.getKey();
@@ -112,18 +134,18 @@ public class Container implements INode {
                 //TODO this too
                 bulletDirection = newBulletEntry.getKey();
                 dir = Direction.UP;
-                while(dir != node.getRotation()){
+                while(dir != node.getRotation()) {
                     dir = dir.clockwise();
                     bulletDirection = bulletDirection.clockwise();
                 }
+
                 Bullet newBullet = new Bullet(bulletDirection, newBulletEntry.getValue());
 
                 Coordinate newCoordinate = coordinate.plus(newBullet.getDirection());
 
-                if(newBullets.containsKey(newCoordinate)){
+                if(newBullets.containsKey(newCoordinate)) {
                     collisions.add(newCoordinate);
-                }
-                else{
+                } else {
                     newBullets.put(newCoordinate, newBullet);
                 }
             }
