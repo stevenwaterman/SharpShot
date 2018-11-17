@@ -11,10 +11,6 @@ import java.util.Map;
 
 public class NodeIn implements INode {
     private Direction dir = Direction.UP;
-    public Bullet bulletIn;
-    public NodeIn(Bullet inBullet){
-        bulletIn = inBullet;
-    }
     @Override
     public @NotNull Direction getRotation() {
         return dir;
@@ -25,10 +21,14 @@ public class NodeIn implements INode {
         dir = Direction.clockwiseOf(dir);
     }
 
+    //@Override
+    public @NotNull Map<Direction, BigInteger> into(@NotNull Bullet bullet) {
+        HashMap<Direction, BigInteger> map = new HashMap<>();
+        map.put(bullet.getDirection(),bullet.getValue());
+        return map;
+    }
     @Override
     public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
-        HashMap<Direction, BigInteger> map = new HashMap<>();
-        map.put(bulletIn.getDirection(),bulletIn.getValue());
-        return map;
+        return new HashMap<>();
     }
 }
