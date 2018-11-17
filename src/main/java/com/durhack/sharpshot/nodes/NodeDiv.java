@@ -18,6 +18,6 @@ public class NodeDiv extends NodeArithmetic {
 
     @Override
     public @NotNull Node toGraphic() {
-        return new Triangle(getRotation(), Color.LIGHTPINK, "÷");
+        return new Triangle(getRotation(), Color.web("#CC66FF"), "÷");
     }
 }

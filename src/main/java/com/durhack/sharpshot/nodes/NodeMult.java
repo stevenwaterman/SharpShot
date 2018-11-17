@@ -19,6 +19,6 @@ public class NodeMult extends NodeArithmetic {
 
     @Override
     public @NotNull Node toGraphic() {
-        return new Triangle(getRotation(), Color.LIGHTBLUE, "x");
+        return new Triangle(getRotation(), Color.web("#8df8e6"), "x");
     }
 }
