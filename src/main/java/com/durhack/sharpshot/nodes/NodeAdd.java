@@ -9,6 +9,7 @@ import java.math.BigInteger;
 import java.util.*;
 
 public class NodeAdd extends NodeArithmetic {
+    @Override
     public BigInteger operation(BigInteger val1, BigInteger val2){
         return val1.add(val2);}
 }
