@@ -32,7 +32,7 @@ public class NodeIn implements INode {
     }
 
     //@Override
-    private @NotNull Map<Direction, BigInteger> into(@NotNull BigInteger val) {
+    public @NotNull Map<Direction, BigInteger> into(@NotNull BigInteger val) {
         HashMap<Direction, BigInteger> map = new HashMap<>();
         map.put(dir,val);
         return map;
