@@ -42,4 +42,8 @@ public class Coordinate {
     public int hashCode() {
         return Objects.hash(x, y);
     }
+
+    public Coordinate wrap(int width, int height) {
+        return new Coordinate((x+width) % width, (y+height) % height);
+    }
 }

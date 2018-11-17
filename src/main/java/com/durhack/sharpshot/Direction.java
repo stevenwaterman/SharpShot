@@ -53,4 +53,12 @@ public enum Direction {
 
         return dirs;
     }
+
+    public Direction antiClockwise() {
+        return Direction.clockwiseOf(Direction.clockwiseOf(Direction.clockwiseOf(this)));
+    }
+
+    public Direction clockwise() {
+        return Direction.clockwiseOf(this);
+    }
 }
