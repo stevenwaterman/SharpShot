@@ -43,4 +43,6 @@ public class NodeOut implements INode {
         Label label = new Label("OUT");
         return new StackPane(rectangle, label);
     }
+
+    public void reset() {}
 }

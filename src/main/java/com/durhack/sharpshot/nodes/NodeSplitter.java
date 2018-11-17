@@ -39,4 +39,6 @@ public class NodeSplitter implements INode {
     public @NotNull Node toGraphic() {
         return new Rectangle(32.0, 32.0, Color.YELLOW);
     }
+
+    public void reset() {}
 }

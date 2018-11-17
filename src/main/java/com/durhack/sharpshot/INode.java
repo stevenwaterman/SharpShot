@@ -17,4 +17,6 @@ public interface INode {
     Map<Direction, BigInteger> run(@NotNull Bullet bullet);
 
     @NotNull Node toGraphic();
+
+    void reset();
 }
