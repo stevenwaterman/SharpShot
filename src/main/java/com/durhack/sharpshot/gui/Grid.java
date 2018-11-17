@@ -2,40 +2,31 @@ package com.durhack.sharpshot.gui;
 
 import com.durhack.sharpshot.Bullet;
 import com.durhack.sharpshot.Coordinate;
-import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
-import com.durhack.sharpshot.nodes.Container;
-import com.durhack.sharpshot.nodes.NodeAdd;
+import com.durhack.sharpshot.nodes.*;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class Grid extends Application {
     private GridPane pane = new GridPane();
     private Container container;
 
+    private List<BigInteger> pendingInput;
+
     public Grid() {
-        container = new Container(10, 5);
-        container.getBullets().put(new Coordinate(1, 3), new Bullet(Direction.DOWN, BigInteger.ONE));
-        container.getBullets().put(new Coordinate(1, 4), new Bullet(Direction.DOWN, BigInteger.ONE));
-        container.getNodes().put(new Coordinate(1, 2), new NodeAdd());
+        container = new Container(30, 20);
     }
 
     private void render() {
@@ -58,6 +49,89 @@ public class Grid extends Application {
             Bullet bullet = bulletLocations.getValue();
             pane.add(bullet.toGraphic(), coordinate.getX(), coordinate.getY());
         }
+
+        for(Node n : pane.getChildren()) {
+            n.setOnMouseClicked(mouseEvent -> {
+                nodeClicked((int) n.getLayoutX() / 32, (int) n.getLayoutY() / 32);
+            });
+        }
+    }
+
+    private void nodeClicked(int x, int y) {
+        if(container.getNodes().get(new Coordinate(x, y)) != null) {
+            container.getNodes().remove(new Coordinate(x, y));
+        } else {
+            List<String> choices = new ArrayList<>();
+
+            choices.add("add");
+            choices.add("sub");
+            choices.add("mul");
+            choices.add("div");
+
+            choices.add("branch");
+            choices.add("splitter");
+
+            choices.add("const");
+
+            choices.add("void");
+
+            choices.add("if_positive");
+            choices.add("if_0");
+
+            ChoiceDialog<String> dialog = new ChoiceDialog<>("add", choices);
+            dialog.setTitle("Add Node");
+            dialog.setHeaderText("Choose your node type:");
+            dialog.setContentText("");
+
+            Optional<String> result = dialog.showAndWait();
+            if (result.isPresent()){
+                String choice = result.get();
+                INode newNode;
+
+                switch(choice) {
+                    case "add": newNode = new NodeAdd(); break;
+                    case "sub": newNode = new NodeSub(); break;
+                    case "mul": newNode = new NodeMult(); break;
+                    case "div": newNode = new NodeDiv(); break;
+
+                    case "branch": newNode = new NodeBranch(); break;
+                    case "splitter": newNode = new NodeSplitter(); break;
+
+                    case "const": newNode = new NodeConstant(getNumberInput()); break;
+
+                    case "void": newNode = new NodeVoid(); break;
+
+                    case "if_positive": newNode = new NodeIfPositive(); break;
+                    case "if_0": newNode = new NodeIf0(); break;
+
+                    default:
+                        System.err.println("This shouldn't happen");
+                        throw new RuntimeException("Choice nonexistent");
+                }
+
+                container.getNodes().put(new Coordinate(x, y), newNode);
+            } else {
+                System.err.println("No choice made");
+            }
+        }
+
+
+        render();
+    }
+
+    private BigInteger getNumberInput() {
+        TextInputDialog dialog = new TextInputDialog("0");
+        dialog.setTitle("New Constant Node");
+        dialog.setHeaderText("Please Enter an Integer");
+        dialog.setContentText("");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+            return new BigInteger(result.get());
+        } else {
+            throw new RuntimeException("No result");
+        }
+
     }
 
     private void tick() {
@@ -67,10 +141,6 @@ public class Grid extends Application {
 
     private Node emptyGraphic(){
         return new Rectangle(32.0, 32.0, Color.WHITE);
-    }
-
-    public static void main(String[] args) {
-        launch(Grid.class, args);
     }
 
     @Override

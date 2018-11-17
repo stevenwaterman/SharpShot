@@ -27,7 +27,6 @@ public class NodeRotateClockwise implements INode {
 
     @Override
     public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
-        // Shoot out 3 bullets in other directions
         HashMap<Direction, BigInteger> map = new HashMap<>();
         map.put(bullet.getDirection().clockwise(), bullet.getValue());
         return map;
@@ -37,4 +36,6 @@ public class NodeRotateClockwise implements INode {
     public @NotNull Node toGraphic() {
         return new Rectangle(32.0, 32.0, Color.GREEN);
     }
+
+    public void reset() {}
 }
