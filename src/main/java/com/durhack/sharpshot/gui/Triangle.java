@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public class Triangle extends GridPane {
     public Triangle(@NotNull Direction rotation, Color color, String s) {
         super();
-        Polygon polygon = new Polygon(0.0, 30.0, 32.0, 30.0, 16.0, 0.0);
+        Polygon polygon = new Polygon(0.0, 32.0, 32.0, 32.0, 16.0, 0.0);
         polygon.setRotate(rotation.getDegrees());
         polygon.setFill(color);
         add(polygon, 0, 0);

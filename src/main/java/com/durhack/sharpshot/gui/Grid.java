@@ -14,7 +14,9 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
@@ -29,7 +31,7 @@ public class Grid extends Application {
     private GridPane pane = new GridPane();
     private Container container;
 
-    Timer timer = new Timer();
+    private Timer timer = new Timer();
 
     private List<BigInteger> input = new ArrayList<>();
 
@@ -58,11 +60,11 @@ public class Grid extends Application {
             pane.add(bullet.toGraphic(), coordinate.getX(), coordinate.getY());
         }
 
-        for(Node n : pane.getChildren()) {
+        for (Node n : pane.getChildren()) {
             n.setOnMouseClicked(mouseEvent -> {
-                if(mouseEvent.getButton() == MouseButton.PRIMARY)
+                if (mouseEvent.getButton() == MouseButton.PRIMARY)
                     nodeLeftClicked((int) n.getLayoutX() / 32, (int) n.getLayoutY() / 32);
-                if(mouseEvent.getButton() == MouseButton.SECONDARY)
+                if (mouseEvent.getButton() == MouseButton.SECONDARY)
                     nodeRightClicked((int) n.getLayoutX() / 32, (int) n.getLayoutY() / 32);
 
             });
@@ -70,14 +72,14 @@ public class Grid extends Application {
     }
 
     private void nodeRightClicked(int x, int y) {
-        if(container.getNodes().get(new Coordinate(x, y)) != null)
-            container.getNodes().get(new Coordinate(x, y)).rotateClockwise();
+        if (container.getNodes().get(new Coordinate(x, y)) != null)
+            container.getNodes().remove(new Coordinate(x, y));
         render();
     }
 
     private void nodeLeftClicked(int x, int y) {
-        if(container.getNodes().get(new Coordinate(x, y)) != null) {
-            container.getNodes().remove(new Coordinate(x, y));
+        if (container.getNodes().get(new Coordinate(x, y)) != null) {
+            container.getNodes().get(new Coordinate(x, y)).rotateClockwise();
         } else {
             List<String> choices = new ArrayList<>();
 
