@@ -25,9 +25,9 @@ public class NodeIn implements INode {
     }
 
     //@Override
-    public @NotNull Map<Direction, BigInteger> into(@NotNull Bullet bullet) {
+    public @NotNull Map<Direction, BigInteger> into(@NotNull BigInteger val) {
         HashMap<Direction, BigInteger> map = new HashMap<>();
-        map.put(bullet.getDirection(),bullet.getValue());
+        map.put(dir,val);
         return map;
     }
     @Override
