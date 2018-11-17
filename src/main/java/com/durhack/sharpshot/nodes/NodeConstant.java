@@ -41,7 +41,11 @@ public class NodeConstant implements INode {
     public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
         // Shoot out a bullet
         HashMap<Direction, BigInteger> map = new HashMap<>();
-        map.put(Direction.UP, getValue());
+        if(bullet.getDirection() != Direction.UP){
+            map.put(Direction.UP, getValue());
+            map.put(bullet.getDirection(), bullet.getValue());
+            return map;
+        }
         return map;
     }
 
