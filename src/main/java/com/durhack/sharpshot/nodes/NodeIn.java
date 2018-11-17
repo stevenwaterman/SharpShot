@@ -15,6 +15,12 @@ import java.util.Map;
 
 public class NodeIn implements INode {
     private Direction dir = Direction.UP;
+    private int index;
+
+    public NodeIn(int index) {
+        this.index = index;
+    }
+
     @Override
     public @NotNull Direction getRotation() {
         return dir;
@@ -38,8 +44,14 @@ public class NodeIn implements INode {
 
     @Override
     public @NotNull Node toGraphic() {
-        return new Triangle(getRotation(), Color.LIGHTBLUE, "IN");
+        return new Triangle(getRotation(), Color.LIGHTBLUE, "IN" + index);
     }
 
-    public void reset() {}
+    public void reset() {
+        index = -1;
+    }
+
+    public int getIndex() {
+        return index;
+    }
 }

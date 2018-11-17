@@ -14,9 +14,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
@@ -33,32 +31,10 @@ public class Grid extends Application {
 
     Timer timer = new Timer();
 
-    private List<BigInteger> pendingInput = new ArrayList<>();
+    private List<BigInteger> input = new ArrayList<>();
 
     public Grid() {
-        container = new Container(50, 30);
-        container.getBullets().put(new Coordinate(1, 3), new Bullet(Direction.DOWN, BigInteger.ONE));
-        container.getBullets().put(new Coordinate(1, 4), new Bullet(Direction.DOWN, BigInteger.ONE));
-        Map<Coordinate, INode> nodes = container.getNodes();
-        nodes.put(new Coordinate(1, 2), new NodeAdd());
-        nodes.put(new Coordinate(2, 2), new NodeBranch());
-        nodes.put(new Coordinate(3, 2), new NodeConstant(new BigInteger("11")));
-        NodeDiv div = new NodeDiv();
-        div.rotateClockwise();
-        nodes.put(new Coordinate(4, 2), div);
-        nodes.put(new Coordinate(5, 2), new NodeIf0());
-        nodes.put(new Coordinate(6, 2), new NodeIfPositive());
-        nodes.put(new Coordinate(7, 2), new NodeIn());
-        nodes.put(new Coordinate(8, 2), new NodeMult());
-        nodes.put(new Coordinate(9, 2), new NodeOut());
-        nodes.put(new Coordinate(10, 2), new NodeRotateAnticlockwise());
-        nodes.put(new Coordinate(11, 2), new NodeRotateClockwise());
-        nodes.put(new Coordinate(12, 2), new NodeSplitter());
-        nodes.put(new Coordinate(13, 2), new NodeSub());
-        nodes.put(new Coordinate(14, 2), new NodeVoid());
-
-
-        container = new Container(30, 20);
+        container = new Container(40, 30);
     }
 
     private void render() {
@@ -134,7 +110,7 @@ public class Grid extends Application {
                 INode newNode;
 
                 switch(choice) {
-                    case "in":  newNode = new NodeIn(); break;
+                    case "in":  newNode = new NodeIn(getNumberInput("Enter an input index: ").intValue()); break;
                     case "out": newNode = new NodeOut(); break;
 
                     case "add": newNode = new NodeAdd(); break;
@@ -145,7 +121,7 @@ public class Grid extends Application {
                     case "branch":   newNode = new NodeBranch(); break;
                     case "splitter": newNode = new NodeSplitter(); break;
 
-                    case "const": newNode = new NodeConstant(getNumberInput()); break;
+                    case "const": newNode = new NodeConstant(getNumberInput("Enter a constant: ")); break;
 
                     case "void": newNode = new NodeVoid(); break;
 
@@ -167,10 +143,10 @@ public class Grid extends Application {
         render();
     }
 
-    private BigInteger getNumberInput() {
+    private BigInteger getNumberInput(String header) {
         TextInputDialog dialog = new TextInputDialog("0");
-        dialog.setTitle("New Constant Node");
-        dialog.setHeaderText("Please Enter an Integer");
+        dialog.setTitle("New Node");
+        dialog.setHeaderText(header);
         dialog.setContentText("");
 
         Optional<String> result = dialog.showAndWait();
@@ -183,7 +159,7 @@ public class Grid extends Application {
     }
 
     private void tick() {
-        container.tick(pendingInput);
+        container.tick();
         render();
     }
 
@@ -230,11 +206,11 @@ public class Grid extends Application {
                 }
             }, 0, 250);
 
-            pendingInput.clear();
+            input.clear();
             for(String x : inputText.getText().split(" "))
                 if(x.length() > 0)
-                    pendingInput.add(new BigInteger(x));
-
+                    input.add(new BigInteger(x));
+            container.start(input);
         });
 
         HBox hBox = new HBox(resetButton, runButton, inputText);
