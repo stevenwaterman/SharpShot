@@ -18,7 +18,9 @@ import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class Grid extends Application {
     private GridPane pane = new GridPane();
@@ -26,7 +28,7 @@ public class Grid extends Application {
 
     public Grid() {
         container = new Container(10, 5);
-        container.getBullets().put(new Coordinate(1, 2), new Bullet(Direction.DOWN, BigInteger.ONE));
+        container.getBullets().put(new Coordinate(1, 3), new Bullet(Direction.DOWN, BigInteger.ONE));
         container.getNodes().put(new Coordinate(1, 2), new NodeAdd());
     }
 
@@ -39,14 +41,17 @@ public class Grid extends Application {
             }
         }
 
+        Set<Coordinate> allLocationsWithNode = new HashSet<>();
         for (Map.Entry<Coordinate, INode> nodeLocation : container.getNodes().entrySet()) {
             Coordinate coordinate = nodeLocation.getKey();
             INode node = nodeLocation.getValue();
             pane.add(toGraphic(node), coordinate.getX(), coordinate.getY());
+            allLocationsWithNode.add(coordinate);
         }
 
         for (Map.Entry<Coordinate, Bullet> bulletLocations : container.getBullets().entrySet()) {
             Coordinate coordinate = bulletLocations.getKey();
+            if(allLocationsWithNode.contains(coordinate)) continue;
             Bullet bullet = bulletLocations.getValue();
             pane.add(toGraphic(bullet), coordinate.getX(), coordinate.getY());
         }

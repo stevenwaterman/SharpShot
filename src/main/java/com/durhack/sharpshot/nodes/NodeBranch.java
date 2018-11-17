@@ -1,8 +1,8 @@
 package com.durhack.sharpshot.nodes;
 
-public class NodeIfPositive extends NodeIfCondition {
+public class NodeBranch extends NodeIfCondition {
     @Override
     public boolean branchingCondition(int signum) {
-        return (signum == 1);
+        return Boolean.TRUE;
     }
 }
