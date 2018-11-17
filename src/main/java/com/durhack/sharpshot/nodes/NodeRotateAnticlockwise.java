@@ -27,7 +27,6 @@ public class NodeRotateAnticlockwise implements INode {
 
     @Override
     public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
-        // Shoot out 3 bullets in other directions
         HashMap<Direction, BigInteger> map = new HashMap<>();
         map.put(bullet.getDirection().antiClockwise(), bullet.getValue());
         return map;

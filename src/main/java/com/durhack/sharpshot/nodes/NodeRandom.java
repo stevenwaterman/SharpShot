@@ -25,7 +25,7 @@ public class NodeRandom implements INode {
         dir = Direction.clockwiseOf(dir);
     }
 
-    public BigInteger rand(BigInteger n) {
+    private BigInteger rand(BigInteger n) {
         Random rand = new Random();
         BigInteger result = new BigInteger(n.bitLength(), rand);
         while( result.compareTo(n) >= 0 ) {
@@ -33,7 +33,6 @@ public class NodeRandom implements INode {
         }
         return result;
     }
-
     @Override
     public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
         HashMap<Direction, BigInteger> map = new HashMap<>();
