@@ -211,6 +211,7 @@ public class Grid extends Application {
                 if(x.length() > 0)
                     input.add(new BigInteger(x));
             container.start(input);
+            render();
         });
 
         HBox hBox = new HBox(resetButton, runButton, inputText);
