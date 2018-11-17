@@ -8,37 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.math.BigInteger;
 import java.util.*;
 
-public class NodeAdd implements INode {
-    private Direction dir = Direction.UP;
-
-    private Bullet mostRecentBullet = null;
-
-    @Override
-    public @NotNull Direction getRotation() {
-        return dir;
-    }
-
-    @Override
-    public void rotateClockwise() {
-        dir = Direction.clockwiseOf(dir);
-    }
-
-    @Override
-    public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
-        // Ignore null bullets
-        if(bullet.getValue() == null)
-            return new HashMap<>();
-
-        if(mostRecentBullet == null) {
-            // Nothing to add
-            mostRecentBullet = bullet;
-            return new HashMap<>();
-        } else {
-            HashMap<Direction, BigInteger> map = new HashMap<>();
-            assert mostRecentBullet.getValue() != null;
-            map.put(Direction.UP, mostRecentBullet.getValue().add(bullet.getValue()));
-            mostRecentBullet = null;
-            return map;
-        }
-    }
+public class NodeAdd extends NodeArithmetic {
+    public BigInteger operation(BigInteger val1, BigInteger val2){
+        return val1.add(val2);}
 }
