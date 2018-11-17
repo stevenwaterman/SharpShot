@@ -90,7 +90,6 @@ public class Container implements INode {
      * all bullets -> check
      */
     public void tick() {
-    public void tick(List<BigInteger> pendingInput) {
         List<Movement> movements = new ArrayList<>();
 
         //Bullets on nodes
