@@ -1,5 +1,7 @@
 package com.durhack.sharpshot;
 
+import org.jetbrains.annotations.NotNull;
+
 public enum Direction {
     UP(0,-1),
     RIGHT(1,0),
@@ -20,5 +22,17 @@ public enum Direction {
 
     public int getDeltaY() {
         return deltaY;
+    }
+
+    @NotNull
+    public static Direction clockwiseOf(@NotNull Direction d) {
+        switch(d) {
+            case UP:    return Direction.RIGHT;
+            case RIGHT: return Direction.DOWN;
+            case DOWN:  return Direction.LEFT;
+            case LEFT:  return Direction.UP;
+        }
+
+        throw new RuntimeException("Cannot find clockwise of " + d.toString());
     }
 }

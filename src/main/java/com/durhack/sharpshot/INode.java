@@ -2,9 +2,15 @@ package com.durhack.sharpshot;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.math.BigInteger;
+import java.util.Map;
 
 public interface INode {
     @NotNull
-    List<Bullet> run(@NotNull Bullet bullet);
+    Direction getRotation();
+
+    void rotateClockwise();
+
+    @NotNull
+    Map<Direction, BigInteger> run(@NotNull Bullet bullet);
 }
