@@ -47,9 +47,7 @@ public class NodeIn implements INode {
         return new Triangle(getRotation(), Color.LIGHTBLUE, "IN" + index);
     }
 
-    public void reset() {
-        index = -1;
-    }
+    public void reset() {   }
 
     public int getIndex() {
         return index;

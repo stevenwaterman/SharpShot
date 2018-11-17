@@ -34,7 +34,7 @@ public class Grid extends Application {
     private List<BigInteger> input = new ArrayList<>();
 
     public Grid() {
-        container = new Container(40, 30);
+        container = new Container(40, 25);
     }
 
     private void render() {
