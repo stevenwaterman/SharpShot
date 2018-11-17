@@ -13,6 +13,6 @@ public class NodeBranch extends NodeConditional {
 
     @Override
     public @NotNull Node toGraphic() {
-        return new Rectangle(32.0, 32.0, Color.GREEN);
+        return new Rectangle(32.0, 32.0, Color.BLUE);
     }
 }
