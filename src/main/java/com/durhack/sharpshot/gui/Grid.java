@@ -4,9 +4,9 @@ import com.durhack.sharpshot.Bullet;
 import com.durhack.sharpshot.Coordinate;
 import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
-import com.durhack.sharpshot.nodes.Container;
-import com.durhack.sharpshot.nodes.NodeAdd;
+import com.durhack.sharpshot.nodes.*;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -81,9 +81,7 @@ public class Grid extends Application {
         }
 
         for(Node n : pane.getChildren()) {
-            n.setOnMouseClicked(mouseEvent -> {
-                nodeClicked((int) n.getLayoutX() / 32, (int) n.getLayoutY() / 32);
-            });
+            n.setOnMouseClicked(mouseEvent -> nodeClicked((int) n.getLayoutX() / 32, (int) n.getLayoutY() / 32));
         }
     }
 
