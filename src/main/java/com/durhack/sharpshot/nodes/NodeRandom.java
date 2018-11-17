@@ -33,7 +33,6 @@ public class NodeRandom implements INode {
         }
         return result;
     }
-
     @Override
     public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
         HashMap<Direction, BigInteger> map = new HashMap<>();
