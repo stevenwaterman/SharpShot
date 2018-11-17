@@ -46,6 +46,11 @@ public class Grid extends Application {
         }
     }
 
+    private void tick(){
+        container.tick();
+        render();
+    }
+
     @NotNull
     private Node toGraphic(@Nullable INode node){
         if(node == null){

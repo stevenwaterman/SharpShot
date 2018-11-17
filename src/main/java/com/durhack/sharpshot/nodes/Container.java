@@ -36,4 +36,11 @@ public class Container implements INode {
     public List<Bullet> getBullets() {
         return bullets;
     }
+
+    public void tick() {
+        for (Bullet bullet : bullets) {
+            bullet.tick();
+            //TODO check for bullets colliding / hitting nodes
+        }
+    }
 }
