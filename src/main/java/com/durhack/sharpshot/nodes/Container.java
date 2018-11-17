@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 public class Container implements INode {
     private int width;
     private int height;
+    private int bulletSize = 0;
 
     private Direction rotation = Direction.UP;
 
@@ -177,8 +178,12 @@ public class Container implements INode {
         }
         bullets.clear();
         bullets.putAll(newBullets);
+        bulletSize = bullets.size(); // handling reset if no bullets left
     }
 
+    public int getBulletSize(){
+        return bulletSize;
+    }
     public int getWidth() {
         return width;
     }

@@ -163,9 +163,13 @@ public class Grid extends Application {
 
     }
 
-    private void tick() {
+    private void tick(Button runButton) {
         container.tick();
         render();
+        if (container.getBulletSize() == 0){
+            runButton.setDisable(false);
+            reset();
+        }
     }
 
     private void reset() {
@@ -209,7 +213,7 @@ public class Grid extends Application {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    Platform.runLater(() -> tick());
+                    Platform.runLater(() -> tick(runButton));
                 }
             }, 0, 250);
 
