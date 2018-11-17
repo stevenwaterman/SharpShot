@@ -78,8 +78,8 @@ public class Container implements INode {
         Set<Coordinate> collisions = new HashSet<>();
 
         for (Map.Entry<Coordinate, Bullet> entry : freeBullets.entrySet()) {
-            Coordinate coordinate = entry.getKey();
             Bullet bullet = entry.getValue();
+            Coordinate coordinate = entry.getKey().plus(bullet.getDirection()).wrap(width, height);
 
             if(newBullets.containsKey(coordinate)){
                 collisions.add(coordinate);
