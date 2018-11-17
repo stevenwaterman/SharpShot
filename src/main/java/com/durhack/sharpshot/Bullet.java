@@ -1,6 +1,7 @@
 package com.durhack.sharpshot;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
 
@@ -11,7 +12,7 @@ public class Bullet {
     private int x;
     private int y;
 
-    @NotNull
+    @Nullable
     private BigInteger value;
 
     public Bullet(@NotNull Direction direction, int x, int y, @NotNull BigInteger value) {
@@ -46,7 +47,7 @@ public class Bullet {
         this.y = y;
     }
 
-    @NotNull
+    @Nullable
     public BigInteger getValue() {
         return value;
     }
