@@ -17,8 +17,11 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
 
 import java.math.BigInteger;
@@ -168,7 +171,11 @@ public class Grid extends Application {
     }
 
     private Node emptyGraphic(){
-        return new Rectangle(32.0, 32.0, Color.WHITE);
+        Rectangle rectangle = new Rectangle(32.0, 32.0, Color.WHITE);
+        rectangle.setStroke(Color.GRAY);
+        rectangle.setStrokeWidth(0.5);
+        rectangle.setStrokeType(StrokeType.CENTERED);
+        return rectangle;
     }
 
     @Override
