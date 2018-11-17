@@ -1,9 +1,11 @@
 package com.durhack.sharpshot.gui;
 
 import com.durhack.sharpshot.Bullet;
+import com.durhack.sharpshot.Coordinate;
 import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
 import com.durhack.sharpshot.nodes.Container;
+import com.durhack.sharpshot.nodes.NodeAdd;
 import javafx.application.Application;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -17,32 +19,32 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
+import java.util.Map;
 
 public class Grid extends Application {
     private GridPane pane = new GridPane();
     private Container container;
 
     public Grid() {
-        container = new Container(new INode[10][5]);
-        container.getNodes()[5][2] = new Container(container.getNodes());
-
-        container.getBullets().add(new Bullet(Direction.DOWN, 1 , 2, BigInteger.ONE));
+        container = new Container();
+        container.getBullets().put(new Coordinate(1, 2), new Bullet(Direction.DOWN, BigInteger.ONE));
+        container.getNodes().put(new Coordinate(3, 5), new NodeAdd());
     }
 
     private void render(){
         pane.getChildren().clear();
 
-        @NotNull INode[][] nodes = container.getNodes();
-        for (int x = 0; x < nodes.length; x++) {
-            INode[] row = nodes[x];
-            for (int y = 0; y < row.length; y++) {
-                INode node = row[y];
-                pane.add(toGraphic(node), x, y);
-            }
+        Map<Coordinate, INode> nodes = container.getNodes();
+        for (Map.Entry<Coordinate, INode> nodeLocation: nodes.entrySet()) {
+            Coordinate coordinate = nodeLocation.getKey();
+            INode node = nodeLocation.getValue();
+            pane.add(toGraphic(node), coordinate.getX(), coordinate.getY());
         }
 
-        for (Bullet bullet : container.getBullets()) {
-            pane.add(toGraphic(bullet), bullet.getX(), bullet.getY());
+        for (Map.Entry<Coordinate, Bullet> bulletLocations : container.getBullets().entrySet()) {
+            Coordinate coordinate = bulletLocations.getKey();
+            Bullet bullet = bulletLocations.getValue();
+            pane.add(toGraphic(bullet), coordinate.getX(), coordinate.getY());
         }
     }
 
