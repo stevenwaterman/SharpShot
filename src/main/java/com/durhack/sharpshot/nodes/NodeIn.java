@@ -44,7 +44,7 @@ public class NodeIn implements INode {
 
     @Override
     public @NotNull Node toGraphic() {
-        return new Triangle(getRotation(), Color.LIGHTBLUE, "IN" + index);
+        return new Triangle(getRotation(), Color.web("#FFFF00"), "IN" + index);
     }
 
     public void reset() {   }

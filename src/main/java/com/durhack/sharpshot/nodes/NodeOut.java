@@ -39,7 +39,7 @@ public class NodeOut implements INode {
 
     @Override
     public @NotNull Node toGraphic() {
-        Rectangle rectangle = new Rectangle(32.0, 32.0, Color.WHITE);
+        Rectangle rectangle = new Rectangle(32.0, 32.0, Color.SANDYBROWN);
         Label label = new Label("OUT");
         return new StackPane(rectangle, label);
     }

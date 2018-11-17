@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 import java.util.*;
+import java.util.stream.Collectors;
 
 //TODO how do we deal with the container returning multiple outputs over multiple ticks?
 
@@ -64,10 +65,10 @@ public class Container implements INode {
     public void start(List<BigInteger> input) {
         // In nodes add input
         Map<Coordinate, Bullet> newBullets = new HashMap<>();
-        for(int i = 0; i < input.size(); i++) {
-            for(Coordinate coordinate : getNodes().keySet()) {
+        for (int i = 0; i < input.size(); i++) {
+            for (Coordinate coordinate : getNodes().keySet()) {
                 INode x = getNodes().get(coordinate);
-                if(x instanceof NodeIn && ((NodeIn) x).getIndex() == i) {
+                if (x instanceof NodeIn && ((NodeIn) x).getIndex() == i) {
                     Map<Direction, BigInteger> bulletParams = ((NodeIn) x).into(input.get(i));
 
                     for (Map.Entry<Direction, BigInteger> newBulletEntry : bulletParams.entrySet()) {
@@ -89,6 +90,8 @@ public class Container implements INode {
      * all bullets -> check
      */
     public void tick() {
+        List<Movement> movements = new ArrayList<>();
+
         //Bullets on nodes
         Map<Coordinate, Bullet> capturedBullets = new HashMap<>(bullets);
         capturedBullets.keySet().retainAll(nodes.keySet());
@@ -97,20 +100,12 @@ public class Container implements INode {
         Map<Coordinate, Bullet> freeBullets = new HashMap<>(bullets);
         freeBullets.keySet().removeAll(capturedBullets.keySet());
 
-        //Update free bullets
-        Map<Coordinate, Bullet> newBullets = new HashMap<>();
-        Set<Coordinate> collisions = new HashSet<>();
-
+        //Generate movements for free bullets
         for (Map.Entry<Coordinate, Bullet> entry : freeBullets.entrySet()) {
             Bullet bullet = entry.getValue();
-            Coordinate coordinate = entry.getKey().plus(bullet.getDirection()).wrap(width, height);
-
-            if(newBullets.containsKey(coordinate)){
-                collisions.add(coordinate);
-            }
-            else{
-                newBullets.put(coordinate, bullet);
-            }
+            Coordinate coord = entry.getKey();
+            Coordinate newCoord = entry.getKey().plus(bullet.getDirection()).wrap(width, height);
+            movements.add(new Movement(coord, newCoord));
         }
 
         //Update captured bullets
@@ -121,7 +116,7 @@ public class Container implements INode {
             //TODO this brings great shame onto my family
             Direction bulletDirection = entry.getValue().getDirection();
             Direction dir = Direction.UP;
-            while(dir != node.getRotation()){
+            while (dir != node.getRotation()) {
                 dir = dir.clockwise();
                 bulletDirection = bulletDirection.antiClockwise();
             }
@@ -133,25 +128,53 @@ public class Container implements INode {
                 //TODO this too
                 bulletDirection = newBulletEntry.getKey();
                 dir = Direction.UP;
-                while(dir != node.getRotation()) {
+                while (dir != node.getRotation()) {
                     dir = dir.clockwise();
                     bulletDirection = bulletDirection.clockwise();
                 }
 
                 Bullet newBullet = new Bullet(bulletDirection, newBulletEntry.getValue());
+                bullets.put(coordinate, newBullet);
 
                 Coordinate newCoordinate = coordinate.plus(newBullet.getDirection());
-
-                if(newBullets.containsKey(newCoordinate)) {
-                    collisions.add(newCoordinate);
-                } else {
-                    newBullets.put(newCoordinate, newBullet);
-                }
+                movements.add(new Movement(coordinate, newCoordinate));
             }
         }
 
-        //Remove collisions and move bullets
-        newBullets.keySet().removeAll(collisions);
+        //Remove swapping bullets
+        List<Movement> read = new ArrayList<>();
+        Set<Coordinate> toDelete = new HashSet<>();
+        for (Movement movement : movements) {
+            Coordinate from = movement.getFrom();
+            Coordinate to = movement.getTo();
+            boolean foundSwaps = read.stream().anyMatch(other -> from.equals(other.getTo()) && to.equals(other.getFrom()));
+            if(foundSwaps){
+                toDelete.add(from);
+                toDelete.add(to);
+            }
+            read.add(movement);
+        }
+        movements.removeIf(movement -> toDelete.contains(movement.getFrom()) || toDelete.contains(movement.getTo()));
+
+        //Remove bullets that end in the same place
+        read.clear();
+        toDelete.clear();
+        for (Movement movement : movements) {
+            Coordinate from = movement.getFrom();
+            Coordinate to = movement.getTo();
+            boolean foundSameFinal = read.stream().anyMatch(other -> to.equals(other.getTo()));
+            if(foundSameFinal){
+                toDelete.add(to);
+            }
+            read.add(movement);
+        }
+        movements.removeIf(movement -> toDelete.contains(movement.getTo()));
+
+        //Move bullets
+        Map<Coordinate, Bullet> newBullets = new HashMap<>();
+        for (Movement movement : movements) {
+            newBullets.put(movement.getTo(), bullets.get(movement.getFrom()));
+        }
         bullets.clear();
         bullets.putAll(newBullets);
     }
@@ -168,7 +191,23 @@ public class Container implements INode {
 
     public void reset() {
         bullets.clear();
-        for(INode n : getNodes().values())
+        for (INode n : getNodes().values())
             n.reset();
+    }
+
+    private static <T> Set<T> collisions(List<T> collection) {
+        Set<T> found = new HashSet<>();
+        Set<T> banned = new HashSet<>();
+
+        for (T elem : collection) {
+            if (found.contains(elem)) {
+                found.remove(elem);
+                banned.add(elem);
+            } else if (!banned.contains(elem)) {
+                found.add(elem);
+            }
+        }
+
+        return banned;
     }
 }

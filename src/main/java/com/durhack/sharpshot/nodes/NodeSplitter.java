@@ -3,6 +3,7 @@ package com.durhack.sharpshot.nodes;
 import com.durhack.sharpshot.Bullet;
 import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
+import com.durhack.sharpshot.gui.Diamond;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -37,7 +38,7 @@ public class NodeSplitter implements INode {
 
     @Override
     public @NotNull Node toGraphic() {
-        return new Rectangle(32.0, 32.0, Color.YELLOW);
+        return new Diamond(getRotation(), Color.YELLOW, "Y");
     }
 
     public void reset() {}
