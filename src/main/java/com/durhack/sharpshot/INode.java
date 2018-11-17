@@ -1,9 +1,10 @@
 package com.durhack.sharpshot;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public interface INode {
-    @Nullable
-    Bullet run(@NotNull Bullet bullet);
+    @NotNull
+    List<Bullet> run(@NotNull Bullet bullet);
 }

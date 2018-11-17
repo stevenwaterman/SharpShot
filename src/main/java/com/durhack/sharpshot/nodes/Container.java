@@ -19,9 +19,10 @@ public class Container implements INode {
         this.nodes = nodes;
     }
 
+    @NotNull
     @Override
-    public @Nullable Bullet run(@NotNull Bullet bullet) {
-        return null;
+    public List<Bullet> run(@NotNull Bullet bullet) {
+        return new ArrayList<>();
     }
 
     @NotNull
