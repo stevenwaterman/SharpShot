@@ -5,6 +5,7 @@ import com.durhack.sharpshot.Coordinate;
 import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
 import com.durhack.sharpshot.nodes.*;
+import com.durhack.sharpshot.util.SaveLoadFiles;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -185,12 +186,10 @@ public class Grid extends Application {
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(pane);
 
-        //Button tickButton = new Button("Tick");
-        //tickButton.setOnAction(actionEvent -> tick());
-        //pane.add(tickButton, 0, container.getHeight());
-
         Button resetButton = new Button("Reset");
         Button runButton = new Button("Run");
+        Button saveButton = new Button("Save");
+        Button loadButton = new Button("Load");
         TextField inputText = new TextField();
 
         resetButton.setOnAction(actionEvent -> {
@@ -216,7 +215,16 @@ public class Grid extends Application {
             render();
         });
 
-        HBox hBox = new HBox(resetButton, runButton, inputText);
+        loadButton.setOnAction(actionEvent -> {
+            Container c = SaveLoadFiles.loadFromFile(primaryStage);
+            if(c != null) container = c;
+            render();
+        });
+
+        saveButton.setOnAction(actionEvent -> SaveLoadFiles.saveToFile(primaryStage, container));
+
+
+        HBox hBox = new HBox(resetButton, runButton, inputText, saveButton, loadButton);
         borderPane.setBottom(hBox);
 
         Scene rootScene = new Scene(borderPane);
