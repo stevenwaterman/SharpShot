@@ -5,15 +5,32 @@ import com.durhack.sharpshot.INode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Container implements INode {
+    @NotNull
     private INode[][] nodes;
-    private List<Bullet> bullets;
 
+    @NotNull
+    private List<Bullet> bullets = new ArrayList<>();
+
+    public Container(@NotNull INode[][] nodes) {
+        this.nodes = nodes;
+    }
 
     @Override
     public @Nullable Bullet run(@NotNull Bullet bullet) {
         return null;
+    }
+
+    @NotNull
+    public INode[][] getNodes() {
+        return nodes;
+    }
+
+    @NotNull
+    public List<Bullet> getBullets() {
+        return bullets;
     }
 }
