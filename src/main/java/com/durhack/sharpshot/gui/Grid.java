@@ -33,32 +33,10 @@ public class Grid extends Application {
 
     private Timer timer = new Timer();
 
-    private List<BigInteger> pendingInput = new ArrayList<>();
+    private List<BigInteger> input = new ArrayList<>();
 
     public Grid() {
-        container = new Container(50, 30);
-        container.getBullets().put(new Coordinate(1, 3), new Bullet(Direction.DOWN, BigInteger.ONE));
-        container.getBullets().put(new Coordinate(1, 4), new Bullet(Direction.DOWN, BigInteger.ONE));
-        Map<Coordinate, INode> nodes = container.getNodes();
-        nodes.put(new Coordinate(1, 2), new NodeAdd());
-        nodes.put(new Coordinate(2, 2), new NodeBranch());
-        nodes.put(new Coordinate(3, 2), new NodeConstant(new BigInteger("11")));
-        NodeDiv div = new NodeDiv();
-        div.rotateClockwise();
-        nodes.put(new Coordinate(4, 2), div);
-        nodes.put(new Coordinate(5, 2), new NodeIf0());
-        nodes.put(new Coordinate(6, 2), new NodeIfPositive());
-        nodes.put(new Coordinate(7, 2), new NodeIn());
-        nodes.put(new Coordinate(8, 2), new NodeMult());
-        nodes.put(new Coordinate(9, 2), new NodeOut());
-        nodes.put(new Coordinate(10, 2), new NodeRotateAnticlockwise());
-        nodes.put(new Coordinate(11, 2), new NodeRotateClockwise());
-        nodes.put(new Coordinate(12, 2), new NodeSplitter());
-        nodes.put(new Coordinate(13, 2), new NodeSub());
-        nodes.put(new Coordinate(14, 2), new NodeVoid());
-
-
-        container = new Container(30, 20);
+        container = new Container(40, 25);
     }
 
     private void render() {
@@ -129,52 +107,28 @@ public class Grid extends Application {
             dialog.setContentText("");
 
             Optional<String> result = dialog.showAndWait();
-            if (result.isPresent()) {
+            if (result.isPresent()){
                 String choice = result.get();
                 INode newNode;
 
-                switch (choice) {
-                    case "in":
-                        newNode = new NodeIn();
-                        break;
-                    case "out":
-                        newNode = new NodeOut();
-                        break;
+                switch(choice) {
+                    case "in":  newNode = new NodeIn(getNumberInput("Enter an input index: ").intValue()); break;
+                    case "out": newNode = new NodeOut(); break;
 
-                    case "add":
-                        newNode = new NodeAdd();
-                        break;
-                    case "sub":
-                        newNode = new NodeSub();
-                        break;
-                    case "mul":
-                        newNode = new NodeMult();
-                        break;
-                    case "div":
-                        newNode = new NodeDiv();
-                        break;
+                    case "add": newNode = new NodeAdd(); break;
+                    case "sub": newNode = new NodeSub(); break;
+                    case "mul": newNode = new NodeMult(); break;
+                    case "div": newNode = new NodeDiv(); break;
 
-                    case "branch":
-                        newNode = new NodeBranch();
-                        break;
-                    case "splitter":
-                        newNode = new NodeSplitter();
-                        break;
+                    case "branch":   newNode = new NodeBranch(); break;
+                    case "splitter": newNode = new NodeSplitter(); break;
 
-                    case "const":
-                        newNode = new NodeConstant(getNumberInput());
-                        break;
+                    case "const": newNode = new NodeConstant(getNumberInput("Enter a constant: ")); break;
 
-                    case "void":
-                        newNode = new NodeVoid();
-                        break;
+                    case "void": newNode = new NodeVoid(); break;
 
-                    case "if_positive":
-                        newNode = new NodeIfPositive();
-                        break;
-                    case "if_0":
-                        newNode = new NodeIf0();
-                        break;
+                    case "if_positive": newNode = new NodeIfPositive(); break;
+                    case "if_0": newNode = new NodeIf0(); break;
 
                     default:
                         System.err.println("This shouldn't happen");
@@ -191,14 +145,14 @@ public class Grid extends Application {
         render();
     }
 
-    private BigInteger getNumberInput() {
+    private BigInteger getNumberInput(String header) {
         TextInputDialog dialog = new TextInputDialog("0");
-        dialog.setTitle("New Constant Node");
-        dialog.setHeaderText("Please Enter an Integer");
+        dialog.setTitle("New Node");
+        dialog.setHeaderText(header);
         dialog.setContentText("");
 
         Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()) {
+        if (result.isPresent()){
             return new BigInteger(result.get());
         } else {
             throw new RuntimeException("No result");
@@ -207,7 +161,7 @@ public class Grid extends Application {
     }
 
     private void tick() {
-        container.tick(pendingInput);
+        container.tick();
         render();
     }
 
@@ -217,10 +171,11 @@ public class Grid extends Application {
         render();
     }
 
-    private Node emptyGraphic() {
+    private Node emptyGraphic(){
         Rectangle rectangle = new Rectangle(32.0, 32.0, Color.WHITE);
         rectangle.setStroke(Color.GRAY);
         rectangle.setStrokeWidth(0.5);
+        rectangle.setStrokeType(StrokeType.CENTERED);
         return rectangle;
     }
 
@@ -229,6 +184,10 @@ public class Grid extends Application {
         render();
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(pane);
+
+        //Button tickButton = new Button("Tick");
+        //tickButton.setOnAction(actionEvent -> tick());
+        //pane.add(tickButton, 0, container.getHeight());
 
         Button resetButton = new Button("Reset");
         Button runButton = new Button("Run");
@@ -249,11 +208,11 @@ public class Grid extends Application {
                 }
             }, 0, 250);
 
-            pendingInput.clear();
-            for (String x : inputText.getText().split(" "))
-                if (x.length() > 0)
-                    pendingInput.add(new BigInteger(x));
-
+            input.clear();
+            for(String x : inputText.getText().split(" "))
+                if(x.length() > 0)
+                    input.add(new BigInteger(x));
+            container.start(input);
         });
 
         HBox hBox = new HBox(resetButton, runButton, inputText);

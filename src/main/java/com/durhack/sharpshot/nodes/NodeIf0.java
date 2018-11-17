@@ -14,6 +14,6 @@ public class NodeIf0 extends NodeConditional {
 
     @Override
     public @NotNull Node toGraphic() {
-        return new Triangle(getRotation(), Color.GREEN, "0");
+        return new Triangle(getRotation(), Color.web("#FF0000"), "=0");
     }
 }

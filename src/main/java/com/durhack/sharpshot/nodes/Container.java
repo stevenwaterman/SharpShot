@@ -1,6 +1,9 @@
 package com.durhack.sharpshot.nodes;
 
-import com.durhack.sharpshot.*;
+import com.durhack.sharpshot.Bullet;
+import com.durhack.sharpshot.Coordinate;
+import com.durhack.sharpshot.Direction;
+import com.durhack.sharpshot.INode;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -59,12 +62,34 @@ public class Container implements INode {
         return bullets;
     }
 
+    public void start(List<BigInteger> input) {
+        // In nodes add input
+        Map<Coordinate, Bullet> newBullets = new HashMap<>();
+        for(int i = 0; i < input.size(); i++) {
+            for(Coordinate coordinate : getNodes().keySet()) {
+                INode x = getNodes().get(coordinate);
+                if(x instanceof NodeIn && ((NodeIn) x).getIndex() == i) {
+                    Map<Direction, BigInteger> bulletParams = ((NodeIn) x).into(input.get(i));
+
+                    for (Map.Entry<Direction, BigInteger> newBulletEntry : bulletParams.entrySet()) {
+                        Bullet newBullet = new Bullet(x.getRotation(), newBulletEntry.getValue());
+                        Coordinate newCoordinate = coordinate.plus(newBullet.getDirection());
+                        newBullets.put(newCoordinate, newBullet);
+                    }
+                }
+            }
+        }
+
+        bullets.putAll(newBullets);
+    }
+
     /**
      * Bullets on top of node -> store
      * Other bullets -> tick
      * stored bullets -> process and output
      * all bullets -> check
      */
+    public void tick() {
     public void tick(List<BigInteger> pendingInput) {
         List<Movement> movements = new ArrayList<>();
 
@@ -83,25 +108,6 @@ public class Container implements INode {
             Coordinate newCoord = entry.getKey().plus(bullet.getDirection()).wrap(width, height);
             movements.add(new Movement(coord, newCoord));
         }
-
-        // In nodes add input
-        /*
-        if(pendingInput.size() > 0) {
-            for(Coordinate coordinate : getNodes().keySet()) {
-                INode x = getNodes().get(coordinate);
-                if(x instanceof NodeIn) {com.durhack.sharpshot.nodes
-                    Map<Direction, BigInteger> bulletParams = ((NodeIn) x).into(pendingInput.get(0));
-
-                    for (Map.Entry<Direction, BigInteger> newBulletEntry : bulletParams.entrySet()) {
-                        Bullet newBullet = new Bullet(x.getRotation(), newBulletEntry.getValue());
-                        Coordinate newCoordinate = coordinate.plus(newBullet.getDirection());
-                        movements.add(new Movement(coordinate, newCoordinate));
-                    }
-                }
-            }
-            pendingInput.remove(0);
-        }
-        */
 
         //Update captured bullets
         for (Map.Entry<Coordinate, Bullet> entry : capturedBullets.entrySet()) {
