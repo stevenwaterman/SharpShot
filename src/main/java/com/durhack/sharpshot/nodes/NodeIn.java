@@ -32,7 +32,7 @@ public class NodeIn implements INode {
     }
 
     //@Override
-    public @NotNull Map<Direction, BigInteger> into(@NotNull BigInteger val) {
+    private @NotNull Map<Direction, BigInteger> into(@NotNull BigInteger val) {
         HashMap<Direction, BigInteger> map = new HashMap<>();
         map.put(dir,val);
         return map;
@@ -44,7 +44,7 @@ public class NodeIn implements INode {
 
     @Override
     public @NotNull Node toGraphic() {
-        return new Triangle(getRotation(), Color.LIGHTBLUE, "IN" + index);
+        return new Triangle(getRotation(), Color.web("#CC9900"), "IN" + index);
     }
 
     public void reset() {   }

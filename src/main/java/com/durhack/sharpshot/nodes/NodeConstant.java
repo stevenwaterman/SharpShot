@@ -49,7 +49,7 @@ public class NodeConstant implements INode {
 
     @Override
     public @NotNull Node toGraphic() {
-        return new Triangle(getRotation(), Color.GREEN, value.toString());
+        return new Triangle(getRotation(), Color.LIMEGREEN, value.toString());
     }
 
     public void reset() {}

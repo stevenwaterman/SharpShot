@@ -5,6 +5,7 @@ import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,7 +32,7 @@ public class NodeVoid implements INode {
 
     @Override
     public @NotNull Node toGraphic() {
-        return new Rectangle(32.0, 32.0, Color.BLACK);
+        return new Circle(16,Color.BLACK);//Rectangle(32.0, 32.0, Color.BLACK);
     }
 
     public void reset() {}
