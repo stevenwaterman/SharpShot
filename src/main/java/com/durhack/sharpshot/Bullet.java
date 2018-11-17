@@ -47,6 +47,11 @@ public class Bullet {
         this.y = y;
     }
 
+    public void tick(){
+        x += direction.getDeltaX();
+        y += direction.getDeltaY();
+    }
+
     @Nullable
     public BigInteger getValue() {
         return value;
