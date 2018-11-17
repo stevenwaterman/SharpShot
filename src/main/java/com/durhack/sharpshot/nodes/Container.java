@@ -1,9 +1,6 @@
 package com.durhack.sharpshot.nodes;
 
-import com.durhack.sharpshot.Bullet;
-import com.durhack.sharpshot.Coordinate;
-import com.durhack.sharpshot.Direction;
-import com.durhack.sharpshot.INode;
+import com.durhack.sharpshot.*;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -11,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 import java.util.*;
+import java.util.stream.Collectors;
 
 //TODO how do we deal with the container returning multiple outputs over multiple ticks?
 
@@ -68,6 +66,8 @@ public class Container implements INode {
      * all bullets -> check
      */
     public void tick(List<BigInteger> pendingInput) {
+        List<Movement> movements = new ArrayList<>();
+
         //Bullets on nodes
         Map<Coordinate, Bullet> capturedBullets = new HashMap<>(bullets);
         capturedBullets.keySet().retainAll(nodes.keySet());
@@ -76,43 +76,32 @@ public class Container implements INode {
         Map<Coordinate, Bullet> freeBullets = new HashMap<>(bullets);
         freeBullets.keySet().removeAll(capturedBullets.keySet());
 
-        //Update free bullets
-        Map<Coordinate, Bullet> newBullets = new HashMap<>();
-        Set<Coordinate> collisions = new HashSet<>();
-
+        //Generate movements for free bullets
         for (Map.Entry<Coordinate, Bullet> entry : freeBullets.entrySet()) {
             Bullet bullet = entry.getValue();
-            Coordinate coordinate = entry.getKey().plus(bullet.getDirection()).wrap(width, height);
-
-            if(newBullets.containsKey(coordinate)){
-                collisions.add(coordinate);
-            }
-            else{
-                newBullets.put(coordinate, bullet);
-            }
+            Coordinate coord = entry.getKey();
+            Coordinate newCoord = entry.getKey().plus(bullet.getDirection()).wrap(width, height);
+            movements.add(new Movement(coord, newCoord));
         }
 
         // In nodes add input
+        /*
         if(pendingInput.size() > 0) {
             for(Coordinate coordinate : getNodes().keySet()) {
                 INode x = getNodes().get(coordinate);
-                if(x instanceof NodeIn) {
+                if(x instanceof NodeIn) {com.durhack.sharpshot.nodes
                     Map<Direction, BigInteger> bulletParams = ((NodeIn) x).into(pendingInput.get(0));
 
                     for (Map.Entry<Direction, BigInteger> newBulletEntry : bulletParams.entrySet()) {
                         Bullet newBullet = new Bullet(x.getRotation(), newBulletEntry.getValue());
                         Coordinate newCoordinate = coordinate.plus(newBullet.getDirection());
-
-                        if(newBullets.containsKey(newCoordinate)) {
-                            collisions.add(newCoordinate);
-                        } else {
-                            newBullets.put(newCoordinate, newBullet);
-                        }
+                        movements.add(new Movement(coordinate, newCoordinate));
                     }
                 }
             }
             pendingInput.remove(0);
         }
+        */
 
         //Update captured bullets
         for (Map.Entry<Coordinate, Bullet> entry : capturedBullets.entrySet()) {
@@ -140,19 +129,35 @@ public class Container implements INode {
                 }
 
                 Bullet newBullet = new Bullet(bulletDirection, newBulletEntry.getValue());
+                bullets.put(coordinate, newBullet);
 
                 Coordinate newCoordinate = coordinate.plus(newBullet.getDirection());
-
-                if(newBullets.containsKey(newCoordinate)) {
-                    collisions.add(newCoordinate);
-                } else {
-                    newBullets.put(newCoordinate, newBullet);
-                }
+                movements.add(new Movement(coordinate, newCoordinate));
             }
         }
 
-        //Remove collisions and move bullets
-        newBullets.keySet().removeAll(collisions);
+        //Remove swapping bullets
+        List<SwapCollisionTest> swapCollisions = movements.stream().map(Movement::swapCollisionTest).collect(Collectors.toList());
+        Set<SwapCollisionTest> toDeleteSwap = collisions(swapCollisions);
+        for (SwapCollisionTest test: toDeleteSwap) {
+            bullets.remove(test.getFrom());
+            bullets.remove(test.getTo());
+        }
+        movements.removeAll(toDeleteSwap.stream().map(SwapCollisionTest::toMovement).collect(Collectors.toList()));
+
+        //Remove bullets that will end in the same placecom.durhack.sharpshot.nodes
+        List<FinalCollisionTest> finalCollisions = movements.stream().map(Movement::finalCollisionTest).collect(Collectors.toList());
+        Set<FinalCollisionTest> toDeleteFinal = collisions(finalCollisions);
+        for (FinalCollisionTest movement : toDeleteFinal) {
+            bullets.remove(movement.getTo());
+        }
+        movements.removeAll(toDeleteFinal.stream().map(FinalCollisionTest::toMovement).collect(Collectors.toList()));
+
+        //Move bullets
+        Map<Coordinate, Bullet> newBullets = new HashMap<>();
+        for (Movement movement : movements) {
+            newBullets.put(movement.getTo(), bullets.get(movement.getFrom()));
+        }
         bullets.clear();
         bullets.putAll(newBullets);
     }
@@ -171,5 +176,120 @@ public class Container implements INode {
         bullets.clear();
         for(INode n : getNodes().values())
             n.reset();
+    }
+
+    private static <T> Set<T> collisions(List<T> collection){
+        Set<T> found = new HashSet<>();
+        Set<T> banned = new HashSet<>();
+
+        for (T elem : collection) {
+            if(!banned.contains(elem)){
+                if(found.contains(elem)){
+                    found.remove(elem);
+                    banned.add(elem);
+                }
+                else{
+                    found.add(elem);
+                }
+            }
+        }
+
+        return banned;
+    }
+
+    public static class FinalCollisionTest {
+        private Coordinate from;
+        private Coordinate to;
+
+        FinalCollisionTest(Coordinate from, Coordinate to) {
+            this.from = from;
+            this.to = to;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            FinalCollisionTest collision = (FinalCollisionTest) o;
+            return to.equals(collision.to);
+        }
+
+        @Override
+        public int hashCode() {
+            return to.hashCode();
+        }
+
+        public Coordinate getFrom() {
+            return from;
+        }
+
+        Coordinate getTo() {
+            return to;
+        }
+
+        Movement toMovement() {
+            return new Movement(from, to);
+        }
+    }
+
+    public static class Movement {
+        private Coordinate from;
+        private Coordinate to;
+
+        Movement(Coordinate from, Coordinate to) {
+            this.from = from;
+            this.to = to;
+        }
+
+        SwapCollisionTest swapCollisionTest(){
+            return new SwapCollisionTest(from, to);
+        }
+
+        FinalCollisionTest finalCollisionTest(){
+            return new FinalCollisionTest(from, to);
+        }
+
+        Coordinate getFrom() {
+            return from;
+        }
+
+        Coordinate getTo() {
+            return to;
+        }
+    }
+
+    public static class SwapCollisionTest {
+        private Coordinate from;
+        private Coordinate to;
+
+        SwapCollisionTest(Coordinate from, Coordinate to) {
+            this.from = from;
+            this.to = to;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            SwapCollisionTest collision = (SwapCollisionTest) o;
+            return(from.equals(collision.to) && to.equals(collision.from));
+        }
+
+        @Override
+        public int hashCode() {
+            return from.hashCode() + to.hashCode();
+        }
+
+        Coordinate getFrom() {
+            return from;
+        }
+
+        Coordinate getTo() {
+            return to;
+        }
+
+        Movement toMovement() {
+            return new Movement(from, to);
+        }
     }
 }

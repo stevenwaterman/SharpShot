@@ -31,7 +31,7 @@ public class Grid extends Application {
     private GridPane pane = new GridPane();
     private Container container;
 
-    Timer timer = new Timer();
+    private Timer timer = new Timer();
 
     private List<BigInteger> pendingInput = new ArrayList<>();
 
@@ -82,11 +82,11 @@ public class Grid extends Application {
             pane.add(bullet.toGraphic(), coordinate.getX(), coordinate.getY());
         }
 
-        for(Node n : pane.getChildren()) {
+        for (Node n : pane.getChildren()) {
             n.setOnMouseClicked(mouseEvent -> {
-                if(mouseEvent.getButton() == MouseButton.PRIMARY)
+                if (mouseEvent.getButton() == MouseButton.PRIMARY)
                     nodeLeftClicked((int) n.getLayoutX() / 32, (int) n.getLayoutY() / 32);
-                if(mouseEvent.getButton() == MouseButton.SECONDARY)
+                if (mouseEvent.getButton() == MouseButton.SECONDARY)
                     nodeRightClicked((int) n.getLayoutX() / 32, (int) n.getLayoutY() / 32);
 
             });
@@ -94,14 +94,14 @@ public class Grid extends Application {
     }
 
     private void nodeRightClicked(int x, int y) {
-        if(container.getNodes().get(new Coordinate(x, y)) != null)
-            container.getNodes().get(new Coordinate(x, y)).rotateClockwise();
+        if (container.getNodes().get(new Coordinate(x, y)) != null)
+            container.getNodes().remove(new Coordinate(x, y));
         render();
     }
 
     private void nodeLeftClicked(int x, int y) {
-        if(container.getNodes().get(new Coordinate(x, y)) != null) {
-            container.getNodes().remove(new Coordinate(x, y));
+        if (container.getNodes().get(new Coordinate(x, y)) != null) {
+            container.getNodes().get(new Coordinate(x, y)).rotateClockwise();
         } else {
             List<String> choices = new ArrayList<>();
 
@@ -129,28 +129,52 @@ public class Grid extends Application {
             dialog.setContentText("");
 
             Optional<String> result = dialog.showAndWait();
-            if (result.isPresent()){
+            if (result.isPresent()) {
                 String choice = result.get();
                 INode newNode;
 
-                switch(choice) {
-                    case "in":  newNode = new NodeIn(); break;
-                    case "out": newNode = new NodeOut(); break;
+                switch (choice) {
+                    case "in":
+                        newNode = new NodeIn();
+                        break;
+                    case "out":
+                        newNode = new NodeOut();
+                        break;
 
-                    case "add": newNode = new NodeAdd(); break;
-                    case "sub": newNode = new NodeSub(); break;
-                    case "mul": newNode = new NodeMult(); break;
-                    case "div": newNode = new NodeDiv(); break;
+                    case "add":
+                        newNode = new NodeAdd();
+                        break;
+                    case "sub":
+                        newNode = new NodeSub();
+                        break;
+                    case "mul":
+                        newNode = new NodeMult();
+                        break;
+                    case "div":
+                        newNode = new NodeDiv();
+                        break;
 
-                    case "branch":   newNode = new NodeBranch(); break;
-                    case "splitter": newNode = new NodeSplitter(); break;
+                    case "branch":
+                        newNode = new NodeBranch();
+                        break;
+                    case "splitter":
+                        newNode = new NodeSplitter();
+                        break;
 
-                    case "const": newNode = new NodeConstant(getNumberInput()); break;
+                    case "const":
+                        newNode = new NodeConstant(getNumberInput());
+                        break;
 
-                    case "void": newNode = new NodeVoid(); break;
+                    case "void":
+                        newNode = new NodeVoid();
+                        break;
 
-                    case "if_positive": newNode = new NodeIfPositive(); break;
-                    case "if_0": newNode = new NodeIf0(); break;
+                    case "if_positive":
+                        newNode = new NodeIfPositive();
+                        break;
+                    case "if_0":
+                        newNode = new NodeIf0();
+                        break;
 
                     default:
                         System.err.println("This shouldn't happen");
@@ -174,7 +198,7 @@ public class Grid extends Application {
         dialog.setContentText("");
 
         Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()){
+        if (result.isPresent()) {
             return new BigInteger(result.get());
         } else {
             throw new RuntimeException("No result");
@@ -193,11 +217,10 @@ public class Grid extends Application {
         render();
     }
 
-    private Node emptyGraphic(){
+    private Node emptyGraphic() {
         Rectangle rectangle = new Rectangle(32.0, 32.0, Color.WHITE);
         rectangle.setStroke(Color.GRAY);
         rectangle.setStrokeWidth(0.5);
-        rectangle.setStrokeType(StrokeType.CENTERED);
         return rectangle;
     }
 
@@ -206,10 +229,6 @@ public class Grid extends Application {
         render();
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(pane);
-
-        //Button tickButton = new Button("Tick");
-        //tickButton.setOnAction(actionEvent -> tick());
-        //pane.add(tickButton, 0, container.getHeight());
 
         Button resetButton = new Button("Reset");
         Button runButton = new Button("Run");
@@ -231,8 +250,8 @@ public class Grid extends Application {
             }, 0, 250);
 
             pendingInput.clear();
-            for(String x : inputText.getText().split(" "))
-                if(x.length() > 0)
+            for (String x : inputText.getText().split(" "))
+                if (x.length() > 0)
                     pendingInput.add(new BigInteger(x));
 
         });
