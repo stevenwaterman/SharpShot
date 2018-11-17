@@ -31,12 +31,13 @@ public class Grid extends Application {
     private GridPane pane = new GridPane();
     private Container container;
 
+    private boolean systemactive = false;
     private Timer timer = new Timer();
 
     private List<BigInteger> input = new ArrayList<>();
 
     public Grid() {
-        container = new Container(40, 25);
+        container = new Container(32, 16);
     }
 
     private void render() {
@@ -72,12 +73,14 @@ public class Grid extends Application {
     }
 
     private void nodeRightClicked(int x, int y) {
+        if (systemactive){return;}
         if (container.getNodes().get(new Coordinate(x, y)) != null)
             container.getNodes().remove(new Coordinate(x, y));
         render();
     }
 
     private void nodeLeftClicked(int x, int y) {
+        if (systemactive){return;}
         if (container.getNodes().get(new Coordinate(x, y)) != null) {
             container.getNodes().get(new Coordinate(x, y)).rotateClockwise();
         } else {
@@ -168,6 +171,7 @@ public class Grid extends Application {
     private void reset() {
         timer.cancel();
         container.reset();
+        systemactive = false;
         render();
     }
 
@@ -199,6 +203,7 @@ public class Grid extends Application {
         });
 
         runButton.setOnAction(actionEvent -> {
+            systemactive = true;
             runButton.setDisable(true);
             timer = new Timer();
             timer.schedule(new TimerTask() {
