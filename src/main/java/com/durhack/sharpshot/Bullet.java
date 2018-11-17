@@ -5,14 +5,17 @@ import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
 
+/**
+ * Immutable
+ */
 public class Bullet {
     @NotNull
-    private Direction direction;
+    final private Direction direction;
 
     @Nullable
-    private BigInteger value;
+    final private BigInteger value;
 
-    public Bullet(@NotNull Direction direction, @NotNull BigInteger value) {
+    public Bullet(@NotNull Direction direction, @Nullable BigInteger value) {
         this.direction = direction;
         this.value = value;
     }
@@ -22,16 +25,8 @@ public class Bullet {
         return direction;
     }
 
-    public void setDirection(@NotNull Direction direction) {
-        this.direction = direction;
-    }
-
     @Nullable
     public BigInteger getValue() {
         return value;
-    }
-
-    public void setValue(@NotNull BigInteger value) {
-        this.value = value;
     }
 }
