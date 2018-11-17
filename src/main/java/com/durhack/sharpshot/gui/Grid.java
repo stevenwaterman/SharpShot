@@ -47,20 +47,16 @@ public class Grid extends Application {
             }
         }
 
-        Set<Coordinate> nodeLocations = new HashSet<>();
         for (Map.Entry<Coordinate, INode> nodeLocation : container.getNodes().entrySet()) {
             Coordinate coordinate = nodeLocation.getKey();
             INode node = nodeLocation.getValue();
             pane.add(node.toGraphic(), coordinate.getX(), coordinate.getY());
-            nodeLocations.add(coordinate);
         }
 
         for (Map.Entry<Coordinate, Bullet> bulletLocations : container.getBullets().entrySet()) {
             Coordinate coordinate = bulletLocations.getKey();
-            if(!nodeLocations.contains(coordinate)){
-                Bullet bullet = bulletLocations.getValue();
-                pane.add(bullet.toGraphic(), coordinate.getX(), coordinate.getY());
-            }
+            Bullet bullet = bulletLocations.getValue();
+            pane.add(bullet.toGraphic(), coordinate.getX(), coordinate.getY());
         }
     }
 
