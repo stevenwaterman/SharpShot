@@ -47,20 +47,16 @@ public class Grid extends Application {
             }
         }
 
-        Set<Coordinate> nodeLocations = new HashSet<>();
         for (Map.Entry<Coordinate, INode> nodeLocation : container.getNodes().entrySet()) {
             Coordinate coordinate = nodeLocation.getKey();
             INode node = nodeLocation.getValue();
-            pane.add(toGraphic(node), coordinate.getX(), coordinate.getY());
-            nodeLocations.add(coordinate);
+            pane.add(node.toGraphic(), coordinate.getX(), coordinate.getY());
         }
 
         for (Map.Entry<Coordinate, Bullet> bulletLocations : container.getBullets().entrySet()) {
             Coordinate coordinate = bulletLocations.getKey();
-            if(!nodeLocations.contains(coordinate)){
-                Bullet bullet = bulletLocations.getValue();
-                pane.add(toGraphic(bullet), coordinate.getX(), coordinate.getY());
-            }
+            Bullet bullet = bulletLocations.getValue();
+            pane.add(bullet.toGraphic(), coordinate.getX(), coordinate.getY());
         }
     }
 
@@ -71,27 +67,6 @@ public class Grid extends Application {
 
     private Node emptyGraphic(){
         return new Rectangle(32.0, 32.0, Color.WHITE);
-    }
-
-    @NotNull
-    private Node toGraphic(@NotNull INode node) {
-        return new Rectangle(32.0, 32.0, Color.RED);
-    }
-
-    @NotNull
-    private Node toGraphic(@NotNull Bullet bullet) {
-        StackPane stackPane = new StackPane();
-
-        Rectangle background = new Rectangle(16.0, 16.0, Color.WHEAT);
-        stackPane.getChildren().add(background);
-
-        BigInteger value = bullet.getValue();
-        if (value != null) {
-            Label label = new Label(value.toString());
-            stackPane.getChildren().add(label);
-        }
-
-        return stackPane;
     }
 
     public static void main(String[] args) {
