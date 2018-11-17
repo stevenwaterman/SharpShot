@@ -9,7 +9,7 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class NodeIfCondition implements INode {
+public abstract class NodeConditional implements INode {
     private Direction dir = Direction.UP;
 
     @Override
@@ -40,5 +40,6 @@ public abstract class NodeIfCondition implements INode {
             }
         }
     }
+
     public abstract boolean branchingCondition(int signum);
 }

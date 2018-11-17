@@ -3,6 +3,9 @@ package com.durhack.sharpshot.nodes;
 import com.durhack.sharpshot.Bullet;
 import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
+import javafx.scene.Node;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
@@ -26,5 +29,10 @@ public class NodeOut implements INode {
     public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
         System.out.println(bullet.getValue().toString());
         return new HashMap<>();
+    }
+
+    @Override
+    public @NotNull Node toGraphic() {
+        return new Rectangle(32.0, 32.0, Color.GREEN);
     }
 }

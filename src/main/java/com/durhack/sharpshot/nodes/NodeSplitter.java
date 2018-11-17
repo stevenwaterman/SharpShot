@@ -3,6 +3,9 @@ package com.durhack.sharpshot.nodes;
 import com.durhack.sharpshot.Bullet;
 import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
+import javafx.scene.Node;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
@@ -28,5 +31,10 @@ public class NodeSplitter implements INode {
         for(Direction d : Direction.others(Direction.inverseOf(bullet.getDirection())))
             map.put(d, bullet.getValue());
         return map;
+    }
+
+    @Override
+    public @NotNull Node toGraphic() {
+        return new Rectangle(32.0, 32.0, Color.GREEN);
     }
 }

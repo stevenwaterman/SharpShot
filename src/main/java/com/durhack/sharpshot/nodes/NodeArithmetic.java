@@ -3,6 +3,9 @@ package com.durhack.sharpshot.nodes;
 import com.durhack.sharpshot.Bullet;
 import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
+import javafx.scene.Node;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
@@ -44,5 +47,4 @@ public abstract class NodeArithmetic implements INode {
     }
 
     public abstract BigInteger operation(BigInteger val1, BigInteger val2);
-    //return val1.add(val2);
 }
