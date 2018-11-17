@@ -4,6 +4,8 @@ import com.durhack.sharpshot.Bullet;
 import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +29,6 @@ public class NodeRotateClockwise implements INode {
 
     @Override
     public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
-        // Shoot out 3 bullets in other directions
         HashMap<Direction, BigInteger> map = new HashMap<>();
         map.put(bullet.getDirection().clockwise(), bullet.getValue());
         return map;
@@ -35,6 +36,10 @@ public class NodeRotateClockwise implements INode {
 
     @Override
     public @NotNull Node toGraphic() {
-        return new Rectangle(32.0, 32.0, Color.GREEN);
+        Rectangle rectangle = new Rectangle(32.0, 32.0, Color.PALEVIOLETRED);
+        Label label = new Label("ACW");
+        return new StackPane(rectangle, label);
     }
+
+    public void reset() {}
 }

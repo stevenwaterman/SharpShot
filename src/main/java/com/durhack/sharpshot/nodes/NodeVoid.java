@@ -31,6 +31,8 @@ public class NodeVoid implements INode {
 
     @Override
     public @NotNull Node toGraphic() {
-        return new Rectangle(32.0, 32.0, Color.GREEN);
+        return new Rectangle(32.0, 32.0, Color.BLACK);
     }
+
+    public void reset() {}
 }

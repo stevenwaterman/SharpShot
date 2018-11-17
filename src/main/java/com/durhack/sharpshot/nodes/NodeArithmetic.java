@@ -47,4 +47,8 @@ public abstract class NodeArithmetic implements INode {
     }
 
     public abstract BigInteger operation(BigInteger val1, BigInteger val2);
+
+    public void reset() {
+        mostRecentBullet = null;
+    }
 }

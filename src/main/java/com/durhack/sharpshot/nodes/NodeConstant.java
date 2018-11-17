@@ -3,6 +3,7 @@ package com.durhack.sharpshot.nodes;
 import com.durhack.sharpshot.Bullet;
 import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
+import com.durhack.sharpshot.gui.Triangle;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -41,12 +42,18 @@ public class NodeConstant implements INode {
     public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
         // Shoot out a bullet
         HashMap<Direction, BigInteger> map = new HashMap<>();
-        map.put(Direction.UP, getValue());
+        if(bullet.getDirection() != Direction.UP){
+            map.put(Direction.UP, getValue());
+            map.put(bullet.getDirection(), bullet.getValue());
+            return map;
+        }
         return map;
     }
 
     @Override
     public @NotNull Node toGraphic() {
-        return new Rectangle(32.0, 32.0, Color.GREEN);
+        return new Triangle(getRotation(), Color.GREEN, value.toString());
     }
+
+    public void reset() {}
 }

@@ -36,12 +36,19 @@ public class NodeRandom implements INode {
     @Override
     public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
         HashMap<Direction, BigInteger> map = new HashMap<>();
-        map.put(dir, rand(bullet.getValue()));
+        if (bullet.getValue() != null) {
+            map.put(dir, rand(bullet.getValue()));
+        }
         return map;
     }
 
     @Override
     public @NotNull Node toGraphic() {
         return new Rectangle(32.0, 32.0, Color.GREEN);
+    }
+
+    @Override
+    public void reset() {
+        //nothing to do
     }
 }

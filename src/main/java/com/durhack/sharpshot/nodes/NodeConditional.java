@@ -42,4 +42,6 @@ public abstract class NodeConditional implements INode {
     }
 
     public abstract boolean branchingCondition(int signum);
+
+    public void reset() {}
 }
