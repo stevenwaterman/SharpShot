@@ -117,12 +117,11 @@ public class App extends Application {
 
         saveButton.setOnAction(actionEvent -> SaveLoadFiles.saveToFile(primaryStage, grid.getContainer()));
 
-        clearAllButton.setOnAction(actionEvent -> {
-            grid.clearAll();
-        });
+        clearAllButton.setOnAction(actionEvent -> grid.clearAll());
 
         programOutput.setMaxWidth(100);
         programOutput.setEditable(false);
+        programOutput.setWrapText(true);
         clearOutput();
         borderPane.setRight(programOutput);
 
@@ -130,9 +129,7 @@ public class App extends Application {
         primaryStage.setScene(rootScene);
         primaryStage.setTitle("SharpShot 1.0");
 
-        primaryStage.setOnCloseRequest(windowEvent -> {
-            grid.getTimer().cancel();
-        });
+        primaryStage.setOnCloseRequest(windowEvent -> grid.getTimer().cancel());
 
         primaryStage.show();
     }
