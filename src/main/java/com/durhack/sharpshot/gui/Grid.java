@@ -72,11 +72,15 @@ public class Grid extends Pane {
             Bullet bullet = bulletLocations.getValue();
 
             Node graphic = bullet.toGraphic();
-            graphic.relocate(coordinate.getX() * 32, coordinate.getY() * 32);
 
             TranslateTransition translateTransition = new TranslateTransition();
             translateTransition.setDuration(Duration.millis(App.TICK_RATE));
             translateTransition.setNode(graphic);
+
+            Coordinate prevPos = new Coordinate(coordinate.getX(), coordinate.getY());
+            prevPos = new Coordinate(prevPos.getX() - bullet.getDirection().getDeltaX(),
+                                        prevPos.getY()- bullet.getDirection().getDeltaY());
+            graphic.relocate(prevPos.getX() * 32, prevPos.getY() * 32);
 
             translateTransition.setToX(bullet.getDirection().getDeltaX() * 32);
             translateTransition.setToY(bullet.getDirection().getDeltaY() * 32);
@@ -96,9 +100,9 @@ public class Grid extends Pane {
     }
 
     public void tick() {
-        render();
         systemRunning = true;
         container.tick();
+        render();
         if (container.noBullets()) {
             reset();
             enableRunButton.run();
