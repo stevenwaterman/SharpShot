@@ -86,6 +86,8 @@ public class App extends Application {
                     Platform.runLater(() -> grid.tick());
                 }
             }, 0, TICK_RATE);
+            if(grid.getTimer() != null)
+                grid.getTimer().cancel();
             grid.setTimer(timer);
 
             List<BigInteger> input = grid.getInput();

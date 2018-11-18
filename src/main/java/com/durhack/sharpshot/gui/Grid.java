@@ -7,7 +7,6 @@ import com.durhack.sharpshot.nodes.Container;
 import javafx.animation.TranslateTransition;
 import javafx.scene.Node;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
