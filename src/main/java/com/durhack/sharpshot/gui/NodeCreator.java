@@ -35,6 +35,9 @@ class NodeCreator extends ListView<NodeTypeDescriptor> {
         node = new NodeOut();
         nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Provides output", node.toGraphic(), NodeOut::new));
 
+        node = new NodeAscii();
+        nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Outputs an Ascii String corresponding to input", node.toGraphic(), NodeAscii::new));
+
         node = new NodeAdd();
         nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Adds two numbers", node.toGraphic(), NodeAdd::new));
 

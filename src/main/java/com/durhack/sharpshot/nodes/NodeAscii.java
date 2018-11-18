@@ -3,6 +3,7 @@ package com.durhack.sharpshot.nodes;
 import com.durhack.sharpshot.Bullet;
 import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
+import com.durhack.sharpshot.gui.App;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -31,7 +32,9 @@ public class NodeAscii implements INode {
     public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
         BigInteger value = bullet.getValue();
         if(value != null) {
-            System.out.println(findAscii(value + ""));
+            String output  = findAscii(value + "");
+            System.out.println(output);
+            App.printToOut(output);
         }
         return new HashMap<>();
     }
@@ -48,10 +51,14 @@ public class NodeAscii implements INode {
 
         @Override
     public @NotNull Node toGraphic() {
-        Rectangle rectangle = new Rectangle(32.0, 32.0, Color.SANDYBROWN);
-        Label label = new Label("OUT");
+        Rectangle rectangle = new Rectangle(32.0, 32.0, Color.FIREBRICK);
+        Label label = new Label("STR");
         return new StackPane(rectangle, label);
     }
 
     public void reset() {}
+    @Override
+    public String toString() {
+        return "Ascii";
+    }
 }

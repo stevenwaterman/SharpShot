@@ -75,6 +75,7 @@ class Serialiser {
             switch(type) {
                 case "NodeIn":  newNode = new NodeIn(Integer.parseInt(nd.extra)); break;
                 case "NodeOut": newNode = new NodeOut(); break;
+                case "NodeAscii": newNode = new NodeAscii(); break;
 
                 case "NodeAdd": newNode = new NodeAdd(); break;
                 case "NodeSub": newNode = new NodeSub(); break;
