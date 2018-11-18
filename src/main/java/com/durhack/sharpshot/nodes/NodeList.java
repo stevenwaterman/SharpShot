@@ -34,7 +34,7 @@ public class NodeList extends AbstractNodeInput {
 
     @Override
     public String toString() {
-        return "In";
+        return "Argument List";
     }
 
     @Override

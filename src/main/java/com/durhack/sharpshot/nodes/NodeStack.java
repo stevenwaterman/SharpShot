@@ -34,7 +34,6 @@ public class NodeStack implements INode {
             bullets.put(Direction.UP, stack.pop());
         } else {
             stack.add(bullet.getValue());
-            bullets.put(bullet.getDirection(), bullet.getValue());
         }
         return bullets;
     }
@@ -47,5 +46,10 @@ public class NodeStack implements INode {
     @Override
     public void reset() {
         stack.clear();
+    }
+
+    @Override
+    public String toString() {
+        return "Stack";
     }
 }
