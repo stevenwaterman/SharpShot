@@ -62,7 +62,7 @@ class NodeCreator extends ListView<NodeTypeDescriptor> {
         node = new NodeSplitter();
         nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Splits bullets input three", node.toGraphic(), NodeSplitter::new));
 
-        node = new NodeConstant(BigInteger.ONE);
+        node = new NodeConstant(BigInteger.ZERO);
         nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Whenever a bullet passes through, releases another bullet with user-determined value", node.toGraphic(), () -> {
             BigInteger value = getNumberInput("Enter Constant Value");
             if (value == null) {
