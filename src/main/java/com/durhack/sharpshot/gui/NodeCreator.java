@@ -24,7 +24,7 @@ class NodeCreator extends ListView<NodeTypeDescriptor> {
         node = new NodeIn(0);
         nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Provides input", node.toGraphic(), () -> {
             int suggested = minInIndex.get();
-            BigInteger response = getNumberInput("Enter Input Index", suggested);
+            BigInteger response = getNumberInput("Enter Input Index", "0 for shoot 0 at start\nArguments are 1-indexed", suggested);
             if (response == null) {
                 return null;
             } else {
@@ -90,15 +90,15 @@ class NodeCreator extends ListView<NodeTypeDescriptor> {
 
     @Nullable
     private BigInteger getNumberInput(@NotNull String header) {
-        return getNumberInput(header, 0);
+        return getNumberInput(header, "", 0);
     }
 
     @Nullable
-    private BigInteger getNumberInput(@NotNull String header, @NotNull Integer start) {
+    private BigInteger getNumberInput(@NotNull String header, @NotNull String content, @NotNull Integer start) {
         TextInputDialog dialog = new TextInputDialog(start.toString());
         dialog.setTitle("New Node");
         dialog.setHeaderText(header);
-        dialog.setContentText("");
+        dialog.setContentText(content);
 
         Optional<String> result = dialog.showAndWait();
         return result.map(BigInteger::new).orElse(null);

@@ -39,7 +39,7 @@ public class NodeIn implements INode {
 
     @Override
     public String toString() {
-        return "In";
+        return "Input";
     }
 
     @Override
