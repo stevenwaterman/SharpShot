@@ -40,7 +40,7 @@ public class NodeIn extends AbstractNodeInput {
             map.put(Direction.UP, BigInteger.ZERO);
         } else {
             if (index <= inputs.size()) {
-                input = inputs.get(index);
+                input = inputs.get(index - 1);
                 map.put(Direction.UP, input);
             }
         }
