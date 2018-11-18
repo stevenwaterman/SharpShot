@@ -49,6 +49,7 @@ public class Grid extends GridPane {
 
     public void setContainer(Container container) {
         this.container = container;
+        render();
     }
 
     public void render() {

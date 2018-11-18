@@ -1,7 +1,9 @@
 package com.durhack.sharpshot.gui;
 
 import com.durhack.sharpshot.INode;
+import com.durhack.sharpshot.nodes.Container;
 import com.durhack.sharpshot.nodes.NodeIn;
+import com.durhack.sharpshot.util.SaveLoadFiles;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -19,8 +21,14 @@ import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 public class App extends Application {
-    private BorderPane borderPane = new BorderPane();
     private Button runButton = new Button("Run");
+    private Button resetButton = new Button("Reset");
+    private Button loadButton = new Button("Load");
+    private Button saveButton = new Button("Save");
+    private TextField inputText = new TextField();
+
+
+    private BorderPane borderPane = new BorderPane();
     private NodeCreator nodeCreator = new NodeCreator(this::firstAvailableInputIndex);
     private Grid grid = new Grid(this::createNode, () -> runButton.setDisable(false));
 
@@ -55,9 +63,7 @@ public class App extends Application {
         borderPane.setCenter(grid);
         borderPane.setLeft(nodeCreator);
 
-        Button resetButton = new Button("Reset");
-        TextField inputText = new TextField();
-        HBox hBox = new HBox(16.0, resetButton, runButton, inputText);
+        HBox hBox = new HBox(16.0, resetButton, runButton, inputText, loadButton, saveButton);
         hBox.setAlignment(Pos.CENTER);
         borderPane.setBottom(hBox);
 
@@ -85,6 +91,13 @@ public class App extends Application {
             grid.getContainer().start(input);
             grid.render();
         });
+
+        loadButton.setOnAction(actionEvent -> {
+            Container container = SaveLoadFiles.loadFromFile(primaryStage);
+            grid.setContainer(container);
+        });
+
+        saveButton.setOnAction(actionEvent -> SaveLoadFiles.saveToFile(primaryStage, grid.getContainer()));
 
         Scene rootScene = new Scene(borderPane);
         primaryStage.setScene(rootScene);
