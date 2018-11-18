@@ -16,9 +16,14 @@ import java.util.Map;
 public class NodeIn implements INode {
     private Direction dir = Direction.UP;
     private int index;
+    private BigInteger value;
 
     public NodeIn(int index) {
         this.index = index;
+    }
+    
+    public void setValue(BigInteger value) {
+        this.value = value;
     }
 
     @Override
@@ -39,7 +44,9 @@ public class NodeIn implements INode {
     }
     @Override
     public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
-        return new HashMap<>();
+        HashMap<Direction, BigInteger> map = new HashMap<>();
+        map.put(dir, value);
+        return map;
     }
 
     @Override

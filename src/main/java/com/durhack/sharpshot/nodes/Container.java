@@ -70,6 +70,8 @@ public class Container implements INode {
             for (Coordinate coordinate : getNodes().keySet()) {
                 INode x = getNodes().get(coordinate);
                 if (x instanceof NodeIn && ((NodeIn) x).getIndex() == i) {
+                    ((NodeIn) x).setValue(new BigInteger(String.valueOf(input.get(i))));
+
                     Map<Direction, BigInteger> bulletParams = ((NodeIn) x).into(input.get(i));
 
                     for (Map.Entry<Direction, BigInteger> newBulletEntry : bulletParams.entrySet()) {
