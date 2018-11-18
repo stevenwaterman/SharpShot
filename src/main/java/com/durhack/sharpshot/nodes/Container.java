@@ -73,17 +73,15 @@ public class Container implements INode {
         Map<Coordinate, Bullet> newBullets = new HashMap<>();
 
         // Input nodes spawn 0 if their index == 0
-        for (int i = 0; i < input.size(); i++) {
-            for (Coordinate coordinate : getNodes().keySet()) {
-                INode node = getNodes().get(coordinate);
-                if (node instanceof AbstractNodeInput) {
-                    Map<Direction, BigInteger> bulletParams = ((AbstractNodeInput) node).input(input);
+        for (Coordinate coordinate : getNodes().keySet()) {
+            INode node = getNodes().get(coordinate);
+            if (node instanceof AbstractNodeInput) {
+                Map<Direction, BigInteger> bulletParams = ((AbstractNodeInput) node).input(input);
 
-                    for (Map.Entry<Direction, BigInteger> newBulletEntry : bulletParams.entrySet()) {
-                        Bullet newBullet = new Bullet(node.getRotation(), newBulletEntry.getValue());
-                        Coordinate newCoordinate = coordinate.plus(newBullet.getDirection());
-                        newBullets.put(newCoordinate, newBullet);
-                    }
+                for (Map.Entry<Direction, BigInteger> newBulletEntry : bulletParams.entrySet()) {
+                    Bullet newBullet = new Bullet(node.getRotation(), newBulletEntry.getValue());
+                    Coordinate newCoordinate = coordinate.plus(newBullet.getDirection());
+                    newBullets.put(newCoordinate, newBullet);
                 }
             }
         }
@@ -124,7 +122,7 @@ public class Container implements INode {
             INode node = nodes.get(coordinate);
 
             // special case
-            if(node instanceof NodeHalt)
+            if (node instanceof NodeHalt)
                 shouldHaltAfterTick = true;
 
             //TODO this brings great shame onto my family
@@ -162,7 +160,7 @@ public class Container implements INode {
             Coordinate from = movement.getFrom();
             Coordinate to = movement.getTo();
             boolean foundSwaps = read.stream().anyMatch(other -> from.equals(other.getTo()) && to.equals(other.getFrom()));
-            if(foundSwaps){
+            if (foundSwaps) {
                 toDelete.add(from);
                 toDelete.add(to);
             }
@@ -173,11 +171,11 @@ public class Container implements INode {
         //Remove bullets that end in the same place
         read.clear();
         toDelete.clear();
-        for (Pair<Movement, Bullet> pair: movements) {
+        for (Pair<Movement, Bullet> pair : movements) {
             Movement movement = pair.getKey();
             Coordinate to = movement.getTo();
             boolean foundSameFinal = read.stream().anyMatch(other -> to.equals(other.getTo()));
-            if(foundSameFinal){
+            if (foundSameFinal) {
                 toDelete.add(to);
             }
             read.add(movement);
@@ -186,7 +184,7 @@ public class Container implements INode {
 
         //Move bullets
         Map<Coordinate, Bullet> newBullets = new HashMap<>();
-        for (Pair<Movement, Bullet> pair: movements) {
+        for (Pair<Movement, Bullet> pair : movements) {
             Movement movement = pair.getKey();
             Bullet bullet = pair.getValue();
             newBullets.put(movement.getTo(), bullet);
@@ -195,7 +193,7 @@ public class Container implements INode {
         bullets.clear();
         bullets.putAll(newBullets);
 
-        if(shouldHaltAfterTick)
+        if (shouldHaltAfterTick)
             halt();
     }
 
