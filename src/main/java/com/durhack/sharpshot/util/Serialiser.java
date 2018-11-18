@@ -3,6 +3,7 @@ package com.durhack.sharpshot.util;
 import com.durhack.sharpshot.Coordinate;
 import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
+import com.durhack.sharpshot.gui.Grid;
 import com.durhack.sharpshot.nodes.*;
 import com.google.gson.*;
 
@@ -11,15 +12,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Serialiser {
+class Serialiser {
 
     static class NodeData {
-        public String type;
-        public int x, y;
-        public Direction rotation;
-        public String extra;
+        final String type;
+        final int x;
+        final int y;
+        final Direction rotation;
+        String extra;
 
-        public NodeData(String type, int x, int y, Direction rotation, String extra) {
+        NodeData(String type, int x, int y, Direction rotation, String extra) {
             this.type = type;
             this.x = x;
             this.y = y;
@@ -29,8 +31,9 @@ public class Serialiser {
     }
 
     static class Data {
-        public int width, height;
-        public List<NodeData> nodes = new ArrayList<>();
+        int width;
+        int height;
+        final List<NodeData> nodes = new ArrayList<>();
     }
 
 
@@ -60,11 +63,11 @@ public class Serialiser {
         return gson.toJson(data);
     }
 
-    public static Container loadJSON(String json) {
+    public static Container loadJSON(Grid grid, String json) {
         Gson gson = new GsonBuilder().create();
         Data data = gson.fromJson(json, Data.class);
 
-        Container container = new Container(data.width, data.height);
+        Container container = new Container(grid, data.width, data.height);
 
         for(NodeData nd : data.nodes) {
             String type = nd.type;
@@ -93,7 +96,10 @@ public class Serialiser {
 
                 case "NodeRandom": newNode = new NodeRandom(); break;
 
+                case "NodeHalt": newNode = new NodeHalt(); break;
+
                 default:
+                    System.out.println(type);
                     throw new RuntimeException("This shouldn't happen, cannot read serialised node in Serialiser");
             }
 
@@ -105,28 +111,4 @@ public class Serialiser {
 
         return container;
     }
-
-    /*
-    public static void main(String[] args) {
-        Container container = new Container(50, 30);
-        Map<Coordinate, INode> nodes = container.getNodes();
-        nodes.put(new Coordinate(1, 2), new NodeAdd());
-        nodes.put(new Coordinate(2, 2), new NodeBranch());
-        nodes.put(new Coordinate(3, 2), new NodeConstant(new BigInteger("11")));
-        NodeDiv div = new NodeDiv();
-        div.rotateClockwise();
-        nodes.put(new Coordinate(4, 2), div);
-        nodes.put(new Coordinate(5, 2), new NodeIfZero());
-        nodes.put(new Coordinate(6, 2), new NodeIfPositive());
-        nodes.put(new Coordinate(7, 2), new NodeIn(2));
-        nodes.put(new Coordinate(8, 2), new NodeMult());
-        nodes.put(new Coordinate(9, 2), new NodeOut());
-        nodes.put(new Coordinate(10, 2), new NodeRotateAnticlockwise());
-        nodes.put(new Coordinate(11, 2), new NodeRotateClockwise());
-        nodes.put(new Coordinate(12, 2), new NodeSplitter());
-        nodes.put(new Coordinate(13, 2), new NodeSub());
-        nodes.put(new Coordinate(14, 2), new NodeVoid());
-
-        System.out.println(loadJSON(getJSON(container)));
-    }*/
 }

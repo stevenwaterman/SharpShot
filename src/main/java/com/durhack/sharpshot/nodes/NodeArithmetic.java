@@ -36,15 +36,13 @@ public abstract class NodeArithmetic implements INode {
             return new HashMap<>();
         } else {
             HashMap<Direction, BigInteger> map = new HashMap<>();
-            assert mostRecentBullet.getValue() != null;
-            //map.put(Direction.UP, mostRecentBullet.getValue().add(bullet.getValue()));
             map.put(Direction.UP, operation(mostRecentBullet.getValue(),bullet.getValue()));
             mostRecentBullet = null;
             return map;
         }
     }
 
-    public abstract BigInteger operation(BigInteger val1, BigInteger val2);
+    protected abstract BigInteger operation(BigInteger val1, BigInteger val2);
 
     public void reset() {
         mostRecentBullet = null;

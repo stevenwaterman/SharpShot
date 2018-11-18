@@ -19,6 +19,8 @@ import java.util.Timer;
 import java.util.function.Supplier;
 
 public class Grid extends GridPane {
+    private final int WIDTH = 40, HEIGHT = 25;
+
     private final Supplier<INode> nodeSupplier;
     private final Runnable enableRunButton;
     private Container container;
@@ -26,20 +28,18 @@ public class Grid extends GridPane {
     private boolean systemRunning = false;
     private Timer timer = new Timer();
 
-    public Timer getTimer() {
-        return timer;
-    }
-
     public void setTimer(Timer timer) {
         this.timer = timer;
     }
 
-    private List<BigInteger> input = new ArrayList<>();
+    public Timer getTimer() { return this.timer; }
+
+    private final List<BigInteger> input = new ArrayList<>();
 
     public Grid(Supplier<INode> nodeSupplier, Runnable enableRunButton) {
         this.enableRunButton = enableRunButton;
         this.nodeSupplier = nodeSupplier;
-        container = new Container(40, 25);
+        container = new Container(this, WIDTH, HEIGHT);
         render();
     }
 
@@ -88,6 +88,7 @@ public class Grid extends GridPane {
         timer.cancel();
         container.reset();
         systemRunning = false;
+        enableRunButton.run();
         render();
     }
 
@@ -116,10 +117,17 @@ public class Grid extends GridPane {
                 }
             }
         });
+
         return rectangle;
     }
 
     public List<BigInteger> getInput() {
         return input;
+    }
+
+    public void clearAll() {
+        container.clearAll();
+        App.clearOutput();
+        reset();
     }
 }

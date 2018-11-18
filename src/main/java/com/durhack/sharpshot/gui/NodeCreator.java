@@ -13,7 +13,7 @@ import java.math.BigInteger;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class NodeCreator extends ListView<NodeTypeDescriptor> {
+class NodeCreator extends ListView<NodeTypeDescriptor> {
 
     public NodeCreator(Supplier<Integer> minInIndex) {
         super(FXCollections.observableArrayList());
@@ -80,6 +80,9 @@ public class NodeCreator extends ListView<NodeTypeDescriptor> {
 
         node = new NodeVoid();
         nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Destroys all incoming bullets", node.toGraphic(), NodeVoid::new));
+
+        node = new NodeHalt();
+        nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Terminates the program", node.toGraphic(), NodeHalt::new));
     }
 
     @Nullable

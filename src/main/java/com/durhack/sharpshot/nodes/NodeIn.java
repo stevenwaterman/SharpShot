@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class NodeIn implements INode {
     private Direction dir = Direction.UP;
-    private int index;
+    private final int index;
 
     public NodeIn(int index) {
         this.index = index;

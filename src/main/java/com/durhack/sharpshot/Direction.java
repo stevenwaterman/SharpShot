@@ -17,9 +17,9 @@ public enum Direction {
         this.degrees = degrees;
     }
 
-    private int deltaX;
-    private int deltaY;
-    private double degrees;
+    private final int deltaX;
+    private final int deltaY;
+    private final double degrees;
 
     public int getDeltaX() {
         return deltaX;

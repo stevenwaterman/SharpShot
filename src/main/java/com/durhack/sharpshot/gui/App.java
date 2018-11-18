@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -21,16 +22,17 @@ import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 public class App extends Application {
-    private Button runButton = new Button("Run");
-    private Button resetButton = new Button("Reset");
-    private Button loadButton = new Button("Load");
-    private Button saveButton = new Button("Save");
-    private TextField inputText = new TextField();
+    private final Button runButton = new Button("Run");
+    private final Button resetButton = new Button("Reset");
+    private final Button loadButton = new Button("Load");
+    private final Button saveButton = new Button("Save");
+    private final Button clearAllButton = new Button("Clear All");
+    private final TextField inputText = new TextField();
 
-
-    private BorderPane borderPane = new BorderPane();
-    private NodeCreator nodeCreator = new NodeCreator(this::firstAvailableInputIndex);
-    private Grid grid = new Grid(this::createNode, () -> runButton.setDisable(false));
+    private final BorderPane borderPane = new BorderPane();
+    private final NodeCreator nodeCreator = new NodeCreator(this::firstAvailableInputIndex);
+    private final Grid grid = new Grid(this::createNode, () -> runButton.setDisable(false));
+    private static final TextArea programOutput = new TextArea();
 
     private INode createNode() {
         return nodeCreator.createNode();
@@ -63,7 +65,7 @@ public class App extends Application {
         borderPane.setCenter(grid);
         borderPane.setLeft(nodeCreator);
 
-        HBox hBox = new HBox(16.0, resetButton, runButton, inputText, loadButton, saveButton);
+        HBox hBox = new HBox(16.0, resetButton, runButton, inputText, loadButton, saveButton, clearAllButton);
         hBox.setAlignment(Pos.CENTER);
         borderPane.setBottom(hBox);
 
@@ -85,6 +87,7 @@ public class App extends Application {
 
             List<BigInteger> input = grid.getInput();
             input.clear();
+            clearOutput();
             for (String x : inputText.getText().split(" "))
                 if (x.length() > 0)
                     input.add(new BigInteger(x));
@@ -93,15 +96,38 @@ public class App extends Application {
         });
 
         loadButton.setOnAction(actionEvent -> {
-            Container container = SaveLoadFiles.loadFromFile(primaryStage);
-            grid.setContainer(container);
+            Container container = SaveLoadFiles.loadFromFile(primaryStage, grid);
+            if(container != null)
+                grid.setContainer(container);
         });
 
         saveButton.setOnAction(actionEvent -> SaveLoadFiles.saveToFile(primaryStage, grid.getContainer()));
 
+        clearAllButton.setOnAction(actionEvent -> {
+            grid.clearAll();
+        });
+
+        programOutput.setMaxWidth(100);
+        programOutput.setEditable(false);
+        clearOutput();
+        borderPane.setRight(programOutput);
+
         Scene rootScene = new Scene(borderPane);
         primaryStage.setScene(rootScene);
         primaryStage.setTitle("SharpShot 1.0");
+
+        primaryStage.setOnCloseRequest(windowEvent -> {
+            grid.getTimer().cancel();
+        });
+
         primaryStage.show();
+    }
+
+    public static void printToOut(String s) {
+        programOutput.appendText(s + "\n");
+    }
+
+    public static void clearOutput() {
+        programOutput.setText("OUT:\n\n");
     }
 }
