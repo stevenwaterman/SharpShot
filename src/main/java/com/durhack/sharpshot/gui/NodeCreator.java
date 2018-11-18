@@ -6,6 +6,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
 import java.util.Optional;
@@ -13,29 +15,22 @@ import java.util.function.Supplier;
 
 public class NodeCreator extends ListView<NodeTypeDescriptor> {
 
-    private BigInteger getNumberInput(String header) {
-        TextInputDialog dialog = new TextInputDialog("0");
-        dialog.setTitle("New Node");
-        dialog.setHeaderText(header);
-        dialog.setContentText("");
-
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()) {
-            return new BigInteger(result.get());
-        } else {
-            throw new RuntimeException("No result");
-        }
-
-    }
-
-    public NodeCreator() {
+    public NodeCreator(Supplier<Integer> minInIndex) {
         super(FXCollections.observableArrayList());
         ObservableList<NodeTypeDescriptor> nodeTypes = getItems();
 
         INode node;
 
         node = new NodeIn(0);
-        nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Provides input", node.toGraphic(), () -> new NodeIn(getNumberInput("Enter Input Index").intValue())));
+        nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Provides input", node.toGraphic(), () -> {
+            int suggested = minInIndex.get();
+            BigInteger response = getNumberInput("Enter Input Index", suggested);
+            if (response == null) {
+                return null;
+            } else {
+                return new NodeIn(response.intValue());
+            }
+        }));
 
         node = new NodeOut();
         nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Provides output", node.toGraphic(), NodeOut::new));
@@ -65,7 +60,14 @@ public class NodeCreator extends ListView<NodeTypeDescriptor> {
         nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Splits bullets into three", node.toGraphic(), NodeSplitter::new));
 
         node = new NodeConstant(BigInteger.ONE);
-        nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Whenever a bullet passes through, releases another bullet with user-determined value", node.toGraphic(), () -> new NodeConstant(getNumberInput("Enter Constant Value"))));
+        nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Whenever a bullet passes through, releases another bullet with user-determined value", node.toGraphic(), () -> {
+            BigInteger value = getNumberInput("Enter Constant Value");
+            if (value == null) {
+                return null;
+            } else {
+                return new NodeConstant(value);
+            }
+        }));
 
         node = new NodeRandom();
         nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Provides a random output between 0 and input bullet - 1", node.toGraphic(), NodeRandom::new));
@@ -80,7 +82,24 @@ public class NodeCreator extends ListView<NodeTypeDescriptor> {
         nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Destroys all incoming bullets", node.toGraphic(), NodeVoid::new));
     }
 
-    public INode getNode() {
+    @Nullable
+    private BigInteger getNumberInput(@NotNull String header) {
+        return getNumberInput(header, 0);
+    }
+
+    @Nullable
+    private BigInteger getNumberInput(@NotNull String header, @NotNull Integer start) {
+        TextInputDialog dialog = new TextInputDialog(start.toString());
+        dialog.setTitle("New Node");
+        dialog.setHeaderText(header);
+        dialog.setContentText("");
+
+        Optional<String> result = dialog.showAndWait();
+        return result.map(BigInteger::new).orElse(null);
+    }
+
+    @Nullable
+    public INode createNode() {
         return getSelectionModel().getSelectedItem().getSupplier().get();
     }
 }

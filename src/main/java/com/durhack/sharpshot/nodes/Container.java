@@ -36,6 +36,10 @@ public class Container implements INode {
         return height;
     }
 
+    public boolean noBullets() {
+        return bullets.isEmpty();
+    }
+
     @Override
     public @NotNull Direction getRotation() {
         return rotation;

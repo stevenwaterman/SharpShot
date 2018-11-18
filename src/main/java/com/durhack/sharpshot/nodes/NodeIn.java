@@ -6,7 +6,6 @@ import com.durhack.sharpshot.INode;
 import com.durhack.sharpshot.gui.Triangle;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;

@@ -1,18 +1,14 @@
 package com.durhack.sharpshot.gui;
 
-import com.durhack.sharpshot.Coordinate;
 import com.durhack.sharpshot.INode;
+import com.durhack.sharpshot.nodes.NodeIn;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
@@ -20,17 +16,37 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class App extends Application {
-    private Grid grid = new Grid(new Supplier<INode>(){
-        @Override
-        public INode get() {
-            return nodeCreator.getNode();
-        }
-    });
-    private NodeCreator nodeCreator = new NodeCreator();
     private BorderPane borderPane = new BorderPane();
+    private Button runButton = new Button("Run");
+    private NodeCreator nodeCreator = new NodeCreator(this::firstAvailableInputIndex);
+    private Grid grid = new Grid(this::createNode, () -> runButton.setDisable(false));
+
+    private INode createNode() {
+        return nodeCreator.createNode();
+    }
+
+    private int firstAvailableInputIndex() {
+        int counter = 0;
+        List<Integer> inputers = grid.getContainer().getNodes()
+                .values()
+                .stream()
+                .filter(node ->
+                        node instanceof NodeIn
+                ).map(node ->
+                        ((NodeIn) node).getIndex()
+                ).collect(Collectors.toList());
+
+        while (true) {
+            if (inputers.contains(counter)) {
+                counter++;
+            } else {
+                return (counter);
+            }
+        }
+    }
 
     @Override
     public void start(Stage primaryStage) {
@@ -40,7 +56,6 @@ public class App extends Application {
         borderPane.setLeft(nodeCreator);
 
         Button resetButton = new Button("Reset");
-        Button runButton = new Button("Run");
         TextField inputText = new TextField();
         HBox hBox = new HBox(16.0, resetButton, runButton, inputText);
         hBox.setAlignment(Pos.CENTER);
