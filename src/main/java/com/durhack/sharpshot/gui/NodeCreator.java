@@ -89,6 +89,9 @@ class NodeCreator extends ListView<NodeTypeDescriptor> {
 
         node = new NodeList();
         nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Every time a bullet comes in, outputs the next value in the list of inputs", node.toGraphic(), NodeList::new));
+
+        node = new NodeStack();
+        nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Inputs to back of node pop from stack, inputs to other sides add to stack", node.toGraphic(), NodeStack::new));
     }
 
     @Nullable
