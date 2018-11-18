@@ -32,6 +32,7 @@ public class Grid extends GridPane {
     private final Supplier<INode> nodeSupplier;
     private Container container;
 
+    private boolean systemActive = false;
     private Timer timer = new Timer();
 
     public Timer getTimer() {
@@ -91,13 +92,112 @@ public class Grid extends GridPane {
     }
 
     private void nodeRightClicked(int x, int y) {
-        if (container.getNodes().get(new Coordinate(x, y)) != null) {
+        INode node = container.getNodes().get(new Coordinate(x, y));
+        if (systemActive && node != null)
+            //try{
+            if (node instanceof NodeIn){
+                inputers.remove(((NodeIn)node).getIndex());
+            }
+            //catch(ClassNotFoundException e){System.out.println("Node in not found - " + e);}
             container.getNodes().remove(new Coordinate(x, y));
             render();
         }
     }
 
     private void nodeLeftClicked(int x, int y) {
+        if (systemActive){return;}
+        if (container.getNodes().get(new Coordinate(x, y)) != null) {
+            container.getNodes().get(new Coordinate(x, y)).rotateClockwise();
+        } else {
+            List<String> choices = new ArrayList<>();
+
+            choices.add("in");
+            choices.add("out");
+
+            choices.add("add");
+            choices.add("sub");
+            choices.add("mul");
+            choices.add("div");
+
+            choices.add("branch");
+            choices.add("splitter");
+
+            choices.add("const");
+
+            choices.add("void");
+
+            choices.add("if_positive");
+            choices.add("if_0");
+
+            ChoiceDialog<String> dialog = new ChoiceDialog<>("add", choices);
+            dialog.setTitle("Add Node");
+            dialog.setHeaderText("Choose your node type:");
+            dialog.setContentText("");
+
+            Optional<String> result = dialog.showAndWait();
+            if (result.isPresent()){
+                String choice = result.get();
+                INode newNode;
+
+                switch(choice) {
+                    case "in": int var = getNumberInput("Enter an input index: ", getNextIndex()).intValue();inputers.add(var + "");newNode = new NodeIn(var); break;
+                    case "out": newNode = new NodeOut(); break;
+
+                    case "add": newNode = new NodeAdd(); break;
+                    case "sub": newNode = new NodeSub(); break;
+                    case "mul": newNode = new NodeMult(); break;
+                    case "div": newNode = new NodeDiv(); break;
+
+                    case "branch":   newNode = new NodeBranch(); break;
+                    case "splitter": newNode = new NodeSplitter(); break;
+
+                    case "const": newNode = new NodeConstant(getNumberInput("Enter a constant: ","0")); break;
+
+                    case "void": newNode = new NodeVoid(); break;
+
+                    case "if_positive": newNode = new NodeIfPositive(); break;
+                    case "if_0": newNode = new NodeIf0(); break;
+
+                    default:
+                        System.err.println("This shouldn't happen");
+                        throw new RuntimeException("Choice nonexistent");
+                }
+
+                container.getNodes().put(new Coordinate(x, y), newNode);
+            } else {
+                System.err.println("No choice made");
+            }
+        }
+
+
+        render();
+    }
+
+    private ArrayList<String> inputers = new ArrayList<>();
+    private String getNextIndex(){
+        int counter = 0;
+        while (counter <= inputers.size()){
+            if (inputers.contains(counter + "")){
+               counter++;
+            }
+            else{
+                return (counter + "");
+            }
+        }
+        return (counter + "");
+    }
+
+    private BigInteger getNumberInput(String header, String counter) {
+        TextInputDialog dialog = new TextInputDialog(counter);
+        dialog.setTitle("New Node");
+        dialog.setHeaderText(header);
+        dialog.setContentText("");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+            return new BigInteger(result.get());
+        } else {
+            throw new RuntimeException("No result");
         Coordinate coordinate = new Coordinate(x, y);
         INode node = container.getNodes().get(coordinate);
         if (node != null) {
@@ -114,6 +214,7 @@ public class Grid extends GridPane {
     public void reset() {
         timer.cancel();
         container.reset();
+        systemActive = false;
         render();
     }
 
