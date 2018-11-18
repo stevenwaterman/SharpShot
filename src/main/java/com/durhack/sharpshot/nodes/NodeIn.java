@@ -6,7 +6,6 @@ import com.durhack.sharpshot.INode;
 import com.durhack.sharpshot.gui.Triangle;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
@@ -15,15 +14,10 @@ import java.util.Map;
 
 public class NodeIn implements INode {
     private Direction dir = Direction.UP;
-    private int index;
-    private BigInteger value;
+    private final int index;
 
     public NodeIn(int index) {
         this.index = index;
-    }
-    
-    public void setValue(BigInteger value) {
-        this.value = value;
     }
 
     @Override
@@ -42,11 +36,15 @@ public class NodeIn implements INode {
         map.put(dir,val);
         return map;
     }
+
+    @Override
+    public String toString() {
+        return "In";
+    }
+
     @Override
     public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
-        HashMap<Direction, BigInteger> map = new HashMap<>();
-        map.put(dir, value);
-        return map;
+        return new HashMap<>();
     }
 
     @Override

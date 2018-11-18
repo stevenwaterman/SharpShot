@@ -1,10 +1,10 @@
-package com.durhack.sharpshot.nodes;
+package com.durhack.sharpshot.util;
 
 import com.durhack.sharpshot.Coordinate;
 
 public class Movement {
-    private Coordinate from;
-    private Coordinate to;
+    private final Coordinate from;
+    private final Coordinate to;
 
     public Coordinate getFrom() {
         return from;

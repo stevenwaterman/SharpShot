@@ -15,7 +15,7 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NodeOut implements INode {
+public class NodeHalt implements INode {
     private Direction dir = Direction.UP;
 
     @Override
@@ -30,23 +30,19 @@ public class NodeOut implements INode {
 
     @Override
     public String toString() {
-        return "Output";
+        return "Halt";
     }
 
     @Override
     public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
-        BigInteger value = bullet.getValue();
-        if(value != null) {
-            System.out.println(value.toString());
-            App.printToOut(value.toString());
-        }
+        // halt checking is done within Container
         return new HashMap<>();
     }
 
     @Override
     public @NotNull Node toGraphic() {
-        Rectangle rectangle = new Rectangle(32.0, 32.0, Color.SANDYBROWN);
-        Label label = new Label("OUT");
+        Rectangle rectangle = new Rectangle(32.0, 32.0, Color.GHOSTWHITE);
+        Label label = new Label("HLT");
         return new StackPane(rectangle, label);
     }
 

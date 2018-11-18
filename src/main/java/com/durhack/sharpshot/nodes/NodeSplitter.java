@@ -5,14 +5,12 @@ import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
 import com.durhack.sharpshot.gui.Diamond;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NodeSplitter implements INode {
     private Direction dir = Direction.UP;
@@ -34,6 +32,11 @@ public class NodeSplitter implements INode {
         for(Direction d : Direction.others(Direction.inverseOf(bullet.getDirection())))
             map.put(d, bullet.getValue());
         return map;
+    }
+
+    @Override
+    public String toString() {
+        return "Splitter";
     }
 
     @Override

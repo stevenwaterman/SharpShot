@@ -3,13 +3,11 @@ package com.durhack.sharpshot.nodes;
 import com.durhack.sharpshot.Bullet;
 import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
-import javafx.scene.Node;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class NodeArithmetic implements INode {
     private Direction dir = Direction.UP;
@@ -38,15 +36,13 @@ public abstract class NodeArithmetic implements INode {
             return new HashMap<>();
         } else {
             HashMap<Direction, BigInteger> map = new HashMap<>();
-            assert mostRecentBullet.getValue() != null;
-            //map.put(Direction.UP, mostRecentBullet.getValue().add(bullet.getValue()));
             map.put(Direction.UP, operation(mostRecentBullet.getValue(),bullet.getValue()));
             mostRecentBullet = null;
             return map;
         }
     }
 
-    public abstract BigInteger operation(BigInteger val1, BigInteger val2);
+    protected abstract BigInteger operation(BigInteger val1, BigInteger val2);
 
     public void reset() {
         mostRecentBullet = null;

@@ -23,6 +23,11 @@ public class NodeRotateAnticlockwise implements INode {
     }
 
     @Override
+    public String toString() {
+        return "Rotate Anticlockwise";
+    }
+
+    @Override
     public void rotateClockwise() {
         dir = Direction.clockwiseOf(dir);
     }

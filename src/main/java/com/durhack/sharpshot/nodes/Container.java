@@ -4,6 +4,9 @@ import com.durhack.sharpshot.Bullet;
 import com.durhack.sharpshot.Coordinate;
 import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
+import com.durhack.sharpshot.gui.App;
+import com.durhack.sharpshot.gui.Grid;
+import com.durhack.sharpshot.util.Movement;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -13,28 +16,31 @@ import org.jetbrains.annotations.NotNull;
 import java.math.BigInteger;
 import java.util.*;
 
-//TODO how do we deal with the container returning multiple outputs over multiple ticks?
-
 public class Container implements INode {
-    private int width;
-    private int height;
-    private int bulletSize = 0;
+    private final int width;
+    private final int height;
+    private final Grid grid;
 
     private Direction rotation = Direction.UP;
 
     @NotNull
-    private Map<Coordinate, INode> nodes = new HashMap<>();
+    private final Map<Coordinate, INode> nodes = new HashMap<>();
 
     @NotNull
-    private Map<Coordinate, Bullet> bullets = new HashMap<>();
+    private final Map<Coordinate, Bullet> bullets = new HashMap<>();
 
-    public Container(int width, int height) {
+    public Container(Grid grid, int width, int height) {
+        this.grid = grid;
         this.width = width;
         this.height = height;
     }
 
     public int getHeight() {
         return height;
+    }
+
+    public boolean noBullets() {
+        return bullets.isEmpty();
     }
 
     @Override
@@ -70,8 +76,6 @@ public class Container implements INode {
             for (Coordinate coordinate : getNodes().keySet()) {
                 INode x = getNodes().get(coordinate);
                 if (x instanceof NodeIn && ((NodeIn) x).getIndex() == i) {
-                    ((NodeIn) x).setValue(new BigInteger(String.valueOf(input.get(i))));
-
                     Map<Direction, BigInteger> bulletParams = ((NodeIn) x).into(input.get(i));
 
                     for (Map.Entry<Direction, BigInteger> newBulletEntry : bulletParams.entrySet()) {
@@ -93,6 +97,8 @@ public class Container implements INode {
      * all bullets -> check
      */
     public void tick() {
+        boolean shouldHaltAfterTick = false;
+
         List<Pair<Movement, Bullet>> movements = new ArrayList<>();
 
         //Bullets on nodes
@@ -115,6 +121,10 @@ public class Container implements INode {
         for (Map.Entry<Coordinate, Bullet> entry : capturedBullets.entrySet()) {
             Coordinate coordinate = entry.getKey();
             INode node = nodes.get(coordinate);
+
+            // special case
+            if(node instanceof NodeHalt)
+                shouldHaltAfterTick = true;
 
             //TODO this brings great shame onto my family
             Direction bulletDirection = entry.getValue().getDirection();
@@ -180,14 +190,19 @@ public class Container implements INode {
             Bullet bullet = pair.getValue();
             newBullets.put(movement.getTo(), bullet);
         }
+
         bullets.clear();
         bullets.putAll(newBullets);
-        bulletSize = bullets.size(); // handling reset if no bullets left
+
+        if(shouldHaltAfterTick)
+            halt();
     }
 
-    public int getBulletSize(){
-        return bulletSize;
+    private void halt() {
+        App.printToOut("Halt.");
+        grid.reset();
     }
+
     public int getWidth() {
         return width;
     }
@@ -202,5 +217,10 @@ public class Container implements INode {
         bullets.clear();
         for (INode n : getNodes().values())
             n.reset();
+    }
+
+    public void clearAll() {
+        bullets.clear();
+        getNodes().clear();
     }
 }
