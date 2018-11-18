@@ -112,6 +112,11 @@ class NodeCreator extends ListView<NodeTypeDescriptor> {
 
     @Nullable
     public INode createNode() {
-        return getSelectionModel().getSelectedItem().getSupplier().get();
+        NodeTypeDescriptor descriptor = getSelectionModel().getSelectedItem();
+        if (descriptor == null) {
+            return null;
+        } else {
+            return descriptor.getSupplier().get();
+        }
     }
 }
