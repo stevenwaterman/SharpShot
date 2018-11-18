@@ -75,28 +75,12 @@ public class Container implements INode {
         // Input nodes spawn 0 if their index == 0
         for (int i = 0; i < input.size(); i++) {
             for (Coordinate coordinate : getNodes().keySet()) {
-                INode x = getNodes().get(coordinate);
-                if (x instanceof NodeIn && ((NodeIn) x).getIndex() == 0) {
-                    Map<Direction, BigInteger> bulletParams = ((NodeIn) x).into(BigInteger.ZERO);
+                INode node = getNodes().get(coordinate);
+                if (node instanceof AbstractNodeInput) {
+                    Map<Direction, BigInteger> bulletParams = ((AbstractNodeInput) node).input(input);
 
                     for (Map.Entry<Direction, BigInteger> newBulletEntry : bulletParams.entrySet()) {
-                        Bullet newBullet = new Bullet(x.getRotation(), newBulletEntry.getValue());
-                        Coordinate newCoordinate = coordinate.plus(newBullet.getDirection());
-                        newBullets.put(newCoordinate, newBullet);
-                    }
-                }
-            }
-        }
-
-        // In nodes add input to all parameterized ones
-        for (int i = 0; i < input.size(); i++) {
-            for (Coordinate coordinate : getNodes().keySet()) {
-                INode x = getNodes().get(coordinate);
-                if (x instanceof NodeIn && ((NodeIn) x).getIndex() - 1 == i) {
-                    Map<Direction, BigInteger> bulletParams = ((NodeIn) x).into(input.get(i));
-
-                    for (Map.Entry<Direction, BigInteger> newBulletEntry : bulletParams.entrySet()) {
-                        Bullet newBullet = new Bullet(x.getRotation(), newBulletEntry.getValue());
+                        Bullet newBullet = new Bullet(node.getRotation(), newBulletEntry.getValue());
                         Coordinate newCoordinate = coordinate.plus(newBullet.getDirection());
                         newBullets.put(newCoordinate, newBullet);
                     }

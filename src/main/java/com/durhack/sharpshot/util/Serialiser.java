@@ -5,7 +5,8 @@ import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
 import com.durhack.sharpshot.gui.Grid;
 import com.durhack.sharpshot.nodes.*;
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -98,6 +99,12 @@ class Serialiser {
                 case "NodeRandom": newNode = new NodeRandom(); break;
 
                 case "NodeHalt": newNode = new NodeHalt(); break;
+                case "NodeList":
+                    newNode = new NodeHalt();
+                    break;
+                case "NodeStack":
+                    newNode = new NodeHalt();
+                    break;
 
                 default:
                     System.out.println(type);

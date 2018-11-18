@@ -10,7 +10,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -85,7 +84,7 @@ public class App extends Application {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    Platform.runLater(() -> grid.tick());
+                    Platform.runLater(grid::tick);
                 }
             }, 0, TICK_RATE);
             if(grid.getTimer() != null)

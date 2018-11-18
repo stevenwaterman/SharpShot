@@ -60,7 +60,7 @@ class NodeCreator extends ListView<NodeTypeDescriptor> {
         nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Redirects all bullets with value zero", node.toGraphic(), NodeIfZero::new));
 
         node = new NodeSplitter();
-        nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Splits bullets into three", node.toGraphic(), NodeSplitter::new));
+        nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Splits bullets input three", node.toGraphic(), NodeSplitter::new));
 
         node = new NodeConstant(BigInteger.ONE);
         nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Whenever a bullet passes through, releases another bullet with user-determined value", node.toGraphic(), () -> {
@@ -86,6 +86,12 @@ class NodeCreator extends ListView<NodeTypeDescriptor> {
 
         node = new NodeHalt();
         nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Terminates the program", node.toGraphic(), NodeHalt::new));
+
+        node = new NodeList();
+        nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Every time a bullet comes in, outputs the next value in the list of inputs", node.toGraphic(), NodeList::new));
+
+        node = new NodeStack();
+        nodeTypes.add(new NodeTypeDescriptor(node.toString(), "Inputs to back of node pop from stack, inputs to other sides add to stack", node.toGraphic(), NodeStack::new));
     }
 
     @Nullable
