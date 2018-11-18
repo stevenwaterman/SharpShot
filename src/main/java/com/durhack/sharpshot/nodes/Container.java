@@ -190,6 +190,7 @@ public class Container implements INode {
             Bullet bullet = pair.getValue();
             newBullets.put(movement.getTo(), bullet);
         }
+
         bullets.clear();
         bullets.putAll(newBullets);
 

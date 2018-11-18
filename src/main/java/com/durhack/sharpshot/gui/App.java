@@ -13,6 +13,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.math.BigInteger;
@@ -22,6 +23,8 @@ import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 public class App extends Application {
+    public static final int TICK_RATE = 250;
+
     private final Button runButton = new Button("Run");
     private final Button resetButton = new Button("Reset");
     private final Button loadButton = new Button("Load");
@@ -82,7 +85,7 @@ public class App extends Application {
                 public void run() {
                     Platform.runLater(() -> grid.tick());
                 }
-            }, 0, 250);
+            }, 0, TICK_RATE);
             grid.setTimer(timer);
 
             List<BigInteger> input = grid.getInput();

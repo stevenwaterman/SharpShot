@@ -1,5 +1,6 @@
 package com.durhack.sharpshot;
 
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -41,6 +42,10 @@ public class Bullet {
 
         Rectangle background = new Rectangle(16.0, 16.0, Color.WHEAT);
         stackPane.getChildren().add(background);
+        stackPane.setAlignment(Pos.CENTER);
+
+        stackPane.setPrefWidth(32);
+        stackPane.setPrefHeight(32);
 
         if (value != null) {
             Label label = new Label(value.toString());
