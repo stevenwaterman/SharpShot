@@ -14,7 +14,7 @@ public class SaveLoadFiles {
         fileChooser.setTitle("Open Resource File");
         File file = fileChooser.showOpenDialog(stage);
 
-        if(file != null) {
+        if (file != null) {
             try {
                 BufferedReader br = new BufferedReader(new FileReader(file));
                 return Serialiser.loadJSON(br.readLine());
@@ -34,7 +34,7 @@ public class SaveLoadFiles {
         fileChooser.setTitle("Save to File");
         File file = fileChooser.showSaveDialog(stage);
 
-        if(file != null) {
+        if (file != null) {
             try {
                 BufferedWriter writer = new BufferedWriter(new FileWriter(file));
                 writer.write(Serialiser.getJSON(container));

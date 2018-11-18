@@ -4,25 +4,14 @@ import com.durhack.sharpshot.Bullet;
 import com.durhack.sharpshot.Coordinate;
 import com.durhack.sharpshot.INode;
 import com.durhack.sharpshot.nodes.*;
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceDialog;
-import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
-import javafx.stage.Stage;
-import jdk.nashorn.internal.runtime.ScriptObject;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -94,18 +83,17 @@ public class Grid extends GridPane {
     private void nodeRightClicked(int x, int y) {
         INode node = container.getNodes().get(new Coordinate(x, y));
         if (systemActive && node != null)
-            //try{
-            if (node instanceof NodeIn){
-                inputers.remove(((NodeIn)node).getIndex());
+            if (node instanceof NodeIn) {
+                inputers.remove(((NodeIn) node).getIndex());
             }
-            //catch(ClassNotFoundException e){System.out.println("Node in not found - " + e);}
-            container.getNodes().remove(new Coordinate(x, y));
-            render();
-        }
+        container.getNodes().remove(new Coordinate(x, y));
+        render();
     }
 
     private void nodeLeftClicked(int x, int y) {
-        if (systemActive){return;}
+        if (systemActive) {
+            return;
+        }
         if (container.getNodes().get(new Coordinate(x, y)) != null) {
             container.getNodes().get(new Coordinate(x, y)).rotateClockwise();
         } else {
@@ -135,28 +123,54 @@ public class Grid extends GridPane {
             dialog.setContentText("");
 
             Optional<String> result = dialog.showAndWait();
-            if (result.isPresent()){
+            if (result.isPresent()) {
                 String choice = result.get();
                 INode newNode;
 
-                switch(choice) {
-                    case "in": int var = getNumberInput("Enter an input index: ", getNextIndex()).intValue();inputers.add(var + "");newNode = new NodeIn(var); break;
-                    case "out": newNode = new NodeOut(); break;
+                switch (choice) {
+                    case "in":
+                        int var = getNumberInput("Enter an input index: ", getNextIndex()).intValue();
+                        inputers.add(var + "");
+                        newNode = new NodeIn(var);
+                        break;
+                    case "out":
+                        newNode = new NodeOut();
+                        break;
 
-                    case "add": newNode = new NodeAdd(); break;
-                    case "sub": newNode = new NodeSub(); break;
-                    case "mul": newNode = new NodeMult(); break;
-                    case "div": newNode = new NodeDiv(); break;
+                    case "add":
+                        newNode = new NodeAdd();
+                        break;
+                    case "sub":
+                        newNode = new NodeSub();
+                        break;
+                    case "mul":
+                        newNode = new NodeMult();
+                        break;
+                    case "div":
+                        newNode = new NodeDiv();
+                        break;
 
-                    case "branch":   newNode = new NodeBranch(); break;
-                    case "splitter": newNode = new NodeSplitter(); break;
+                    case "branch":
+                        newNode = new NodeBranch();
+                        break;
+                    case "splitter":
+                        newNode = new NodeSplitter();
+                        break;
 
-                    case "const": newNode = new NodeConstant(getNumberInput("Enter a constant: ","0")); break;
+                    case "const":
+                        newNode = new NodeConstant(getNumberInput("Enter a constant: ", "0"));
+                        break;
 
-                    case "void": newNode = new NodeVoid(); break;
+                    case "void":
+                        newNode = new NodeVoid();
+                        break;
 
-                    case "if_positive": newNode = new NodeIfPositive(); break;
-                    case "if_0": newNode = new NodeIf0(); break;
+                    case "if_positive":
+                        newNode = new NodeIfPositive();
+                        break;
+                    case "if_0":
+                        newNode = new NodeIfZero();
+                        break;
 
                     default:
                         System.err.println("This shouldn't happen");
@@ -174,13 +188,13 @@ public class Grid extends GridPane {
     }
 
     private ArrayList<String> inputers = new ArrayList<>();
-    private String getNextIndex(){
+
+    private String getNextIndex() {
         int counter = 0;
-        while (counter <= inputers.size()){
-            if (inputers.contains(counter + "")){
-               counter++;
-            }
-            else{
+        while (counter <= inputers.size()) {
+            if (inputers.contains(counter + "")) {
+                counter++;
+            } else {
                 return (counter + "");
             }
         }
@@ -194,15 +208,10 @@ public class Grid extends GridPane {
         dialog.setContentText("");
 
         Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()){
+        if (result.isPresent()) {
             return new BigInteger(result.get());
         } else {
             throw new RuntimeException("No result");
-        Coordinate coordinate = new Coordinate(x, y);
-        INode node = container.getNodes().get(coordinate);
-        if (node != null) {
-            node.rotateClockwise();
-            render();
         }
     }
 
