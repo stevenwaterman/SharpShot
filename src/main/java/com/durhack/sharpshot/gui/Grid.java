@@ -39,9 +39,6 @@ public class Grid extends Application {
 
     public Grid() {
         container = new Container(32, 16);
-        allinputers.add("0");
-        //allinputers.add("1");
-        //inputers.add("0");
     }
 
     private void render() {
@@ -159,7 +156,6 @@ public class Grid extends Application {
     }
 
     private ArrayList<String> inputers = new ArrayList<>();
-    private ArrayList<String> allinputers = new ArrayList<>();
     private String getNextIndex(){
         int counter = 0;
         while (counter <= inputers.size()){
