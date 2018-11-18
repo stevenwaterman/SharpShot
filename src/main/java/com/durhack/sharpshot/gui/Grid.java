@@ -39,6 +39,9 @@ public class Grid extends Application {
 
     public Grid() {
         container = new Container(32, 16);
+        allinputers.add("0");
+        //allinputers.add("1");
+        //inputers.add("0");
     }
 
     private void render() {
@@ -75,7 +78,13 @@ public class Grid extends Application {
 
     private void nodeRightClicked(int x, int y) {
         if (systemactive){return;}
-        if (container.getNodes().get(new Coordinate(x, y)) != null)
+        INode node = container.getNodes().get(new Coordinate(x, y));
+        if (node != null)
+            //try{
+            if (node instanceof NodeIn){
+                inputers.remove(((NodeIn)node).getIndex());
+            }
+            //catch(ClassNotFoundException e){System.out.println("Node in not found - " + e);}
             container.getNodes().remove(new Coordinate(x, y));
         render();
     }
@@ -116,7 +125,7 @@ public class Grid extends Application {
                 INode newNode;
 
                 switch(choice) {
-                    case "in":  newNode = new NodeIn(getNumberInput("Enter an input index: ").intValue()); break;
+                    case "in": int var = getNumberInput("Enter an input index: ", getNextIndex()).intValue();inputers.add(var + "");newNode = new NodeIn(var); break;
                     case "out": newNode = new NodeOut(); break;
 
                     case "add": newNode = new NodeAdd(); break;
@@ -127,7 +136,7 @@ public class Grid extends Application {
                     case "branch":   newNode = new NodeBranch(); break;
                     case "splitter": newNode = new NodeSplitter(); break;
 
-                    case "const": newNode = new NodeConstant(getNumberInput("Enter a constant: ")); break;
+                    case "const": newNode = new NodeConstant(getNumberInput("Enter a constant: ","0")); break;
 
                     case "void": newNode = new NodeVoid(); break;
 
@@ -149,8 +158,23 @@ public class Grid extends Application {
         render();
     }
 
-    private BigInteger getNumberInput(String header) {
-        TextInputDialog dialog = new TextInputDialog("0");
+    private ArrayList<String> inputers = new ArrayList<>();
+    private ArrayList<String> allinputers = new ArrayList<>();
+    private String getNextIndex(){
+        int counter = 0;
+        while (counter <= inputers.size()){
+            if (inputers.contains(counter + "")){
+               counter++;
+            }
+            else{
+                return (counter + "");
+            }
+        }
+        return (counter + "");
+    }
+
+    private BigInteger getNumberInput(String header, String counter) {
+        TextInputDialog dialog = new TextInputDialog(counter);
         dialog.setTitle("New Node");
         dialog.setHeaderText(header);
         dialog.setContentText("");
