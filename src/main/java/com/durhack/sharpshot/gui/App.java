@@ -43,7 +43,7 @@ public class App extends Application {
     }
 
     private int firstAvailableInputIndex() {
-        int counter = 0;
+        int counter = 1;
         List<Integer> inputers = grid.getContainer().getNodes()
                 .values()
                 .stream()

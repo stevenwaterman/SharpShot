@@ -42,7 +42,7 @@ public class NodeIn extends AbstractNodeInput {
 
     @Override
     public String toString() {
-        return "In";
+        return "Input";
     }
 
     @Override

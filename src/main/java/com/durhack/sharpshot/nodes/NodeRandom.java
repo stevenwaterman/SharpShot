@@ -31,12 +31,18 @@ public class NodeRandom implements INode {
     }
 
     private BigInteger rand(BigInteger n) {
+        int sign = 1;
+        if (n.compareTo(BigInteger.ZERO) == 0){
+            return BigInteger.ZERO;}
+        if (n.compareTo(BigInteger.ZERO) < 0){
+            sign = -1;}
+        n = n.abs();
         Random rand = new Random();
         BigInteger result = new BigInteger(n.bitLength(), rand);
         while( result.compareTo(n) >= 0 ) {
             result = new BigInteger(n.bitLength(), rand);
         }
-        return result;
+        return result.multiply(new BigInteger(sign + ""));
     }
     @Override
     public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {

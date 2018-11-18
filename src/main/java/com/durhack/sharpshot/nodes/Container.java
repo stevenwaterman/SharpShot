@@ -70,8 +70,9 @@ public class Container implements INode {
     }
 
     public void start(List<BigInteger> input) {
-        // In nodes add input
         Map<Coordinate, Bullet> newBullets = new HashMap<>();
+
+        // Input nodes spawn 0 if their index == 0
         for (int i = 0; i < input.size(); i++) {
             for (Coordinate coordinate : getNodes().keySet()) {
                 INode node = getNodes().get(coordinate);
