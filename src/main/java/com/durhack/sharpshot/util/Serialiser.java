@@ -99,12 +99,8 @@ class Serialiser {
                 case "NodeRandom": newNode = new NodeRandom(); break;
 
                 case "NodeHalt": newNode = new NodeHalt(); break;
-                case "NodeList":
-                    newNode = new NodeHalt();
-                    break;
-                case "NodeStack":
-                    newNode = new NodeHalt();
-                    break;
+                case "NodeList": newNode = new NodeList(); break;
+                case "NodeStack": newNode = new NodeStack(); break;
 
                 default:
                     System.out.println(type);

@@ -30,8 +30,10 @@ public class NodeStack implements INode {
     @Override
     public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
         Map<Direction, BigInteger> bullets = new HashMap<>();
-        if (bullet.getDirection() == Direction.UP && !stack.isEmpty()) {
-            bullets.put(Direction.UP, stack.pop());
+        if (bullet.getDirection() == Direction.UP) {
+            if(!stack.isEmpty()){
+                bullets.put(Direction.UP, stack.pop());
+            }
         } else {
             stack.add(bullet.getValue());
         }
