@@ -19,6 +19,9 @@ public class NodeIn extends AbstractNodeInput {
 
     public NodeIn(int index) {
         this.index = index;
+        if (index == 0) {
+            input = BigInteger.ZERO;
+        }
     }
 
     @Override
@@ -33,9 +36,13 @@ public class NodeIn extends AbstractNodeInput {
 
     public @NotNull Map<Direction, BigInteger> input(@NotNull List<BigInteger> inputs) {
         HashMap<Direction, BigInteger> map = new HashMap<>();
-        if (index < inputs.size()) {
-            input = inputs.get(index);
-            map.put(dir, input);
+        if (index == 0) {
+            map.put(Direction.UP, BigInteger.ZERO);
+        } else {
+            if (index <= inputs.size()) {
+                input = inputs.get(index);
+                map.put(Direction.UP, input);
+            }
         }
         return map;
     }
@@ -60,7 +67,8 @@ public class NodeIn extends AbstractNodeInput {
         return new Triangle(getRotation(), Color.web("#FFFF00"), "IN" + index);
     }
 
-    public void reset() {   }
+    public void reset() {
+    }
 
     public int getIndex() {
         return index;
