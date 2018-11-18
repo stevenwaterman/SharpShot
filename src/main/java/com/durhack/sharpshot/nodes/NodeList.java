@@ -8,17 +8,18 @@ import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NodeIn extends AbstractNodeInput {
+public class NodeList extends AbstractNodeInput {
     private Direction dir = Direction.UP;
-    private final int index;
-    private BigInteger input = null;
+    private List<BigInteger> inputs;
+    private int nextOutputIndex = 0;
 
-    public NodeIn(int index) {
-        this.index = index;
+    public NodeList() {
+
     }
 
     @Override
@@ -31,15 +32,6 @@ public class NodeIn extends AbstractNodeInput {
         dir = Direction.clockwiseOf(dir);
     }
 
-    public @NotNull Map<Direction, BigInteger> input(@NotNull List<BigInteger> inputs) {
-        HashMap<Direction, BigInteger> map = new HashMap<>();
-        if (index < inputs.size()) {
-            input = inputs.get(index);
-            map.put(dir, input);
-        }
-        return map;
-    }
-
     @Override
     public String toString() {
         return "In";
@@ -47,22 +39,28 @@ public class NodeIn extends AbstractNodeInput {
 
     @Override
     public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
-        Map<Direction, BigInteger> bullets = new HashMap<>();
+        HashMap<Direction, BigInteger> bullets = new HashMap<>();
         bullets.put(bullet.getDirection(), bullet.getValue());
-        if (input != null) {
-            bullets.put(Direction.UP, input);
+        if (nextOutputIndex < inputs.size()) {
+            bullets.put(Direction.UP, inputs.get(nextOutputIndex));
+            nextOutputIndex++;
         }
         return bullets;
     }
 
     @Override
     public @NotNull Node toGraphic() {
-        return new Triangle(getRotation(), Color.web("#FFFF00"), "IN" + index);
+        return new Triangle(getRotation(), Color.web("#FFFF00"), "LST");
     }
 
-    public void reset() {   }
+    public void reset() {
+        inputs = new ArrayList<>();
+        nextOutputIndex = 0;
+    }
 
-    public int getIndex() {
-        return index;
+    @Override
+    public @NotNull Map<Direction, BigInteger> input(@NotNull List<BigInteger> inputs) {
+        this.inputs = inputs;
+        return new HashMap<>();
     }
 }

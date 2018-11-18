@@ -74,12 +74,12 @@ public class Container implements INode {
         Map<Coordinate, Bullet> newBullets = new HashMap<>();
         for (int i = 0; i < input.size(); i++) {
             for (Coordinate coordinate : getNodes().keySet()) {
-                INode x = getNodes().get(coordinate);
-                if (x instanceof NodeIn && ((NodeIn) x).getIndex() == i) {
-                    Map<Direction, BigInteger> bulletParams = ((NodeIn) x).into(input.get(i));
+                INode node = getNodes().get(coordinate);
+                if (node instanceof AbstractNodeInput) {
+                    Map<Direction, BigInteger> bulletParams = ((AbstractNodeInput) node).input(input);
 
                     for (Map.Entry<Direction, BigInteger> newBulletEntry : bulletParams.entrySet()) {
-                        Bullet newBullet = new Bullet(x.getRotation(), newBulletEntry.getValue());
+                        Bullet newBullet = new Bullet(node.getRotation(), newBulletEntry.getValue());
                         Coordinate newCoordinate = coordinate.plus(newBullet.getDirection());
                         newBullets.put(newCoordinate, newBullet);
                     }
