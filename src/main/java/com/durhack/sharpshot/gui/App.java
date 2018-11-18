@@ -3,17 +3,19 @@ package com.durhack.sharpshot.gui;
 import com.durhack.sharpshot.INode;
 import com.durhack.sharpshot.nodes.Container;
 import com.durhack.sharpshot.nodes.NodeIn;
+import com.durhack.sharpshot.util.Ascii;
+import com.durhack.sharpshot.util.ErrorBox;
 import com.durhack.sharpshot.util.SaveLoadFiles;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.math.BigInteger;
@@ -95,7 +97,15 @@ public class App extends Application {
             clearOutput();
             for (String x : inputText.getText().split(" "))
                 if (x.length() > 0)
-                    input.add(new BigInteger(x));
+                    try{
+                    input.add(new BigInteger(x));}
+                    catch(NumberFormatException e){
+                        if (x.length() <= 1){
+                        input.add(Ascii.toBig(x.charAt(0)));}
+                        else{
+                            ErrorBox.alert("Input not Char or BigInteger","Please try again","Input takes Char and integers only with spaces bettween them!");
+                        }
+                    }
             grid.getContainer().start(input);
             grid.render();
         });

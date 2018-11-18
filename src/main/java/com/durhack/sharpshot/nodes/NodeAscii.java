@@ -4,6 +4,7 @@ import com.durhack.sharpshot.Bullet;
 import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
 import com.durhack.sharpshot.gui.App;
+import com.durhack.sharpshot.util.Ascii;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -32,33 +33,23 @@ public class NodeAscii implements INode {
     public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
         BigInteger value = bullet.getValue();
         if(value != null) {
-            String output  = findAscii(value + "");
+            String output  = Ascii.fromBig(value) + "";
             System.out.println(output);
             App.printToOut(output);
         }
         return new HashMap<>();
     }
-    public String findAscii (String string){
-        while (string.length() % 3 != 0)
-    {
-        string = '0' + string;
-    }
-    String result = "";
-    for (int i = 0; i < string.length(); i += 3)
-    {
-        result += (char)(Integer.parseInt(string.substring(i, i + 3)));}
-    return result;}
 
         @Override
     public @NotNull Node toGraphic() {
         Rectangle rectangle = new Rectangle(32.0, 32.0, Color.FIREBRICK);
-        Label label = new Label("STR");
+        Label label = new Label("CHR");
         return new StackPane(rectangle, label);
     }
 
     public void reset() {}
     @Override
     public String toString() {
-        return "Ascii";
+        return "Print Character";
     }
 }

@@ -42,7 +42,7 @@ public class NodeRotateClockwise implements INode {
     @Override
     public @NotNull Node toGraphic() {
         Rectangle rectangle = new Rectangle(32.0, 32.0, Color.PALEVIOLETRED);
-        Label label = new Label("ACW");
+        Label label = new Label("CW");
         return new StackPane(rectangle, label);
     }
 

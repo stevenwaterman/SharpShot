@@ -30,7 +30,7 @@ public class NodeOut implements INode {
 
     @Override
     public String toString() {
-        return "Output";
+        return "Print Integer";
     }
 
     @Override
@@ -46,7 +46,7 @@ public class NodeOut implements INode {
     @Override
     public @NotNull Node toGraphic() {
         Rectangle rectangle = new Rectangle(32.0, 32.0, Color.SANDYBROWN);
-        Label label = new Label("OUT");
+        Label label = new Label("INT");
         return new StackPane(rectangle, label);
     }
 
