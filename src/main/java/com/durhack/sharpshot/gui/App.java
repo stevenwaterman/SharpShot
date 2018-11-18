@@ -23,7 +23,7 @@ import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 public class App extends Application {
-    public static final int TICK_RATE = 250;
+    public static final int TICK_RATE = 150;
 
     private final Button runButton = new Button("Run");
     private final Button resetButton = new Button("Reset");

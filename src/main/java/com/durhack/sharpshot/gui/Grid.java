@@ -73,8 +73,7 @@ public class Grid extends Pane {
 
             Node graphic = bullet.toGraphic();
 
-            TranslateTransition translateTransition = new TranslateTransition();
-            translateTransition.setDuration(Duration.millis(App.TICK_RATE));
+            TranslateTransition translateTransition = new TranslateTransition(Duration.millis(App.TICK_RATE));
             translateTransition.setNode(graphic);
 
             Coordinate prevPos = new Coordinate(coordinate.getX(), coordinate.getY());
