@@ -13,6 +13,11 @@ public class NodeIfPositive extends NodeConditional {
     }
 
     @Override
+    public String toString() {
+        return "Branch if Positive";
+    }
+
+    @Override
     public @NotNull Node toGraphic() {
         return new Triangle(getRotation(), Color.web("#FF9900"), ">0");
     }

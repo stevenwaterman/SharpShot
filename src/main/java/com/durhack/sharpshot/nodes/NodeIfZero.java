@@ -6,10 +6,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
 
-public class NodeIf0 extends NodeConditional {
+public class NodeIfZero extends NodeConditional {
     @Override
     public boolean branchingCondition(int signum) {
         return (signum == 0);
+    }
+
+    @Override
+    public String toString() {
+        return "Branch if Zero";
     }
 
     @Override

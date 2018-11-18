@@ -13,6 +13,11 @@ import java.math.BigInteger;
 import java.util.*;
 
 public class NodeVoid implements INode {
+    @Override
+    public String toString() {
+        return "Void";
+    }
+
     private Direction dir = Direction.UP;
 
     @Override

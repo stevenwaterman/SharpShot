@@ -25,4 +25,9 @@ public class NodeAdd extends NodeArithmetic {
     public @NotNull Node toGraphic() {
         return new Triangle(getRotation(), Color.web("#add8e6"), "+");
     }
+
+    @Override
+    public String toString() {
+        return "Add";
+    }
 }

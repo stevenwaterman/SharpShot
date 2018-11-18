@@ -86,7 +86,7 @@ public class Serialiser {
                 case "NodeVoid": newNode = new NodeVoid(); break;
 
                 case "NodeIfPositive": newNode = new NodeIfPositive(); break;
-                case "NodeIf0": newNode = new NodeIf0(); break;
+                case "NodeIfZero": newNode = new NodeIfZero(); break;
 
                 case "NodeRotateClockwise": newNode = new NodeRotateClockwise(); break;
                 case "NodeRotateAnticlockwise": newNode = new NodeRotateAnticlockwise(); break;
@@ -116,7 +116,7 @@ public class Serialiser {
         NodeDiv div = new NodeDiv();
         div.rotateClockwise();
         nodes.put(new Coordinate(4, 2), div);
-        nodes.put(new Coordinate(5, 2), new NodeIf0());
+        nodes.put(new Coordinate(5, 2), new NodeIfZero());
         nodes.put(new Coordinate(6, 2), new NodeIfPositive());
         nodes.put(new Coordinate(7, 2), new NodeIn(2));
         nodes.put(new Coordinate(8, 2), new NodeMult());

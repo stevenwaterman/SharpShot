@@ -29,6 +29,11 @@ public class NodeOut implements INode {
     }
 
     @Override
+    public String toString() {
+        return "Output";
+    }
+
+    @Override
     public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
         BigInteger value = bullet.getValue();
         if(value != null) {

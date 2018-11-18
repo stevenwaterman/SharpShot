@@ -17,6 +17,11 @@ public class NodeSub extends NodeArithmetic {
     }
 
     @Override
+    public String toString() {
+        return "Subtract";
+    }
+
+    @Override
     public @NotNull Node toGraphic() {
         return new Triangle(getRotation(), Color.web("#7700FF"), "-");
     }

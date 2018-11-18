@@ -53,4 +53,9 @@ public class NodeConstant implements INode {
     }
 
     public void reset() {}
+
+    @Override
+    public String toString() {
+        return "Constant";
+    }
 }

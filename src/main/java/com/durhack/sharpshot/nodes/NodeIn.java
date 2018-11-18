@@ -37,6 +37,12 @@ public class NodeIn implements INode {
         map.put(dir,val);
         return map;
     }
+
+    @Override
+    public String toString() {
+        return "In";
+    }
+
     @Override
     public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
         return new HashMap<>();

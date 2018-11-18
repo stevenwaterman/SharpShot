@@ -25,6 +25,11 @@ public class NodeRandom implements INode {
         dir = Direction.clockwiseOf(dir);
     }
 
+    @Override
+    public String toString() {
+        return "Random";
+    }
+
     private BigInteger rand(BigInteger n) {
         Random rand = new Random();
         BigInteger result = new BigInteger(n.bitLength(), rand);

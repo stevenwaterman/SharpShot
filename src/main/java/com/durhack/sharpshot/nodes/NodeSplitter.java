@@ -37,6 +37,11 @@ public class NodeSplitter implements INode {
     }
 
     @Override
+    public String toString() {
+        return "Splitter";
+    }
+
+    @Override
     public @NotNull Node toGraphic() {
         return new Diamond(getRotation(), Color.YELLOW, "Y");
     }

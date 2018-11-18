@@ -16,4 +16,9 @@ public class NodeBranch extends NodeConditional {
     public @NotNull Node toGraphic() {
         return new Triangle(getRotation(), Color.web("#FF6699"), "");
     }
+
+    @Override
+    public String toString() {
+        return "Branch";
+    }
 }
