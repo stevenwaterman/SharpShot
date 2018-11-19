@@ -19,7 +19,7 @@ class ConstantNode(var value: BigInteger?) : INode() {
                          Direction.UP to value
                         )
 
-    override fun graphic() = Triangle(rotation, Color.LIMEGREEN, value!!.toString())
+    override fun graphic() = Triangle(rotation, Color.LIMEGREEN, value?.toString() ?: "")
     override fun reset() {}
 
     override val type = "constant"
@@ -27,7 +27,16 @@ class ConstantNode(var value: BigInteger?) : INode() {
     override val tooltip = "Whenever a bullet passes through, release another bullet with pre-set value"
     override val factory = {
         val value = getNumberInput("Enter Input Index", "Blank to shoot empty bullet at start\nArguments are 0-indexed")
-        ConstantNode(value)
+        if (value.isPresent) {
+            val string = value.get()
+            when {
+                string.isBlank() -> ConstantNode(null)
+                else -> ConstantNode(BigInteger(string))
+            }
+        }
+        else {
+            null
+        }
     }
 
     override fun toJson(): JsonElement {

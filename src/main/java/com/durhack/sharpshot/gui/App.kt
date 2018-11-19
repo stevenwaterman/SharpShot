@@ -1,7 +1,7 @@
 package com.durhack.sharpshot.gui
 
-import com.durhack.sharpshot.nodes.INode
 import com.durhack.sharpshot.nodes.Container
+import com.durhack.sharpshot.nodes.INode
 import com.durhack.sharpshot.util.ErrorBox
 import com.durhack.sharpshot.util.SaveLoadFiles
 import com.durhack.sharpshot.util.toBigInteger
@@ -68,12 +68,12 @@ class App : Application() {
 
             val numberRegex = Regex("[0-9]+")
             val inputs = textInput.text.split(" ").filter { !it.isBlank() }.map { word ->
-                        when {
-                            word.matches(numberRegex) -> BigInteger(word)
-                            word.length == 1          -> word.first().toBigInteger()
-                            else                      -> null
-                        }
-                    }
+                when {
+                    word.matches(numberRegex) -> BigInteger(word)
+                    word.length == 1 -> word.first().toBigInteger()
+                    else -> null
+                }
+            }
 
             if (inputs.any { it == null }) {
                 ErrorBox.alert("Input not Char or BigInteger",
@@ -132,15 +132,11 @@ class App : Application() {
     }
 }
 
-fun getNumberInput(header: String, content: String = "", start: BigInteger = BigInteger.ZERO): BigInteger? {
+fun getNumberInput(header: String, content: String = "", start: BigInteger = BigInteger.ZERO): Optional<String> {
     val dialog = TextInputDialog(start.toString())
     dialog.title = "New Node"
     dialog.headerText = header
     dialog.contentText = content
 
-    val result = dialog.showAndWait()
-    return when {
-        result.isPresent -> BigInteger(result.get())
-        else             -> null
-    }
+    return dialog.showAndWait()
 }

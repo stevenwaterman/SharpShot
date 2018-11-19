@@ -27,10 +27,18 @@ class InNode(val index: Int?) : AbstractInputNode() {
     override val tooltip = "Provides Input at program start and every time a bullet passes through"
     override val factory = {
         val index = getNumberInput("Enter Input Index",
-                                   "Blank to shoot empty bullet at start\nArguments are 0-indexed")?.toInt()
-        when (index) {
-            null -> null
-            else -> InNode(index)
+                                   "Blank to shoot empty bullet at start\nArguments are 0-indexed")
+        if(index.isPresent){
+            val string = index.get()
+            if(string.isBlank()){
+                InNode(null)
+            }
+            else{
+                InNode(string.toInt())
+            }
+        }
+        else{
+            null
         }
     }
 
