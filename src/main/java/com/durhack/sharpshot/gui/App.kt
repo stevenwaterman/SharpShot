@@ -1,6 +1,6 @@
 package com.durhack.sharpshot.gui
 
-import com.durhack.sharpshot.INode
+import com.durhack.sharpshot.nodes.INode
 import com.durhack.sharpshot.nodes.Container
 import com.durhack.sharpshot.util.ErrorBox
 import com.durhack.sharpshot.util.SaveLoadFiles
@@ -12,6 +12,7 @@ import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.scene.control.TextArea
 import javafx.scene.control.TextField
+import javafx.scene.control.TextInputDialog
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
 import javafx.stage.Stage
@@ -28,7 +29,7 @@ class App : Application() {
     private val textInput = TextField()
 
     private val borderPane = BorderPane()
-    private val nodeCreator = NodeCreator { grid.container.firstAvailableInputIndex() }
+    private val nodeCreator = NodeCreator()
     private val grid = Grid(Container(40, 25)) { this.createNode() }
 
     init {
@@ -66,18 +67,15 @@ class App : Application() {
             grid.timer = timer
 
             val numberRegex = Regex("[0-9]+")
-            val inputs = textInput.text
-                    .split(" ")
-                    .filter { !it.isBlank() }
-                    .map { word ->
+            val inputs = textInput.text.split(" ").filter { !it.isBlank() }.map { word ->
                         when {
                             word.matches(numberRegex) -> BigInteger(word)
-                            word.length == 1 -> word.first().toBigInteger()
-                            else -> null
+                            word.length == 1          -> word.first().toBigInteger()
+                            else                      -> null
                         }
                     }
 
-            if(inputs.any { it == null }){
+            if (inputs.any { it == null }) {
                 ErrorBox.alert("Input not Char or BigInteger",
                                "Please try again",
                                "Input takes Char and integers only with spaces bettween them!")
@@ -91,7 +89,7 @@ class App : Application() {
 
         loadButton.setOnAction {
             val container = SaveLoadFiles.loadFromFile(primaryStage)
-            if(container != null) {
+            if (container != null) {
                 grid.load(container)
             }
         }
@@ -120,7 +118,7 @@ class App : Application() {
         private val programOutput = TextArea()
 
         fun print(c: Char) {
-            programOutput.appendText(c.toString() )
+            programOutput.appendText(c.toString())
         }
 
         fun print(s: String) {
@@ -131,5 +129,18 @@ class App : Application() {
         fun clearOutput() {
             programOutput.text = "OUT:\n\n"
         }
+    }
+}
+
+fun getNumberInput(header: String, content: String = "", start: BigInteger = BigInteger.ZERO): BigInteger? {
+    val dialog = TextInputDialog(start.toString())
+    dialog.title = "New Node"
+    dialog.headerText = header
+    dialog.contentText = content
+
+    val result = dialog.showAndWait()
+    return when {
+        result.isPresent -> BigInteger(result.get())
+        else             -> null
     }
 }

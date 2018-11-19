@@ -2,13 +2,10 @@ package com.durhack.sharpshot.nodes
 
 import com.durhack.sharpshot.Bullet
 import com.durhack.sharpshot.Coordinate
-import com.durhack.sharpshot.Direction
-import com.durhack.sharpshot.INode
 import com.durhack.sharpshot.nodes.io.AbstractInputNode
 import com.durhack.sharpshot.nodes.io.InNode
 import com.durhack.sharpshot.util.Listeners
 import com.durhack.sharpshot.util.Movement
-
 import java.math.BigInteger
 import java.util.*
 
@@ -39,9 +36,7 @@ class Container(val width: Int, val height: Int) {
     }
 
     fun firstAvailableInputIndex(): Int {
-        val inputs = nodes.values
-                .filter { node -> node is InNode }
-                .map { node -> (node as InNode).index }
+        val inputs = nodes.values.filter { node -> node is InNode }.map { node -> (node as InNode).index }
 
         var counter = 1
         while (inputs.contains(counter)) {
@@ -73,43 +68,31 @@ class Container(val width: Int, val height: Int) {
         val freeBullets = bullets.filterValues { it !in capturedBullets }
 
         //Generate movements for free bullets
-        bulletMovements.addAll(freeBullets.map {(coord, bullet) ->
+        bulletMovements.addAll(freeBullets.map { (coord, bullet) ->
             val newCoord = coord.plus(bullet.direction).wrap(width, height)
             return@map Movement(coord, newCoord) to bullet
         })
 
         //Update captured bullets
-        captured.forEach {(coord, node, bullet) ->
+        captured.forEach { (coord, node, bullet) ->
             // special case
             // if any halt nodes get hit by a bullet, halt at end of
             if (!haltNodeHit && node is HaltNode) {
                 haltNodeHit = true
             }
 
-            //TODO this brings great shame onto my family
-            var bulletDirection = bullet.direction
-            var dir = Direction.UP
-            while (dir != node.rotation) {
-                dir = dir.clockwise()
-                bulletDirection = bulletDirection.antiClockwise()
-            }
-            val rotatedBullet = Bullet(bulletDirection, bullet.value)
+            val rotatedDirection = bullet.direction.plusQuarters(node.rotation.quarters)
+            val rotatedBullet = Bullet(rotatedDirection, bullet.value)
 
             node.run(rotatedBullet).forEach { direction, value ->
-                //TODO this too
-                bulletDirection = direction
-                dir = Direction.UP
-                while (dir != node.rotation) {
-                    dir = dir.clockwise()
-                    bulletDirection = bulletDirection.clockwise()
-                }
-
-                val newBullet = Bullet(bulletDirection, value)
+                val unrotatedDirection = direction.plusQuarters(-node.rotation.quarters)
+                val newBullet = Bullet(unrotatedDirection, value)
                 val newCoordinate = coord.plus(newBullet.direction).wrap(width, height)
                 val movement = Movement(coord, newCoordinate)
                 bulletMovements.add(movement to newBullet)
             }
         }
+
 
         //Remove swapping bullets
         //When two bullets are adjacent and each is trying to move into the space the other is occupying, a naive solution

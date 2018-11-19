@@ -1,7 +1,9 @@
 package com.durhack.sharpshot
 
 
-import java.util.Objects
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+import java.util.*
 
 /**
  * This is an immutable class.
@@ -27,5 +29,20 @@ class Coordinate(val x: Int, val y: Int) {
 
     fun wrap(width: Int, height: Int): Coordinate {
         return Coordinate((x + width) % width, (y + height) % height)
+    }
+
+    fun toJson(): JsonElement {
+        val json = JsonObject()
+        json.addProperty("x", x)
+        json.addProperty("y", y)
+        return json
+    }
+
+    companion object {
+        fun fromJson(json: JsonObject): Coordinate {
+            val x = json.get("x").asInt
+            val y = json.get("y").asInt
+            return Coordinate(x, y)
+        }
     }
 }

@@ -1,7 +1,7 @@
 package com.durhack.sharpshot.gui
 
 import com.durhack.sharpshot.Coordinate
-import com.durhack.sharpshot.INode
+import com.durhack.sharpshot.nodes.INode
 import com.durhack.sharpshot.nodes.Container
 import com.durhack.sharpshot.util.Listeners
 import javafx.animation.TranslateTransition
@@ -12,8 +12,7 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.shape.StrokeType
 import javafx.util.Duration
-
-import java.util.Timer
+import java.util.*
 
 class Grid(val container: Container, private val getUiSelectedNode: () -> INode?) : Pane() {
     val completionListeners = Listeners()
@@ -32,7 +31,7 @@ class Grid(val container: Container, private val getUiSelectedNode: () -> INode?
         children.clear()
 
         for ((coordinate, node) in container.nodes) {
-            val graphic = node.toGraphic()
+            val graphic = node.graphic()
             graphic.relocate((coordinate.x * 32).toDouble(), (coordinate.y * 32).toDouble())
             children.add(graphic)
         }
@@ -45,8 +44,7 @@ class Grid(val container: Container, private val getUiSelectedNode: () -> INode?
             translateTransition.node = graphic
 
             var prevPos = Coordinate(coordinate.x, coordinate.y)
-            prevPos = Coordinate(prevPos.x - bullet.direction.deltaX,
-                                 prevPos.y - bullet.direction.deltaY)
+            prevPos = Coordinate(prevPos.x - bullet.direction.deltaX, prevPos.y - bullet.direction.deltaY)
             graphic.relocate((prevPos.x * 32).toDouble(), (prevPos.y * 32).toDouble())
 
             translateTransition.toX = (bullet.direction.deltaX * 32).toDouble()
@@ -96,7 +94,7 @@ class Grid(val container: Container, private val getUiSelectedNode: () -> INode?
                 }
                 else {
                     if (mouseEvent.button == MouseButton.PRIMARY) {
-                        currentNode.rotateClockwise()
+                        currentNode.rotate()
                         render()
                     }
                     else if (mouseEvent.button == MouseButton.SECONDARY) {
@@ -119,5 +117,6 @@ class Grid(val container: Container, private val getUiSelectedNode: () -> INode?
     fun load(newContainer: Container) {
         container.clearAll()
         container.nodes.putAll(newContainer.nodes)
+        render()
     }
 }

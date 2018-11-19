@@ -1,46 +1,32 @@
 package com.durhack.sharpshot
 
-import java.util.ArrayList
+enum class Direction(val deltaX: Int, val deltaY: Int, val quarters: Int) {
+    UP(0, -1, 0),
+    RIGHT(1, 0, 1),
+    DOWN(0, 1, 2),
+    LEFT(-1, 0, 3);
 
-enum class Direction private constructor(val deltaX: Int, val deltaY: Int, val degrees: Double) {
-    UP(0, -1, 0.0),
-    RIGHT(1, 0, 90.0),
-    DOWN(0, 1, 180.0),
-    LEFT(-1, 0, 270.0);
-
-    fun antiClockwise(): Direction {
-        return Direction.clockwiseOf(Direction.clockwiseOf(Direction.clockwiseOf(this)))
+    fun plusQuarters(add: Int): Direction {
+        return ofQuarters(quarters + add)
     }
 
-    fun clockwise(): Direction {
-        return Direction.clockwiseOf(this)
-    }
+    val inverse get() = plusQuarters(2)
+    val clockwise get() = plusQuarters(1)
+    val antiClockwise get() = plusQuarters(-1)
+    val others get() = (1..3).map { plusQuarters(it) }
+    val degrees get() = quarters * 90.0
 
-    companion object {
+    companion object{
+        fun ofQuarters(quarters: Int): Direction {
+            val adjusted = (quarters + 4) % 4
 
-        fun clockwiseOf(d: Direction): Direction {
-            return when (d) {
-                UP -> Direction.RIGHT
-                RIGHT -> Direction.DOWN
-                DOWN -> Direction.LEFT
-                LEFT -> Direction.UP
+            return when (adjusted) {
+                0    -> Direction.UP
+                1    -> Direction.RIGHT
+                2    -> Direction.DOWN
+                3    -> Direction.LEFT
+                else -> throw IllegalArgumentException("Quarters must be 0-3")
             }
-        }
-
-        fun inverseOf(d: Direction): Direction {
-            return Direction.clockwiseOf(Direction.clockwiseOf(d))
-        }
-
-        fun others(d: Direction): List<Direction> {
-            //TODO fix
-            var d = d
-            val dirs = ArrayList<Direction>()
-            for (i in 0..2) {
-                d = Direction.clockwiseOf(d)
-                dirs.add(d)
-            }
-
-            return dirs
         }
     }
 }

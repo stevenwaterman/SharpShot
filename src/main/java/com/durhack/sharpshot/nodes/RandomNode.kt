@@ -2,29 +2,14 @@ package com.durhack.sharpshot.nodes
 
 import com.durhack.sharpshot.Bullet
 import com.durhack.sharpshot.Direction
-import com.durhack.sharpshot.INode
-import javafx.scene.Node
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
-
 import java.math.BigInteger
-import java.util.HashMap
-import java.util.Random
+import java.util.*
 
-class RandomNode : INode {
-    override var rotation = Direction.UP
-        private set
-
-    override fun rotateClockwise() {
-        rotation = Direction.clockwiseOf(rotation)
-    }
-
-    override fun toString(): String {
-        return "Random"
-    }
-
-    private fun rand(n: BigInteger): BigInteger {
-        var n = n
+class RandomNode : INode() {
+    private fun rand(max: BigInteger): BigInteger {
+        var n = max
         var sign = 1
         if (n.compareTo(BigInteger.ZERO) == 0) {
             return BigInteger.ZERO
@@ -49,11 +34,9 @@ class RandomNode : INode {
         return map
     }
 
-    override fun toGraphic(): Node {
-        return Rectangle(32.0, 32.0, Color.GREEN)
-    }
+    override val type = "random"
 
-    override fun reset() {
-        //nothing to do
-    }
+    override fun graphic() = Rectangle(32.0, 32.0, Color.GREEN)
+    override fun reset() {}
+    override val tooltip = "Provides a random output from 0 (inclusive) to input bullet value (exclusive)"
 }
