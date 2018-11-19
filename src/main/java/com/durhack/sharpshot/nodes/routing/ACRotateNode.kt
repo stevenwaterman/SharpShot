@@ -9,10 +9,6 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 
 class ACRotateNode : INode() {
-    override fun toString(): String {
-        return "Rotate Anticlockwise"
-    }
-
     override fun run(bullet: Bullet) = mapOf(bullet.direction.antiClockwise to bullet.value)
 
     override fun graphic(): Node {
@@ -21,7 +17,8 @@ class ACRotateNode : INode() {
         return StackPane(rectangle, label)
     }
 
-    override fun reset() {}
+    override val type = "rotate anticlockwise"
 
+    override fun reset() {}
     override val tooltip = "Rotates incoming bullets anticlockwise"
 }

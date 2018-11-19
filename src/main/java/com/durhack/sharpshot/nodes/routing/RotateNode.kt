@@ -17,6 +17,6 @@ class RotateNode : INode() {
 
     override fun run(bullet: Bullet) = mapOf(bullet.direction.clockwise to bullet.value)
     override fun reset() {}
-    override fun toString() = "Rotate Clockwise"
+    override val type = "rotate clockwise"
     override val tooltip = "Rotates incoming bullets anticlockwise"
 }

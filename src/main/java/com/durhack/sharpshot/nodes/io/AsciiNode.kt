@@ -26,7 +26,8 @@ class AsciiNode : INode() {
         return StackPane(rectangle, label)
     }
 
+    override val type = "char print"
+
     override fun reset() {}
-    override fun toString() = "Print Character"
     override val tooltip = "Consumes and prints bullets based on their ASCII code equivalent"
 }

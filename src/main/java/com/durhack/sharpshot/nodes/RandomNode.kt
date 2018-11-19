@@ -34,8 +34,9 @@ class RandomNode : INode() {
         return map
     }
 
+    override val type = "random"
+
     override fun graphic() = Rectangle(32.0, 32.0, Color.GREEN)
     override fun reset() {}
-    override fun toString() = "Random"
     override val tooltip = "Provides a random output from 0 (inclusive) to input bullet value (exclusive)"
 }

@@ -14,7 +14,7 @@ class DivNode : AbstractMathNode() {
         }
     }
 
-    override fun toString() = "Divide"
+    override val type = "divide"
     override fun graphic() =  Triangle(rotation, Color.web("#CC66FF"), "÷")
     override val tooltip = "Adds two bullets"
 }

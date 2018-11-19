@@ -27,7 +27,8 @@ class StackNode : INode() {
         stack.clear()
     }
 
+    override val type = "stack"
+
     override fun graphic() = Triangle(rotation, Color.web("#FFFF00"), "S" + stack.size)
-    override fun toString() = "Stack"
     override val tooltip = "Inputs in the back pop from the stack, inputs to other sides get added to the stack"
 }

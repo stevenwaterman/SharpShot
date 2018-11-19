@@ -13,6 +13,6 @@ class SplitterNode : INode() {
 
     override fun graphic() = Diamond(rotation, Color.YELLOW, "Y")
     override fun reset() {}
-    override fun toString() = "Splitter"
+    override val type = "splitter"
     override val tooltip = "A bullet in one side produces 3 bullets in the others"
 }

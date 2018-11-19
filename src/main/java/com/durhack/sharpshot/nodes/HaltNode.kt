@@ -22,7 +22,8 @@ class HaltNode : INode() {
         return StackPane(rectangle, label)
     }
 
+    override val type = "halt"
+
     override fun reset() {}
-    override fun toString() = "Halt"
     override val tooltip = "Terminates the program"
 }

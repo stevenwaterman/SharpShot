@@ -33,7 +33,8 @@ class ListNode : AbstractInputNode() {
         nextOutputIndex = 0
     }
 
+    override val type = "list"
+
     override fun graphic() = Triangle(rotation, Color.web("#FFFF00"), "LST")
-    override fun toString() = "Argument List"
     override val tooltip = "Every time a bullet comes in, outputs the next value in the list of inputs"
 }

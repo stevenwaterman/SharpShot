@@ -11,6 +11,6 @@ class VoidNode : INode() {
     override fun run(bullet: Bullet): Map<Direction, BigInteger> = mapOf()
     override fun graphic() = Circle(16.0, Color.BLACK)
     override fun reset() {}
-    override fun toString() = "Void"
+    override val type = "void"
     override val tooltip = "Consumes all incoming bullets"
 }

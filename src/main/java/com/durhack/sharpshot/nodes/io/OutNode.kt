@@ -26,7 +26,8 @@ class OutNode : INode() {
         return StackPane(rectangle, label)
     }
 
-    override fun toString() = "Print Integer"
+    override val type = "int print"
+
     override fun reset() {}
     override val tooltip = "Consumes and prints bullets"
 }

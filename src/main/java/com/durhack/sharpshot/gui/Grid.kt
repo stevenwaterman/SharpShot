@@ -117,5 +117,6 @@ class Grid(val container: Container, private val getUiSelectedNode: () -> INode?
     fun load(newContainer: Container) {
         container.clearAll()
         container.nodes.putAll(newContainer.nodes)
+        render()
     }
 }
