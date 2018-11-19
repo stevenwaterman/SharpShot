@@ -2,7 +2,7 @@ package com.durhack.sharpshot.gui;
 
 import com.durhack.sharpshot.INode;
 import com.durhack.sharpshot.nodes.Container;
-import com.durhack.sharpshot.nodes.NodeIn;
+import com.durhack.sharpshot.nodes.io.InNode;
 import com.durhack.sharpshot.util.Ascii;
 import com.durhack.sharpshot.util.ErrorBox;
 import com.durhack.sharpshot.util.SaveLoadFiles;
@@ -48,9 +48,9 @@ public class App extends Application {
                 .values()
                 .stream()
                 .filter(node ->
-                        node instanceof NodeIn
+                        node instanceof InNode
                 ).map(node ->
-                        ((NodeIn) node).getIndex()
+                        ((InNode) node).getIndex()
                 ).collect(Collectors.toList());
 
         while (true) {

@@ -6,6 +6,7 @@ import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
 import com.durhack.sharpshot.gui.App;
 import com.durhack.sharpshot.gui.Grid;
+import com.durhack.sharpshot.nodes.io.AbstractInputNode;
 import com.durhack.sharpshot.util.Movement;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -16,12 +17,10 @@ import org.jetbrains.annotations.NotNull;
 import java.math.BigInteger;
 import java.util.*;
 
-public class Container implements INode {
+public class Container {
     private final int width;
     private final int height;
     private final Grid grid;
-
-    private Direction rotation = Direction.UP;
 
     @NotNull
     private final Map<Coordinate, INode> nodes = new HashMap<>();
@@ -43,22 +42,6 @@ public class Container implements INode {
         return bullets.isEmpty();
     }
 
-    @Override
-    public @NotNull Direction getRotation() {
-        return rotation;
-    }
-
-    @Override
-    public void rotateClockwise() {
-        rotation = Direction.clockwiseOf(rotation);
-    }
-
-    @NotNull
-    @Override
-    public Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
-        return new HashMap<>();
-    }
-
     @NotNull
     public Map<Coordinate, INode> getNodes() {
         return nodes;
@@ -75,8 +58,8 @@ public class Container implements INode {
         // Input nodes spawn 0 if their index == 0
         for (Coordinate coordinate : getNodes().keySet()) {
             INode node = getNodes().get(coordinate);
-            if (node instanceof AbstractNodeInput) {
-                Map<Direction, BigInteger> bulletParams = ((AbstractNodeInput) node).input(input);
+            if (node instanceof AbstractInputNode) {
+                Map<Direction, BigInteger> bulletParams = ((AbstractInputNode) node).input(input);
 
                 for (Map.Entry<Direction, BigInteger> newBulletEntry : bulletParams.entrySet()) {
                     Bullet newBullet = new Bullet(node.getRotation(), newBulletEntry.getValue());
@@ -122,7 +105,7 @@ public class Container implements INode {
             INode node = nodes.get(coordinate);
 
             // special case
-            if (node instanceof NodeHalt)
+            if (node instanceof HaltNode)
                 shouldHaltAfterTick = true;
 
             //TODO this brings great shame onto my family
@@ -205,12 +188,6 @@ public class Container implements INode {
     public int getWidth() {
         return width;
     }
-
-    @Override
-    public @NotNull Node toGraphic() {
-        return new Rectangle(32.0, 32.0, Color.GREEN);
-    }
-
 
     public void reset() {
         bullets.clear();

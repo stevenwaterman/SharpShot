@@ -1,4 +1,4 @@
-package com.durhack.sharpshot.nodes;
+package com.durhack.sharpshot.nodes.math;
 
 import com.durhack.sharpshot.Bullet;
 import com.durhack.sharpshot.Direction;
@@ -9,7 +9,7 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class NodeArithmetic implements INode {
+public abstract class MathNode implements INode {
     private Direction dir = Direction.UP;
 
     private Bullet mostRecentBullet = null;

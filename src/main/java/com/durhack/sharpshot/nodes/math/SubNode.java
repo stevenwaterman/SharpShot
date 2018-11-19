@@ -1,4 +1,4 @@
-package com.durhack.sharpshot.nodes;
+package com.durhack.sharpshot.nodes.math;
 
 import com.durhack.sharpshot.gui.Triangle;
 import javafx.scene.Node;
@@ -7,24 +7,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
-public class NodeDiv extends NodeArithmetic {
+public class SubNode extends MathNode {
     @Override
     public BigInteger operation(BigInteger val1, BigInteger val2) {
-        if(val2.equals(BigInteger.ZERO)){
-            return null;
-        }
-        else{
-            return val1.divide(val2);
-        }
+        return val1.subtract(val2);
     }
 
     @Override
     public String toString() {
-        return "Divide";
+        return "Subtract";
     }
 
     @Override
     public @NotNull Node toGraphic() {
-        return new Triangle(getRotation(), Color.web("#CC66FF"), "÷");
+        return new Triangle(getRotation(), Color.web("#7700FF"), "-");
     }
 }

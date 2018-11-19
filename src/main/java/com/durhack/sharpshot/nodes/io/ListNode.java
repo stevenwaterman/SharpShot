@@ -1,4 +1,4 @@
-package com.durhack.sharpshot.nodes;
+package com.durhack.sharpshot.nodes.io;
 
 import com.durhack.sharpshot.Bullet;
 import com.durhack.sharpshot.Direction;
@@ -13,12 +13,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NodeList extends AbstractNodeInput {
+public class ListNode extends AbstractInputNode {
     private Direction dir = Direction.UP;
     private List<BigInteger> inputs;
     private int nextOutputIndex = 0;
 
-    public NodeList() {
+    public ListNode() {
 
     }
 

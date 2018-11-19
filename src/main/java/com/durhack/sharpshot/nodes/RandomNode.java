@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class NodeRandom implements INode {
+public class RandomNode implements INode {
     private Direction dir = Direction.UP;
     @Override
     public @NotNull Direction getRotation() {

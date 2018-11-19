@@ -5,6 +5,14 @@ import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
 import com.durhack.sharpshot.gui.Grid;
 import com.durhack.sharpshot.nodes.*;
+import com.durhack.sharpshot.nodes.io.InNode;
+import com.durhack.sharpshot.nodes.io.ListNode;
+import com.durhack.sharpshot.nodes.io.NodeAscii;
+import com.durhack.sharpshot.nodes.io.NodeOut;
+import com.durhack.sharpshot.nodes.math.*;
+import com.durhack.sharpshot.nodes.math.AddNode;
+import com.durhack.sharpshot.nodes.math.MultNode;
+import com.durhack.sharpshot.nodes.routing.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -50,10 +58,10 @@ class Serialiser {
 
             NodeData nd = new NodeData(node.getClass().getSimpleName(), coord.getX(), coord.getY(), node.getRotation(), "");
 
-            if(node instanceof NodeConstant)
-                nd.extra = ((NodeConstant) node).getValue().toString();
-            if(node instanceof NodeIn)
-                nd.extra = String.valueOf(((NodeIn) node).getIndex());
+            if(node instanceof ConstantNode)
+                nd.extra = ((ConstantNode) node).getValue().toString();
+            if(node instanceof InNode)
+                nd.extra = String.valueOf(((InNode) node).getIndex());
 
             data.nodes.add(nd);
         }
@@ -74,33 +82,33 @@ class Serialiser {
             String type = nd.type;
             INode newNode;
             switch(type) {
-                case "NodeIn":  newNode = new NodeIn(Integer.parseInt(nd.extra)); break;
+                case "InNode":  newNode = new InNode(Integer.parseInt(nd.extra)); break;
                 case "NodeOut": newNode = new NodeOut(); break;
                 case "NodeAscii": newNode = new NodeAscii(); break;
 
-                case "NodeAdd": newNode = new NodeAdd(); break;
-                case "NodeSub": newNode = new NodeSub(); break;
-                case "NodeMult": newNode = new NodeMult(); break;
-                case "NodeDiv": newNode = new NodeDiv(); break;
+                case "AddNode": newNode = new AddNode(); break;
+                case "SubNode": newNode = new SubNode(); break;
+                case "MultNode": newNode = new MultNode(); break;
+                case "DivNode": newNode = new DivNode(); break;
 
-                case "NodeBranch":   newNode = new NodeBranch(); break;
-                case "NodeSplitter": newNode = new NodeSplitter(); break;
+                case "BranchNode":   newNode = new BranchNode(); break;
+                case "SplitterNode": newNode = new SplitterNode(); break;
 
-                case "NodeConstant": newNode = new NodeConstant(new BigInteger(nd.extra)); break;
+                case "ConstantNode": newNode = new ConstantNode(new BigInteger(nd.extra)); break;
 
-                case "NodeVoid": newNode = new NodeVoid(); break;
+                case "VoidNode": newNode = new VoidNode(); break;
 
-                case "NodeIfPositive": newNode = new NodeIfPositive(); break;
-                case "NodeIfZero": newNode = new NodeIfZero(); break;
+                case "IfPositiveNode": newNode = new IfPositiveNode(); break;
+                case "IfZeroNode": newNode = new IfZeroNode(); break;
 
-                case "NodeRotateClockwise": newNode = new NodeRotateClockwise(); break;
-                case "NodeRotateAnticlockwise": newNode = new NodeRotateAnticlockwise(); break;
+                case "RotateNode": newNode = new RotateNode(); break;
+                case "ACRotateNode": newNode = new ACRotateNode(); break;
 
-                case "NodeRandom": newNode = new NodeRandom(); break;
+                case "RandomNode": newNode = new RandomNode(); break;
 
-                case "NodeHalt": newNode = new NodeHalt(); break;
-                case "NodeList": newNode = new NodeList(); break;
-                case "NodeStack": newNode = new NodeStack(); break;
+                case "HaltNode": newNode = new HaltNode(); break;
+                case "ListNode": newNode = new ListNode(); break;
+                case "StackNode": newNode = new StackNode(); break;
 
                 default:
                     System.out.println(type);

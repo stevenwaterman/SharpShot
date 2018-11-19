@@ -1,18 +1,23 @@
-package com.durhack.sharpshot.nodes;
+package com.durhack.sharpshot.nodes.routing;
 
 import com.durhack.sharpshot.Bullet;
 import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
-import com.durhack.sharpshot.gui.Diamond;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NodeSplitter implements INode {
+public class VoidNode implements INode {
+    @Override
+    public String toString() {
+        return "Void";
+    }
+
     private Direction dir = Direction.UP;
 
     @Override
@@ -27,21 +32,12 @@ public class NodeSplitter implements INode {
 
     @Override
     public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
-        // Shoot out 3 bullets in other directions
-        HashMap<Direction, BigInteger> map = new HashMap<>();
-        for(Direction d : Direction.others(Direction.inverseOf(bullet.getDirection())))
-            map.put(d, bullet.getValue());
-        return map;
-    }
-
-    @Override
-    public String toString() {
-        return "Splitter";
+        return new HashMap<>();
     }
 
     @Override
     public @NotNull Node toGraphic() {
-        return new Diamond(getRotation(), Color.YELLOW, "Y");
+        return new Circle(16,Color.BLACK);//Rectangle(32.0, 32.0, Color.BLACK);
     }
 
     public void reset() {}

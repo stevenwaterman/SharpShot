@@ -3,6 +3,7 @@ package com.durhack.sharpshot.nodes;
 import com.durhack.sharpshot.Bullet;
 import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
+import com.durhack.sharpshot.gui.App;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -14,7 +15,7 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NodeRotateClockwise implements INode {
+public class HaltNode implements INode {
     private Direction dir = Direction.UP;
 
     @Override
@@ -28,21 +29,20 @@ public class NodeRotateClockwise implements INode {
     }
 
     @Override
-    public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
-        HashMap<Direction, BigInteger> map = new HashMap<>();
-        map.put(bullet.getDirection().clockwise(), bullet.getValue());
-        return map;
+    public String toString() {
+        return "Halt";
     }
 
     @Override
-    public String toString() {
-        return "Rotate Clockwise";
+    public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
+        // halt checking is done within Container
+        return new HashMap<>();
     }
 
     @Override
     public @NotNull Node toGraphic() {
-        Rectangle rectangle = new Rectangle(32.0, 32.0, Color.PALEVIOLETRED);
-        Label label = new Label("CW");
+        Rectangle rectangle = new Rectangle(32.0, 32.0, Color.GHOSTWHITE);
+        Label label = new Label("HLT");
         return new StackPane(rectangle, label);
     }
 

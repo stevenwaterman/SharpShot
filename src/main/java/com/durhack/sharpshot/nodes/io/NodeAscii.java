@@ -1,9 +1,10 @@
-package com.durhack.sharpshot.nodes;
+package com.durhack.sharpshot.nodes.io;
 
 import com.durhack.sharpshot.Bullet;
 import com.durhack.sharpshot.Direction;
 import com.durhack.sharpshot.INode;
 import com.durhack.sharpshot.gui.App;
+import com.durhack.sharpshot.util.Ascii;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -15,7 +16,7 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NodeOut implements INode {
+public class NodeAscii implements INode {
     private Direction dir = Direction.UP;
 
     @Override
@@ -29,26 +30,26 @@ public class NodeOut implements INode {
     }
 
     @Override
-    public String toString() {
-        return "Print Integer";
-    }
-
-    @Override
     public @NotNull Map<Direction, BigInteger> run(@NotNull Bullet bullet) {
         BigInteger value = bullet.getValue();
         if(value != null) {
-            System.out.println(value.toString());
-            App.printToOut(value.toString());
+            String output  = Ascii.fromBig(value) + "";
+            System.out.println(output);
+            App.printToOut(output);
         }
         return new HashMap<>();
     }
 
-    @Override
+        @Override
     public @NotNull Node toGraphic() {
-        Rectangle rectangle = new Rectangle(32.0, 32.0, Color.SANDYBROWN);
-        Label label = new Label("INT");
+        Rectangle rectangle = new Rectangle(32.0, 32.0, Color.FIREBRICK);
+        Label label = new Label("CHR");
         return new StackPane(rectangle, label);
     }
 
     public void reset() {}
+    @Override
+    public String toString() {
+        return "Print Character";
+    }
 }

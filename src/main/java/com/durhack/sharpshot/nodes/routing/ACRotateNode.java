@@ -1,4 +1,4 @@
-package com.durhack.sharpshot.nodes;
+package com.durhack.sharpshot.nodes.routing;
 
 import com.durhack.sharpshot.Bullet;
 import com.durhack.sharpshot.Direction;
@@ -14,7 +14,7 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NodeRotateAnticlockwise implements INode {
+public class ACRotateNode implements INode {
     private Direction dir = Direction.UP;
 
     @Override

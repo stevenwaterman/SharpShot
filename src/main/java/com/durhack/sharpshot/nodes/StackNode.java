@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
-public class NodeStack implements INode {
+public class StackNode implements INode {
     private Direction rotation = Direction.UP;
     private Stack<BigInteger> stack = new Stack<>();
 
