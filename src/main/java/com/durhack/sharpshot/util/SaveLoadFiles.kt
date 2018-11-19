@@ -5,8 +5,11 @@ import javafx.scene.control.Alert
 import javafx.stage.FileChooser
 import javafx.stage.Stage
 import javafx.stage.Window
-
-import java.io.*
+import java.io.BufferedReader
+import java.io.BufferedWriter
+import java.io.FileReader
+import java.io.FileWriter
+import java.io.IOException
 
 object SaveLoadFiles {
 

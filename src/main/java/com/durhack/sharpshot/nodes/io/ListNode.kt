@@ -3,12 +3,9 @@ package com.durhack.sharpshot.nodes.io
 import com.durhack.sharpshot.Bullet
 import com.durhack.sharpshot.Direction
 import com.durhack.sharpshot.gui.Triangle
-import javafx.scene.Node
 import javafx.scene.paint.Color
-
 import java.math.BigInteger
-import java.util.ArrayList
-import java.util.HashMap
+import java.util.*
 
 class ListNode : AbstractInputNode() {
     override var rotation = Direction.UP
@@ -21,10 +18,8 @@ class ListNode : AbstractInputNode() {
         rotation = Direction.clockwiseOf(rotation)
     }
 
-    override fun run(bullet: Bullet): Map<Direction, BigInteger?>{
-        val bullets = mutableMapOf(
-                bullet.direction to bullet.value
-                                  )
+    override fun run(bullet: Bullet): Map<Direction, BigInteger?> {
+        val bullets = mutableMapOf(bullet.direction to bullet.value)
 
         if (nextOutputIndex < inputs!!.size) {
             bullets[Direction.UP] = inputs!![nextOutputIndex]

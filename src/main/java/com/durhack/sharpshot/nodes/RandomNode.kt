@@ -6,10 +6,8 @@ import com.durhack.sharpshot.INode
 import javafx.scene.Node
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
-
 import java.math.BigInteger
-import java.util.HashMap
-import java.util.Random
+import java.util.*
 
 class RandomNode : INode {
     override var rotation = Direction.UP

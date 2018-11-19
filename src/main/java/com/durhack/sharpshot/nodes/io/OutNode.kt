@@ -9,9 +9,7 @@ import javafx.scene.control.Label
 import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
-
 import java.math.BigInteger
-import java.util.HashMap
 
 class OutNode : INode {
     override var rotation = Direction.UP

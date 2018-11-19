@@ -6,10 +6,8 @@ import com.durhack.sharpshot.INode
 import com.durhack.sharpshot.gui.Triangle
 import javafx.scene.Node
 import javafx.scene.paint.Color
-
 import java.math.BigInteger
-import java.util.HashMap
-import java.util.Stack
+import java.util.*
 
 class StackNode : INode {
     override var rotation = Direction.UP

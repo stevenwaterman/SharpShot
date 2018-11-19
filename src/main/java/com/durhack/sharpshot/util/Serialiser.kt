@@ -3,19 +3,29 @@ package com.durhack.sharpshot.util
 import com.durhack.sharpshot.Coordinate
 import com.durhack.sharpshot.Direction
 import com.durhack.sharpshot.INode
-import com.durhack.sharpshot.nodes.*
+import com.durhack.sharpshot.nodes.ConstantNode
+import com.durhack.sharpshot.nodes.Container
+import com.durhack.sharpshot.nodes.HaltNode
+import com.durhack.sharpshot.nodes.RandomNode
+import com.durhack.sharpshot.nodes.StackNode
+import com.durhack.sharpshot.nodes.io.AsciiNode
 import com.durhack.sharpshot.nodes.io.InNode
 import com.durhack.sharpshot.nodes.io.ListNode
-import com.durhack.sharpshot.nodes.io.AsciiNode
 import com.durhack.sharpshot.nodes.io.OutNode
-import com.durhack.sharpshot.nodes.math.*
 import com.durhack.sharpshot.nodes.math.AddNode
+import com.durhack.sharpshot.nodes.math.DivNode
 import com.durhack.sharpshot.nodes.math.MultNode
-import com.durhack.sharpshot.nodes.routing.*
+import com.durhack.sharpshot.nodes.math.SubNode
+import com.durhack.sharpshot.nodes.routing.ACRotateNode
+import com.durhack.sharpshot.nodes.routing.BranchNode
+import com.durhack.sharpshot.nodes.routing.IfPositiveNode
+import com.durhack.sharpshot.nodes.routing.IfZeroNode
+import com.durhack.sharpshot.nodes.routing.RotateNode
+import com.durhack.sharpshot.nodes.routing.SplitterNode
+import com.durhack.sharpshot.nodes.routing.VoidNode
 import com.google.gson.GsonBuilder
-
 import java.math.BigInteger
-import java.util.ArrayList
+import java.util.*
 
 internal object Serialiser {
 
@@ -40,7 +50,7 @@ internal object Serialiser {
 
             when (node) {
                 is ConstantNode -> nd.extra = node.value!!.toString()
-                is InNode -> nd.extra = node.index.toString()
+                is InNode       -> nd.extra = node.index.toString()
             }
 
             data.nodes.add(nd)
@@ -62,35 +72,35 @@ internal object Serialiser {
             val type = nd.type
             val newNode: INode
             when (type) {
-                "InNode" -> newNode = InNode(Integer.parseInt(nd.extra))
-                "OutNode" -> newNode = OutNode()
-                "AsciiNode" -> newNode = AsciiNode()
+                "InNode"         -> newNode = InNode(Integer.parseInt(nd.extra))
+                "OutNode"        -> newNode = OutNode()
+                "AsciiNode"      -> newNode = AsciiNode()
 
-                "AddNode" -> newNode = AddNode()
-                "SubNode" -> newNode = SubNode()
-                "MultNode" -> newNode = MultNode()
-                "DivNode" -> newNode = DivNode()
+                "AddNode"        -> newNode = AddNode()
+                "SubNode"        -> newNode = SubNode()
+                "MultNode"       -> newNode = MultNode()
+                "DivNode"        -> newNode = DivNode()
 
-                "BranchNode" -> newNode = BranchNode()
-                "SplitterNode" -> newNode = SplitterNode()
+                "BranchNode"     -> newNode = BranchNode()
+                "SplitterNode"   -> newNode = SplitterNode()
 
-                "ConstantNode" -> newNode = ConstantNode(BigInteger(nd.extra))
+                "ConstantNode"   -> newNode = ConstantNode(BigInteger(nd.extra))
 
-                "VoidNode" -> newNode = VoidNode()
+                "VoidNode"       -> newNode = VoidNode()
 
                 "IfPositiveNode" -> newNode = IfPositiveNode()
-                "IfZeroNode" -> newNode = IfZeroNode()
+                "IfZeroNode"     -> newNode = IfZeroNode()
 
-                "RotateNode" -> newNode = RotateNode()
-                "ACRotateNode" -> newNode = ACRotateNode()
+                "RotateNode"     -> newNode = RotateNode()
+                "ACRotateNode"   -> newNode = ACRotateNode()
 
-                "RandomNode" -> newNode = RandomNode()
+                "RandomNode"     -> newNode = RandomNode()
 
-                "HaltNode" -> newNode = HaltNode()
-                "ListNode" -> newNode = ListNode()
-                "StackNode" -> newNode = StackNode()
+                "HaltNode"       -> newNode = HaltNode()
+                "ListNode"       -> newNode = ListNode()
+                "StackNode"      -> newNode = StackNode()
 
-                else -> {
+                else             -> {
                     throw RuntimeException("This shouldn't happen, cannot read serialised node in Serialiser: $type")
                 }
             }

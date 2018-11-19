@@ -1,7 +1,6 @@
 package com.durhack.sharpshot.nodes.routing
 
 import com.durhack.sharpshot.gui.Triangle
-import javafx.scene.Node
 import javafx.scene.paint.Color
 import java.math.BigInteger
 

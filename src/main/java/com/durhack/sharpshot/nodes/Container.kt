@@ -39,9 +39,7 @@ class Container(val width: Int, val height: Int) {
     }
 
     fun firstAvailableInputIndex(): Int {
-        val inputs = nodes.values
-                .filter { node -> node is InNode }
-                .map { node -> (node as InNode).index }
+        val inputs = nodes.values.filter { node -> node is InNode }.map { node -> (node as InNode).index }
 
         var counter = 1
         while (inputs.contains(counter)) {
@@ -73,13 +71,13 @@ class Container(val width: Int, val height: Int) {
         val freeBullets = bullets.filterValues { it !in capturedBullets }
 
         //Generate movements for free bullets
-        bulletMovements.addAll(freeBullets.map {(coord, bullet) ->
+        bulletMovements.addAll(freeBullets.map { (coord, bullet) ->
             val newCoord = coord.plus(bullet.direction).wrap(width, height)
             return@map Movement(coord, newCoord) to bullet
         })
 
         //Update captured bullets
-        captured.forEach {(coord, node, bullet) ->
+        captured.forEach { (coord, node, bullet) ->
             // special case
             // if any halt nodes get hit by a bullet, halt at end of
             if (!haltNodeHit && node is HaltNode) {

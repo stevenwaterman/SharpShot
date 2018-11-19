@@ -6,9 +6,8 @@ import com.durhack.sharpshot.INode
 import javafx.scene.Node
 import javafx.scene.paint.Color
 import javafx.scene.shape.Circle
-
 import java.math.BigInteger
-import java.util.HashMap
+import java.util.*
 
 class VoidNode : INode {
 
@@ -28,7 +27,7 @@ class VoidNode : INode {
     }
 
     override fun toGraphic(): Node {
-        return Circle(16.0, Color.BLACK)//Rectangle(32.0, 32.0, Color.BLACK);
+        return Circle(16.0, Color.BLACK) //Rectangle(32.0, 32.0, Color.BLACK);
     }
 
     override fun reset() {}

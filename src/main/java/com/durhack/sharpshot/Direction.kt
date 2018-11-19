@@ -1,12 +1,9 @@
 package com.durhack.sharpshot
 
-import java.util.ArrayList
+import java.util.*
 
 enum class Direction private constructor(val deltaX: Int, val deltaY: Int, val degrees: Double) {
-    UP(0, -1, 0.0),
-    RIGHT(1, 0, 90.0),
-    DOWN(0, 1, 180.0),
-    LEFT(-1, 0, 270.0);
+    UP(0, -1, 0.0), RIGHT(1, 0, 90.0), DOWN(0, 1, 180.0), LEFT(-1, 0, 270.0);
 
     fun antiClockwise(): Direction {
         return Direction.clockwiseOf(Direction.clockwiseOf(Direction.clockwiseOf(this)))
@@ -20,10 +17,10 @@ enum class Direction private constructor(val deltaX: Int, val deltaY: Int, val d
 
         fun clockwiseOf(d: Direction): Direction {
             return when (d) {
-                UP -> Direction.RIGHT
+                UP    -> Direction.RIGHT
                 RIGHT -> Direction.DOWN
-                DOWN -> Direction.LEFT
-                LEFT -> Direction.UP
+                DOWN  -> Direction.LEFT
+                LEFT  -> Direction.UP
             }
         }
 

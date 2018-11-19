@@ -66,18 +66,15 @@ class App : Application() {
             grid.timer = timer
 
             val numberRegex = Regex("[0-9]+")
-            val inputs = textInput.text
-                    .split(" ")
-                    .filter { !it.isBlank() }
-                    .map { word ->
+            val inputs = textInput.text.split(" ").filter { !it.isBlank() }.map { word ->
                         when {
                             word.matches(numberRegex) -> BigInteger(word)
-                            word.length == 1 -> word.first().toBigInteger()
-                            else -> null
+                            word.length == 1          -> word.first().toBigInteger()
+                            else                      -> null
                         }
                     }
 
-            if(inputs.any { it == null }){
+            if (inputs.any { it == null }) {
                 ErrorBox.alert("Input not Char or BigInteger",
                                "Please try again",
                                "Input takes Char and integers only with spaces bettween them!")
@@ -91,7 +88,7 @@ class App : Application() {
 
         loadButton.setOnAction {
             val container = SaveLoadFiles.loadFromFile(primaryStage)
-            if(container != null) {
+            if (container != null) {
                 grid.load(container)
             }
         }
@@ -120,7 +117,7 @@ class App : Application() {
         private val programOutput = TextArea()
 
         fun print(c: Char) {
-            programOutput.appendText(c.toString() )
+            programOutput.appendText(c.toString())
         }
 
         fun print(s: String) {

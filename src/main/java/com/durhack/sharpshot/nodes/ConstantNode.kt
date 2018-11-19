@@ -16,11 +16,9 @@ class ConstantNode(var value: BigInteger?) : INode {
         rotation = Direction.clockwiseOf(rotation)
     }
 
-    override fun run(bullet: Bullet): Map<Direction, BigInteger?> =
-            mutableMapOf(
-                    bullet.direction to bullet.value,
-                    Direction.UP to value // if both same direction, only constant comes out
-                        )
+    override fun run(bullet: Bullet): Map<Direction, BigInteger?> = mutableMapOf(bullet.direction to bullet.value,
+                                                                                 Direction.UP to value // if both same direction, only constant comes out
+                                                                                )
 
     override fun toGraphic(): Node {
         return Triangle(rotation, Color.LIMEGREEN, value!!.toString())
