@@ -11,18 +11,7 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import java.math.BigInteger
 
-class OutNode : INode {
-    override var rotation = Direction.UP
-        private set
-
-    override fun rotateClockwise() {
-        rotation = Direction.clockwiseOf(rotation)
-    }
-
-    override fun toString(): String {
-        return "Print Integer"
-    }
-
+class OutNode : INode() {
     override fun run(bullet: Bullet): Map<Direction, BigInteger> {
         val value = bullet.value
         if (value != null) {
@@ -37,5 +26,6 @@ class OutNode : INode {
         return StackPane(rectangle, label)
     }
 
+    override fun toString() = "Print Integer"
     override fun reset() {}
 }

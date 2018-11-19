@@ -4,14 +4,14 @@ import javafx.scene.Node
 
 import java.math.BigInteger
 
-interface INode {
-    val rotation: Direction
+abstract class INode {
+    var rotation = Direction.UP
 
-    fun rotateClockwise()
+    fun rotate() {
+        rotation = rotation.clockwise
+    }
 
-    fun run(bullet: Bullet): Map<Direction, BigInteger?>
-
-    fun toGraphic(): Node
-
-    fun reset()
+    abstract fun run(bullet: Bullet): Map<Direction, BigInteger?>
+    abstract fun toGraphic(): Node
+    abstract fun reset()
 }

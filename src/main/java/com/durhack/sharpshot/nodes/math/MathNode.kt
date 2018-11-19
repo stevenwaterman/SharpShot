@@ -5,15 +5,10 @@ import com.durhack.sharpshot.Direction
 import com.durhack.sharpshot.INode
 import java.math.BigInteger
 
-abstract class MathNode : INode {
-    override var rotation = Direction.UP
-        protected set
-
+abstract class MathNode : INode() {
     private var mostRecentBullet: Bullet? = null
 
-    override fun rotateClockwise() {
-        rotation = Direction.clockwiseOf(rotation)
-    }
+    protected abstract fun operation(val1: BigInteger, val2: BigInteger): BigInteger?
 
     override fun run(bullet: Bullet): Map<Direction, BigInteger?> {
         val value = bullet.value
@@ -32,8 +27,6 @@ abstract class MathNode : INode {
             }
         }
     }
-
-    protected abstract fun operation(val1: BigInteger, val2: BigInteger): BigInteger?
 
     override fun reset() {
         mostRecentBullet = null

@@ -94,7 +94,7 @@ class Grid(val container: Container, private val getUiSelectedNode: () -> INode?
                 }
                 else {
                     if (mouseEvent.button == MouseButton.PRIMARY) {
-                        currentNode.rotateClockwise()
+                        currentNode.rotate()
                         render()
                     }
                     else if (mouseEvent.button == MouseButton.SECONDARY) {

@@ -11,14 +11,7 @@ import javafx.scene.shape.Rectangle
 import java.math.BigInteger
 import java.util.*
 
-class HaltNode : INode {
-    override var rotation = Direction.UP
-        private set
-
-    override fun rotateClockwise() {
-        rotation = Direction.clockwiseOf(rotation)
-    }
-
+class HaltNode : INode() {
     override fun toString(): String {
         return "Halt"
     }

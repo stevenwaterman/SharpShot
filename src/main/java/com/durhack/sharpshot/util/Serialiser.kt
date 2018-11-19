@@ -37,6 +37,26 @@ internal object Serialiser {
         val nodes: MutableList<NodeData> = ArrayList()
     }
 
+    private val nodeFactories = mapOf<String, (NodeData) -> INode>(
+            "InNode" to { node -> InNode(Integer.parseInt(node.extra)) },
+            "OutNode" to { _ -> OutNode() },
+            "AsciiNode" to { _ -> AsciiNode() },
+            "AddNode" to { _ -> AddNode() },
+            "SubNode" to { _ -> SubNode() },
+            "MultNode" to { _ -> MultNode() },
+            "DivNode" to { _ -> DivNode() },
+            "BranchNode" to { _ -> BranchNode() },
+            "SplitterNode" to { _ -> SplitterNode() },
+            "ConstantNode" to { node -> ConstantNode(BigInteger(node.extra)) },
+            "VoidNode" to { _ -> VoidNode() },
+            "IfPositiveNode" to { _ -> IfPositiveNode() },
+            "IfZeroNode" to { _ -> IfZeroNode() },
+            "RotateNode" to { _ -> RotateNode() },
+            "ACRotateNode" to { _ -> ACRotateNode() },
+            "RandomNode" to { _ -> RandomNode() },
+            "HaltNode" to { _ -> HaltNode() },
+            "ListNode" to { _ -> ListNode() },
+            "StackNode" to { _ -> StackNode() })
 
     fun getJSON(cont: Container): String {
         val data = Data()
@@ -68,47 +88,12 @@ internal object Serialiser {
 
         val container = Container(data.width, data.height)
 
-        for (nd in data.nodes) {
-            val type = nd.type
-            val newNode: INode
-            when (type) {
-                "InNode"         -> newNode = InNode(Integer.parseInt(nd.extra))
-                "OutNode"        -> newNode = OutNode()
-                "AsciiNode"      -> newNode = AsciiNode()
-
-                "AddNode"        -> newNode = AddNode()
-                "SubNode"        -> newNode = SubNode()
-                "MultNode"       -> newNode = MultNode()
-                "DivNode"        -> newNode = DivNode()
-
-                "BranchNode"     -> newNode = BranchNode()
-                "SplitterNode"   -> newNode = SplitterNode()
-
-                "ConstantNode"   -> newNode = ConstantNode(BigInteger(nd.extra))
-
-                "VoidNode"       -> newNode = VoidNode()
-
-                "IfPositiveNode" -> newNode = IfPositiveNode()
-                "IfZeroNode"     -> newNode = IfZeroNode()
-
-                "RotateNode"     -> newNode = RotateNode()
-                "ACRotateNode"   -> newNode = ACRotateNode()
-
-                "RandomNode"     -> newNode = RandomNode()
-
-                "HaltNode"       -> newNode = HaltNode()
-                "ListNode"       -> newNode = ListNode()
-                "StackNode"      -> newNode = StackNode()
-
-                else             -> {
-                    throw RuntimeException("This shouldn't happen, cannot read serialised node in Serialiser: $type")
-                }
+        data.nodes.forEach { jsonNode ->
+            val newNode = nodeFactories[jsonNode.type]?.invoke(jsonNode)
+            if (newNode != null) {
+                newNode.rotation = jsonNode.rotation
+                container.nodes[Coordinate(jsonNode.x, jsonNode.y)] = newNode
             }
-
-            // wow.. lazy
-            while (newNode.rotation != nd.rotation) newNode.rotateClockwise()
-
-            container.nodes[Coordinate(nd.x, nd.y)] = newNode
         }
 
         return container

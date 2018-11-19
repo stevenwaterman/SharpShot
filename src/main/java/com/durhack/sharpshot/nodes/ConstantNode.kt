@@ -8,16 +8,13 @@ import javafx.scene.Node
 import javafx.scene.paint.Color
 import java.math.BigInteger
 
-class ConstantNode(var value: BigInteger?) : INode {
-    override var rotation = Direction.UP
-        private set
-
-    override fun rotateClockwise() {
-        rotation = Direction.clockwiseOf(rotation)
-    }
-
+class ConstantNode(var value: BigInteger?) : INode() {
+    /**
+     * If both the bullet and the output are in the same direction, the second element in the map overrides the first
+     * so the input bullet is destroyed
+     */
     override fun run(bullet: Bullet): Map<Direction, BigInteger?> = mutableMapOf(bullet.direction to bullet.value,
-                                                                                 Direction.UP to value // if both same direction, only constant comes out
+                                                                                 Direction.UP to value
                                                                                 )
 
     override fun toGraphic(): Node {

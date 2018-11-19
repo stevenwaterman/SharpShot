@@ -5,14 +5,7 @@ import com.durhack.sharpshot.Direction
 import com.durhack.sharpshot.INode
 import java.math.BigInteger
 
-abstract class ConditionalNode : INode {
-    override var rotation = Direction.UP
-        protected set
-
-    override fun rotateClockwise() {
-        rotation = Direction.clockwiseOf(rotation)
-    }
-
+abstract class ConditionalNode : INode() {
     // Ignore null bullets
     override fun run(bullet: Bullet): Map<Direction, BigInteger> {
         val value = bullet.value ?: return mapOf()

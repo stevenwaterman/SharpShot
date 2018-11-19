@@ -11,14 +11,7 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import java.math.BigInteger
 
-class AsciiNode : INode {
-    override var rotation = Direction.UP
-        private set
-
-    override fun rotateClockwise() {
-        rotation = Direction.clockwiseOf(rotation)
-    }
-
+class AsciiNode : INode() {
     override fun run(bullet: Bullet): Map<Direction, BigInteger> {
         val value = bullet.value
         if (value != null) {
