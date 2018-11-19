@@ -10,7 +10,12 @@ import java.math.BigInteger;
 public class NodeDiv extends NodeArithmetic {
     @Override
     public BigInteger operation(BigInteger val1, BigInteger val2) {
-        return val1.divide(val2);
+        if(val2.equals(BigInteger.ZERO)){
+            return null;
+        }
+        else{
+            return val1.divide(val2);
+        }
     }
 
     @Override
