@@ -2,7 +2,7 @@ package com.durhack.sharpshot.util
 
 import com.durhack.sharpshot.Coordinate
 import com.durhack.sharpshot.Direction
-import com.durhack.sharpshot.INode
+import com.durhack.sharpshot.nodes.INode
 import com.durhack.sharpshot.nodes.ConstantNode
 import com.durhack.sharpshot.nodes.Container
 import com.durhack.sharpshot.nodes.HaltNode

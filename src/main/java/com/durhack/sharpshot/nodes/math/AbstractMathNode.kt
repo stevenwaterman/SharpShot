@@ -2,10 +2,10 @@ package com.durhack.sharpshot.nodes.math
 
 import com.durhack.sharpshot.Bullet
 import com.durhack.sharpshot.Direction
-import com.durhack.sharpshot.INode
+import com.durhack.sharpshot.nodes.INode
 import java.math.BigInteger
 
-abstract class MathNode : INode() {
+abstract class AbstractMathNode : INode() {
     private var mostRecentBullet: Bullet? = null
 
     protected abstract fun operation(val1: BigInteger, val2: BigInteger): BigInteger?
@@ -31,4 +31,6 @@ abstract class MathNode : INode() {
     override fun reset() {
         mostRecentBullet = null
     }
+
+
 }

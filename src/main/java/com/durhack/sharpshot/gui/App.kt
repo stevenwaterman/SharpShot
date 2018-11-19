@@ -1,6 +1,6 @@
 package com.durhack.sharpshot.gui
 
-import com.durhack.sharpshot.INode
+import com.durhack.sharpshot.nodes.INode
 import com.durhack.sharpshot.nodes.Container
 import com.durhack.sharpshot.util.ErrorBox
 import com.durhack.sharpshot.util.SaveLoadFiles
@@ -12,6 +12,7 @@ import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.scene.control.TextArea
 import javafx.scene.control.TextField
+import javafx.scene.control.TextInputDialog
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
 import javafx.stage.Stage
@@ -28,7 +29,7 @@ class App : Application() {
     private val textInput = TextField()
 
     private val borderPane = BorderPane()
-    private val nodeCreator = NodeCreator { grid.container.firstAvailableInputIndex() }
+    private val nodeCreator = NodeCreator()
     private val grid = Grid(Container(40, 25)) { this.createNode() }
 
     init {
@@ -128,5 +129,18 @@ class App : Application() {
         fun clearOutput() {
             programOutput.text = "OUT:\n\n"
         }
+    }
+}
+
+fun getNumberInput(header: String, content: String = "", start: BigInteger = BigInteger.ZERO): BigInteger? {
+    val dialog = TextInputDialog(start.toString())
+    dialog.title = "New Node"
+    dialog.headerText = header
+    dialog.contentText = content
+
+    val result = dialog.showAndWait()
+    return when {
+        result.isPresent -> BigInteger(result.get())
+        else             -> null
     }
 }

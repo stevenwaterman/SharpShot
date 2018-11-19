@@ -2,7 +2,6 @@ package com.durhack.sharpshot.nodes
 
 import com.durhack.sharpshot.Bullet
 import com.durhack.sharpshot.Coordinate
-import com.durhack.sharpshot.INode
 import com.durhack.sharpshot.nodes.io.AbstractInputNode
 import com.durhack.sharpshot.nodes.io.InNode
 import com.durhack.sharpshot.util.Listeners
@@ -82,7 +81,6 @@ class Container(val width: Int, val height: Int) {
                 haltNodeHit = true
             }
 
-            //TODO this brings great shame onto my family
             val rotatedDirection = bullet.direction.plusQuarters(node.rotation.quarters)
             val rotatedBullet = Bullet(rotatedDirection, bullet.value)
 

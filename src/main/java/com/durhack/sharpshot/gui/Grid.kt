@@ -1,7 +1,7 @@
 package com.durhack.sharpshot.gui
 
 import com.durhack.sharpshot.Coordinate
-import com.durhack.sharpshot.INode
+import com.durhack.sharpshot.nodes.INode
 import com.durhack.sharpshot.nodes.Container
 import com.durhack.sharpshot.util.Listeners
 import javafx.animation.TranslateTransition
@@ -31,7 +31,7 @@ class Grid(val container: Container, private val getUiSelectedNode: () -> INode?
         children.clear()
 
         for ((coordinate, node) in container.nodes) {
-            val graphic = node.toGraphic()
+            val graphic = node.graphic()
             graphic.relocate((coordinate.x * 32).toDouble(), (coordinate.y * 32).toDouble())
             children.add(graphic)
         }

@@ -2,7 +2,6 @@ package com.durhack.sharpshot.nodes
 
 import com.durhack.sharpshot.Bullet
 import com.durhack.sharpshot.Direction
-import com.durhack.sharpshot.INode
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import java.math.BigInteger
@@ -35,7 +34,8 @@ class RandomNode : INode() {
         return map
     }
 
-    override fun toGraphic() = Rectangle(32.0, 32.0, Color.GREEN)
+    override fun graphic() = Rectangle(32.0, 32.0, Color.GREEN)
     override fun reset() {}
     override fun toString() = "Random"
+    override val tooltip = "Provides a random output from 0 (inclusive) to input bullet value (exclusive)"
 }

@@ -1,7 +1,7 @@
 package com.durhack.sharpshot.nodes.io
 
 import com.durhack.sharpshot.Direction
-import com.durhack.sharpshot.INode
+import com.durhack.sharpshot.nodes.INode
 
 import java.math.BigInteger
 

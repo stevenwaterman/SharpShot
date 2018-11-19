@@ -3,6 +3,7 @@ package com.durhack.sharpshot.nodes.io
 import com.durhack.sharpshot.Bullet
 import com.durhack.sharpshot.Direction
 import com.durhack.sharpshot.gui.Triangle
+import com.durhack.sharpshot.nodes.INode
 import javafx.scene.paint.Color
 import java.math.BigInteger
 
@@ -32,6 +33,7 @@ class ListNode : AbstractInputNode() {
         nextOutputIndex = 0
     }
 
-    override fun toGraphic() = Triangle(rotation, Color.web("#FFFF00"), "LST")
+    override fun graphic() = Triangle(rotation, Color.web("#FFFF00"), "LST")
     override fun toString() = "Argument List"
+    override val tooltip = "Every time a bullet comes in, outputs the next value in the list of inputs"
 }

@@ -6,16 +6,9 @@ import javafx.scene.paint.Color
 
 import java.math.BigInteger
 
-class SubNode : MathNode() {
-    public override fun operation(val1: BigInteger, val2: BigInteger): BigInteger? {
-        return val1.subtract(val2)
-    }
-
-    override fun toString(): String {
-        return "Subtract"
-    }
-
-    override fun toGraphic(): Node {
-        return Triangle(rotation, Color.web("#7700FF"), "-")
-    }
+class SubNode : AbstractMathNode() {
+    public override fun operation(val1: BigInteger, val2: BigInteger): BigInteger? = val1.subtract(val2)
+    override fun toString() = "Subtract"
+    override fun graphic() = Triangle(rotation, Color.web("#7700FF"), "-")
+    override val tooltip = "Subtracts the second bullet from the first"
 }

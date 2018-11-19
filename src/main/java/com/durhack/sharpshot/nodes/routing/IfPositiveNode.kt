@@ -4,8 +4,9 @@ import com.durhack.sharpshot.gui.Triangle
 import javafx.scene.paint.Color
 import java.math.BigInteger
 
-class IfPositiveNode : ConditionalNode() {
+class IfPositiveNode : AbstractConditionalNode() {
     override fun branch(value: BigInteger) = value.signum() == 1
-    override fun toGraphic() = Triangle(rotation, Color.web("#FF9900"), ">0")
+    override fun graphic() = Triangle(rotation, Color.web("#FF9900"), ">0")
     override fun toString() = "Branch if Positive"
+    override val tooltip = "Redirects all positive bullets (>0). Other bullets pass through unaffected"
 }

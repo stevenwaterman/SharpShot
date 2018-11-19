@@ -2,10 +2,10 @@ package com.durhack.sharpshot.nodes.routing
 
 import com.durhack.sharpshot.Bullet
 import com.durhack.sharpshot.Direction
-import com.durhack.sharpshot.INode
+import com.durhack.sharpshot.nodes.INode
 import java.math.BigInteger
 
-abstract class ConditionalNode : INode() {
+abstract class AbstractConditionalNode : INode() {
     // Ignore null bullets
     override fun run(bullet: Bullet): Map<Direction, BigInteger> {
         val value = bullet.value ?: return mapOf()

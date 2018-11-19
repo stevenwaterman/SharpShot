@@ -6,21 +6,15 @@ import javafx.scene.paint.Color
 
 import java.math.BigInteger
 
-class DivNode : MathNode() {
+class DivNode : AbstractMathNode() {
     public override fun operation(val1: BigInteger, val2: BigInteger): BigInteger? {
-        return if (val2 == BigInteger.ZERO) {
-            null
-        }
-        else {
-            val1.divide(val2)
+        return when (val2) {
+            BigInteger.ZERO -> null
+            else -> val1.divide(val2)
         }
     }
 
-    override fun toString(): String {
-        return "Divide"
-    }
-
-    override fun toGraphic(): Node {
-        return Triangle(rotation, Color.web("#CC66FF"), "÷")
-    }
+    override fun toString() = "Divide"
+    override fun graphic() =  Triangle(rotation, Color.web("#CC66FF"), "÷")
+    override val tooltip = "Adds two bullets"
 }

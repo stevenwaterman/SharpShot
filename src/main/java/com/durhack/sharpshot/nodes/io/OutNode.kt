@@ -2,7 +2,7 @@ package com.durhack.sharpshot.nodes.io
 
 import com.durhack.sharpshot.Bullet
 import com.durhack.sharpshot.Direction
-import com.durhack.sharpshot.INode
+import com.durhack.sharpshot.nodes.INode
 import com.durhack.sharpshot.gui.App
 import javafx.scene.Node
 import javafx.scene.control.Label
@@ -20,7 +20,7 @@ class OutNode : INode() {
         return mapOf()
     }
 
-    override fun toGraphic(): Node {
+    override fun graphic(): Node {
         val rectangle = Rectangle(32.0, 32.0, Color.SANDYBROWN)
         val label = Label("INT")
         return StackPane(rectangle, label)
@@ -28,4 +28,5 @@ class OutNode : INode() {
 
     override fun toString() = "Print Integer"
     override fun reset() {}
+    override val tooltip = "Consumes and prints bullets"
 }

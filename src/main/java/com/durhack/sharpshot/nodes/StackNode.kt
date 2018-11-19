@@ -2,7 +2,6 @@ package com.durhack.sharpshot.nodes
 
 import com.durhack.sharpshot.Bullet
 import com.durhack.sharpshot.Direction
-import com.durhack.sharpshot.INode
 import com.durhack.sharpshot.gui.Triangle
 import javafx.scene.paint.Color
 import java.math.BigInteger
@@ -24,11 +23,11 @@ class StackNode : INode() {
         return bullets
     }
 
-    override fun toGraphic() = Triangle(rotation, Color.web("#FFFF00"), "S" + stack.size)
-
     override fun reset() {
         stack.clear()
     }
 
+    override fun graphic() = Triangle(rotation, Color.web("#FFFF00"), "S" + stack.size)
     override fun toString() = "Stack"
+    override val tooltip = "Inputs in the back pop from the stack, inputs to other sides get added to the stack"
 }
