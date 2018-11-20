@@ -19,6 +19,9 @@ class AsciiNode : INode() {
         if (value != null) {
             App.print(value.asChar())
         }
+        else{
+            App.print(" ")
+        }
         return mapOf()
     }
 
@@ -31,5 +34,5 @@ class AsciiNode : INode() {
     override val type = "char print"
 
     override fun reset() {}
-    override val tooltip = "Consumes and prints bullets based on their ASCII code equivalent"
+    override val tooltip = "Consumes and prints bullets based on their ASCII code equivalent. Nulls print as spaces"
 }

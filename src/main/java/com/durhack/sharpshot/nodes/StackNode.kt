@@ -8,12 +8,12 @@ import java.math.BigInteger
 import java.util.*
 
 class StackNode : INode() {
-    private val stack = Stack<BigInteger>()
+    private val stack = Stack<BigInteger?>()
 
-    override fun run(bullet: Bullet): Map<Direction, BigInteger> {
-        val bullets = HashMap<Direction, BigInteger>()
+    override fun run(bullet: Bullet): Map<Direction, BigInteger?> {
+        val bullets = HashMap<Direction, BigInteger?>()
         if (bullet.direction == Direction.UP) {
-            if (!stack.isEmpty()) {
+            if (stack.isNotEmpty()) {
                 bullets[Direction.UP] = stack.pop()
             }
         }
