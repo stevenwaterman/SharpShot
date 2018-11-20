@@ -5,6 +5,7 @@ import com.durhack.sharpshot.Direction
 import com.durhack.sharpshot.GRID_SIZE
 import com.durhack.sharpshot.gui.App
 import com.durhack.sharpshot.nodes.INode
+import com.durhack.sharpshot.util.asChar
 import javafx.scene.Node
 import javafx.scene.control.Label
 import javafx.scene.layout.StackPane
@@ -16,7 +17,7 @@ class AsciiNode : INode() {
     override fun run(bullet: Bullet): Map<Direction, BigInteger> {
         val value = bullet.value
         if (value != null) {
-            App.print(value.toChar())
+            App.print(value.asChar())
         }
         return mapOf()
     }

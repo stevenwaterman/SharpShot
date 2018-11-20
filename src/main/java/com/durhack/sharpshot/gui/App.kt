@@ -5,7 +5,7 @@ import com.durhack.sharpshot.TICK_RATE
 import com.durhack.sharpshot.nodes.INode
 import com.durhack.sharpshot.util.ErrorBox
 import com.durhack.sharpshot.util.SaveLoadFiles
-import com.durhack.sharpshot.util.toBigInteger
+import com.durhack.sharpshot.util.asBigInteger
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.geometry.Pos
@@ -73,7 +73,7 @@ class App : Application() {
                 when {
                     word.isBlank() -> null
                     word.matches(numberRegex) -> BigInteger(word)
-                    word.length == 1 -> word.first().toBigInteger()
+                    word.length == 1 -> word.first().asBigInteger()
                     else -> {
                         notUnderstoodInputs.add(word)
                         null
