@@ -67,24 +67,31 @@ class App : Application() {
             grid.timer.cancel()
             grid.timer = timer
 
+            val notUnderstoodInputs = mutableListOf<String>()
             val numberRegex = Regex("[0-9]+")
-            val inputs = textInput.text.split(" ").filter { !it.isBlank() }.map { word ->
+            val inputs = textInput.text.split(",").map { word ->
                 when {
+                    word.isBlank() -> null
                     word.matches(numberRegex) -> BigInteger(word)
                     word.length == 1 -> word.first().toBigInteger()
-                    else -> null
+                    else -> {
+                        notUnderstoodInputs.add(word)
+                        null
+                    }
                 }
             }
 
-            if (inputs.any { it == null }) {
+            if (notUnderstoodInputs.isNotEmpty()) {
                 ErrorBox.alert("Input not Char or BigInteger",
                                "Please try again",
-                               "Input takes Char and integers only with spaces bettween them!")
+                               "Input only accepts Char, integers, and space, with commas between them!\n" +
+                                       "Inputs not understood:\n" +
+                                       notUnderstoodInputs.joinToString())
             }
 
             clearOutput()
 
-            grid.container.start(inputs.filterNotNull())
+            grid.container.start(inputs)
             grid.render()
         }
 

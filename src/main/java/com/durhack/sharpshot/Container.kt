@@ -14,7 +14,7 @@ class Container(val width: Int, val height: Int) {
     val nodes = HashMap<Coordinate, INode>()
     val bullets = HashMap<Coordinate, Bullet>()
 
-    fun start(input: List<BigInteger>) {
+    fun start(input: List<BigInteger?>) {
         val newBullets = HashMap<Coordinate, Bullet>()
 
         // Input nodes spawn 0 if their index == 0

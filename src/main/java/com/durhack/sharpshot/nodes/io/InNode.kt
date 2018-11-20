@@ -10,10 +10,10 @@ import com.google.gson.JsonObject
 import javafx.scene.paint.Color
 import java.math.BigInteger
 
-class InNode(val index: Int?) : AbstractInputNode() {
+class InNode(private val index: Int?) : AbstractInputNode() {
     private var input: BigInteger? = null
 
-    override fun input(inputs: List<BigInteger>) =
+    override fun input(inputs: List<BigInteger?>) =
             mapOf(Direction.UP to (if (index == null) null else inputs.getOrNull(index)))
 
     override fun run(bullet: Bullet) = mapOf(bullet.direction to bullet.value, Direction.UP to input)

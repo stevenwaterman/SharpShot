@@ -6,5 +6,5 @@ import com.durhack.sharpshot.nodes.INode
 import java.math.BigInteger
 
 abstract class AbstractInputNode : INode() {
-    abstract fun input(inputs: List<BigInteger>): Map<Direction, BigInteger?>
+    abstract fun input(inputs: List<BigInteger?>): Map<Direction, BigInteger?>
 }

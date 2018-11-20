@@ -7,10 +7,10 @@ import javafx.scene.paint.Color
 import java.math.BigInteger
 
 class ListNode : AbstractInputNode() {
-    private var inputs: MutableList<BigInteger> = mutableListOf()
+    private val inputs: MutableList<BigInteger?> = mutableListOf()
     private var nextOutputIndex = 0
 
-    override fun input(inputs: List<BigInteger>): Map<Direction, BigInteger> {
+    override fun input(inputs: List<BigInteger?>): Map<Direction, BigInteger> {
         this.inputs.clear()
         this.inputs.addAll(inputs)
         return mapOf()
