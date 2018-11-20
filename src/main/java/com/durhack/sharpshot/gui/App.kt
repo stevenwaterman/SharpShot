@@ -88,11 +88,11 @@ class App : Application() {
                                        "Inputs not understood:\n" +
                                        notUnderstoodInputs.joinToString())
             }
-
-            clearOutput()
-
-            grid.container.start(inputs)
-            grid.render()
+            else {
+                clearOutput()
+                grid.container.start(inputs)
+                grid.render()
+            }
         }
 
         loadButton.setOnAction {
