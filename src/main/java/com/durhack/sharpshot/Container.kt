@@ -53,8 +53,8 @@ class Container(val width: Int, val height: Int) {
 
 
         //Bullets not on nodes
-        val capturedBullets = captured.map { it.third }.toSet()
-        val freeBullets = bullets.filterValues { it !in capturedBullets }
+        val capturedLocations = captured.map { it.first }
+        val freeBullets = bullets.filterKeys { it !in capturedLocations }
 
         //Generate movements for free bullets
         bulletMovements.addAll(freeBullets.map { (coord, bullet) ->
