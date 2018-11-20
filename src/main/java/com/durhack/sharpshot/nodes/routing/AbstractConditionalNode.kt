@@ -6,9 +6,9 @@ import com.durhack.sharpshot.nodes.INode
 import java.math.BigInteger
 
 abstract class AbstractConditionalNode : INode() {
-    // Ignore null bullets
-    override fun run(bullet: Bullet): Map<Direction, BigInteger> {
-        val value = bullet.value ?: return mapOf()
+    // Null bullets never redirect
+    override fun run(bullet: Bullet): Map<Direction, BigInteger?> {
+        val value = bullet.value ?: return mapOf(bullet.direction to bullet.value)
         return when {
             branch(value) -> mapOf(Direction.UP to value)
             else          -> mapOf(bullet.direction to value)

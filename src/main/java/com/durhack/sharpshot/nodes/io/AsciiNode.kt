@@ -2,8 +2,9 @@ package com.durhack.sharpshot.nodes.io
 
 import com.durhack.sharpshot.Bullet
 import com.durhack.sharpshot.Direction
-import com.durhack.sharpshot.nodes.INode
+import com.durhack.sharpshot.GRID_SIZE
 import com.durhack.sharpshot.gui.App
+import com.durhack.sharpshot.nodes.INode
 import javafx.scene.Node
 import javafx.scene.control.Label
 import javafx.scene.layout.StackPane
@@ -21,7 +22,7 @@ class AsciiNode : INode() {
     }
 
     override fun graphic(): Node {
-        val rectangle = Rectangle(32.0, 32.0, Color.FIREBRICK)
+        val rectangle = Rectangle(GRID_SIZE.toDouble(), GRID_SIZE.toDouble(), Color.FIREBRICK)
         val label = Label("CHR")
         return StackPane(rectangle, label)
     }

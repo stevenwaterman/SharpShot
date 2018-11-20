@@ -1,6 +1,7 @@
 package com.durhack.sharpshot.gui
 
-import com.durhack.sharpshot.nodes.Container
+import com.durhack.sharpshot.Container
+import com.durhack.sharpshot.TICK_RATE
 import com.durhack.sharpshot.nodes.INode
 import com.durhack.sharpshot.util.ErrorBox
 import com.durhack.sharpshot.util.SaveLoadFiles
@@ -55,7 +56,7 @@ class App : Application() {
             grid.reset()
         }
 
-        runButton.setOnAction { _ ->
+        runButton.setOnAction {
             runButton.isDisable = true
             val timer = Timer()
             timer.schedule(object : TimerTask() {
@@ -114,7 +115,6 @@ class App : Application() {
     }
 
     companion object {
-        val TICK_RATE = 150
         private val programOutput = TextArea()
 
         fun print(c: Char) {

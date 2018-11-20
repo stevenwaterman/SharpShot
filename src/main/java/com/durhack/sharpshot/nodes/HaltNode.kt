@@ -2,6 +2,7 @@ package com.durhack.sharpshot.nodes
 
 import com.durhack.sharpshot.Bullet
 import com.durhack.sharpshot.Direction
+import com.durhack.sharpshot.GRID_SIZE
 import javafx.scene.Node
 import javafx.scene.control.Label
 import javafx.scene.layout.StackPane
@@ -17,7 +18,7 @@ class HaltNode : INode() {
     }
 
     override fun graphic(): Node {
-        val rectangle = Rectangle(32.0, 32.0, Color.GHOSTWHITE)
+        val rectangle = Rectangle(GRID_SIZE.toDouble(), GRID_SIZE.toDouble(), Color.GHOSTWHITE)
         val label = Label("HLT")
         return StackPane(rectangle, label)
     }

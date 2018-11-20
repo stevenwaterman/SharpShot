@@ -2,6 +2,7 @@ package com.durhack.sharpshot.nodes
 
 import com.durhack.sharpshot.Bullet
 import com.durhack.sharpshot.Direction
+import com.durhack.sharpshot.GRID_SIZE
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import java.math.BigInteger
@@ -14,7 +15,7 @@ class RandomNode : INode() {
         if (n.compareTo(BigInteger.ZERO) == 0) {
             return BigInteger.ZERO
         }
-        if (n.compareTo(BigInteger.ZERO) < 0) {
+        if (n < BigInteger.ZERO) {
             sign = -1
         }
         n = n.abs()
@@ -36,7 +37,7 @@ class RandomNode : INode() {
 
     override val type = "random"
 
-    override fun graphic() = Rectangle(32.0, 32.0, Color.GREEN)
+    override fun graphic() = Rectangle(GRID_SIZE.toDouble(), GRID_SIZE.toDouble(), Color.GREEN)
     override fun reset() {}
     override val tooltip = "Provides a random output from 0 (inclusive) to input bullet value (exclusive)"
 }

@@ -1,12 +1,10 @@
 package com.durhack.sharpshot.nodes
 
 import com.durhack.sharpshot.Bullet
-import com.durhack.sharpshot.Coordinate
 import com.durhack.sharpshot.Direction
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import javafx.scene.Node
-
 import java.math.BigInteger
 
 abstract class INode {

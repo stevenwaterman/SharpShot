@@ -17,12 +17,12 @@ class Bullet(val direction: Direction, val value: BigInteger?) {
     fun toGraphic(): Node {
         val stackPane = StackPane()
 
-        val background = Rectangle(16.0, 16.0, Color.WHEAT)
+        val background = Rectangle(GRID_SIZE.toDouble() * 0.5, GRID_SIZE.toDouble() * 0.5, Color.WHEAT)
         stackPane.children.add(background)
         stackPane.alignment = Pos.CENTER
 
-        stackPane.prefWidth = 32.0
-        stackPane.prefHeight = 32.0
+        stackPane.prefWidth = GRID_SIZE.toDouble()
+        stackPane.prefHeight = GRID_SIZE.toDouble()
 
         if (value != null) {
             val label = Label(value.toString())

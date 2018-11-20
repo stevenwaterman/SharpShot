@@ -11,19 +11,18 @@ abstract class AbstractMathNode : INode() {
     protected abstract fun operation(val1: BigInteger, val2: BigInteger): BigInteger?
 
     override fun run(bullet: Bullet): Map<Direction, BigInteger?> {
-        val value = bullet.value
-        val firstBullet = mostRecentBullet
+        val value = bullet.value ?: return mapOf()
 
-        return when {
-            value == null       -> mapOf()
-            firstBullet == null -> {
+        val firstBullet = mostRecentBullet
+        return when (firstBullet) {
+            null -> {
                 // First bullet
                 mostRecentBullet = bullet
                 mapOf()
             }
-            else                -> {
+            else -> {
                 mostRecentBullet = null
-                mapOf(Direction.UP to operation(value, bullet.value))
+                mapOf(Direction.UP to operation(firstBullet.value!!, value))
             }
         }
     }
@@ -31,6 +30,4 @@ abstract class AbstractMathNode : INode() {
     override fun reset() {
         mostRecentBullet = null
     }
-
-
 }

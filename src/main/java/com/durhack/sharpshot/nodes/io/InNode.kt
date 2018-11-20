@@ -11,8 +11,7 @@ import javafx.scene.paint.Color
 import java.math.BigInteger
 
 class InNode(val index: Int?) : AbstractInputNode() {
-    var input: BigInteger? = null
-        private set
+    private var input: BigInteger? = null
 
     override fun input(inputs: List<BigInteger>) =
             mapOf(Direction.UP to (if (index == null) null else inputs.getOrNull(index)))

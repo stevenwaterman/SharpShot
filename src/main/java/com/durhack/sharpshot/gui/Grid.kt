@@ -1,8 +1,10 @@
 package com.durhack.sharpshot.gui
 
+import com.durhack.sharpshot.Container
 import com.durhack.sharpshot.Coordinate
+import com.durhack.sharpshot.GRID_SIZE
+import com.durhack.sharpshot.TICK_RATE
 import com.durhack.sharpshot.nodes.INode
-import com.durhack.sharpshot.nodes.Container
 import com.durhack.sharpshot.util.Listeners
 import javafx.animation.TranslateTransition
 import javafx.scene.Node
@@ -23,7 +25,7 @@ class Grid(val container: Container, private val getUiSelectedNode: () -> INode?
     init {
         // Call program completion listeners when container is done
         container.completionListeners.add(completionListeners)
-        resize((container.width * 32).toDouble(), (container.height * 32).toDouble())
+        resize((container.width * GRID_SIZE).toDouble(), (container.height * GRID_SIZE).toDouble())
         render()
     }
 
@@ -32,7 +34,7 @@ class Grid(val container: Container, private val getUiSelectedNode: () -> INode?
 
         for ((coordinate, node) in container.nodes) {
             val graphic = node.graphic()
-            graphic.relocate((coordinate.x * 32).toDouble(), (coordinate.y * 32).toDouble())
+            graphic.relocate((coordinate.x * GRID_SIZE).toDouble(), (coordinate.y * GRID_SIZE).toDouble())
             children.add(graphic)
         }
 
@@ -40,15 +42,15 @@ class Grid(val container: Container, private val getUiSelectedNode: () -> INode?
 
             val graphic = bullet.toGraphic()
 
-            val translateTransition = TranslateTransition(Duration.millis(App.TICK_RATE.toDouble()))
+            val translateTransition = TranslateTransition(Duration.millis(TICK_RATE.toDouble()))
             translateTransition.node = graphic
 
             var prevPos = Coordinate(coordinate.x, coordinate.y)
             prevPos = Coordinate(prevPos.x - bullet.direction.deltaX, prevPos.y - bullet.direction.deltaY)
-            graphic.relocate((prevPos.x * 32).toDouble(), (prevPos.y * 32).toDouble())
+            graphic.relocate((prevPos.x * GRID_SIZE).toDouble(), (prevPos.y * GRID_SIZE).toDouble())
 
-            translateTransition.toX = (bullet.direction.deltaX * 32).toDouble()
-            translateTransition.toY = (bullet.direction.deltaY * 32).toDouble()
+            translateTransition.toX = (bullet.direction.deltaX * GRID_SIZE).toDouble()
+            translateTransition.toY = (bullet.direction.deltaY * GRID_SIZE).toDouble()
 
             translateTransition.isAutoReverse = false
             children.add(graphic)
@@ -58,7 +60,7 @@ class Grid(val container: Container, private val getUiSelectedNode: () -> INode?
         for (x in 0..container.width) {
             for (y in 0..container.height) {
                 val background = emptyGraphic(Coordinate(x, y))
-                background.relocate((x * 32).toDouble(), (y * 32).toDouble())
+                background.relocate((x * GRID_SIZE).toDouble(), (y * GRID_SIZE).toDouble())
                 children.add(background)
             }
         }
@@ -78,7 +80,7 @@ class Grid(val container: Container, private val getUiSelectedNode: () -> INode?
     }
 
     private fun emptyGraphic(coordinate: Coordinate): Node {
-        val rectangle = Rectangle(32.0, 32.0, Color.TRANSPARENT)
+        val rectangle = Rectangle(GRID_SIZE.toDouble(), GRID_SIZE.toDouble(), Color.TRANSPARENT)
         rectangle.stroke = Color.GRAY
         rectangle.strokeWidth = 0.5
         rectangle.strokeType = StrokeType.CENTERED

@@ -1,9 +1,8 @@
-package com.durhack.sharpshot.nodes
+package com.durhack.sharpshot
 
-import com.durhack.sharpshot.Bullet
-import com.durhack.sharpshot.Coordinate
+import com.durhack.sharpshot.nodes.HaltNode
+import com.durhack.sharpshot.nodes.INode
 import com.durhack.sharpshot.nodes.io.AbstractInputNode
-import com.durhack.sharpshot.nodes.io.InNode
 import com.durhack.sharpshot.util.Listeners
 import com.durhack.sharpshot.util.Movement
 import java.math.BigInteger
@@ -33,16 +32,6 @@ class Container(val width: Int, val height: Int) {
         }
 
         bullets.putAll(newBullets)
-    }
-
-    fun firstAvailableInputIndex(): Int {
-        val inputs = nodes.values.filter { node -> node is InNode }.map { node -> (node as InNode).index }
-
-        var counter = 1
-        while (inputs.contains(counter)) {
-            counter++
-        }
-        return counter
     }
 
     /**
@@ -81,11 +70,11 @@ class Container(val width: Int, val height: Int) {
                 haltNodeHit = true
             }
 
-            val rotatedDirection = bullet.direction.plusQuarters(node.rotation.quarters)
+            val rotatedDirection = bullet.direction.plusQuarters(-node.rotation.quarters)
             val rotatedBullet = Bullet(rotatedDirection, bullet.value)
 
             node.run(rotatedBullet).forEach { direction, value ->
-                val unrotatedDirection = direction.plusQuarters(-node.rotation.quarters)
+                val unrotatedDirection = direction.plusQuarters(node.rotation.quarters)
                 val newBullet = Bullet(unrotatedDirection, value)
                 val newCoordinate = coord.plus(newBullet.direction).wrap(width, height)
                 val movement = Movement(coord, newCoordinate)

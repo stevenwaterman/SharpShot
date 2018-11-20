@@ -2,7 +2,7 @@ package com.durhack.sharpshot.util
 
 import com.durhack.sharpshot.Coordinate
 import com.durhack.sharpshot.NodeRegistry
-import com.durhack.sharpshot.nodes.Container
+import com.durhack.sharpshot.Container
 import com.google.gson.*
 
 internal object Serialiser {

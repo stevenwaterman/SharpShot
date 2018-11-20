@@ -1,11 +1,15 @@
 package com.durhack.sharpshot.nodes.routing
 
+import com.durhack.sharpshot.Bullet
+import com.durhack.sharpshot.Direction
 import com.durhack.sharpshot.gui.Triangle
+import com.durhack.sharpshot.nodes.INode
 import javafx.scene.paint.Color
 import java.math.BigInteger
 
-class BranchNode : AbstractConditionalNode() {
-    override fun branch(value: BigInteger) = true
+class BranchNode : INode() {
+    override fun reset() {}
+    override fun run(bullet: Bullet): Map<Direction, BigInteger?> = mapOf(Direction.UP to bullet.value)
     override fun graphic() = Triangle(rotation, Color.web("#FF6699"), "")
     override val type = "branch"
     override val tooltip = "Redirects bullets"
