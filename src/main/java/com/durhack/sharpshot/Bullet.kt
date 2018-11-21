@@ -13,7 +13,6 @@ import java.math.BigInteger
  * Immutable
  */
 class Bullet(val direction: Direction, val value: BigInteger?) {
-
     fun toGraphic(): Node {
         val stackPane = StackPane()
 

@@ -1,4 +1,4 @@
-package com.durhack.sharpshot.gui
+package com.durhack.sharpshot.gui.shapes
 
 import com.durhack.sharpshot.Direction
 import com.durhack.sharpshot.GRID_SIZE

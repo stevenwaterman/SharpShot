@@ -1,15 +1,17 @@
-package com.durhack.sharpshot
+package com.durhack.sharpshot.gui.container
 
+import com.durhack.sharpshot.Bullet
+import com.durhack.sharpshot.Coordinate
 import com.durhack.sharpshot.nodes.HaltNode
 import com.durhack.sharpshot.nodes.INode
 import com.durhack.sharpshot.nodes.io.AbstractInputNode
-import com.durhack.sharpshot.util.Listeners
 import com.durhack.sharpshot.util.Movement
+import javafx.beans.property.SimpleBooleanProperty
 import java.math.BigInteger
 import java.util.*
 
 class Container(val width: Int, val height: Int) {
-    val completionListeners = Listeners()
+    val running = SimpleBooleanProperty()
 
     val nodes = HashMap<Coordinate, INode>()
     val bullets = HashMap<Coordinate, Bullet>()
@@ -32,6 +34,8 @@ class Container(val width: Int, val height: Int) {
         }
 
         bullets.putAll(newBullets)
+
+        running.set(true)
     }
 
     /**
@@ -123,22 +127,19 @@ class Container(val width: Int, val height: Int) {
         bullets.putAll(newBullets)
 
         if (haltNodeHit) {
-            halt()
+            reset()
         }
-    }
-
-    private fun halt() {
-        completionListeners()
-        reset()
     }
 
     fun reset() {
         bullets.clear()
         nodes.forEach { _, node -> node.reset() }
+        running.set(false)
     }
 
     fun clearAll() {
-        bullets.clear()
+        reset()
         nodes.clear()
+        running.set(false)
     }
 }

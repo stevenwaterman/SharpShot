@@ -1,5 +1,6 @@
 package com.durhack.sharpshot
 
+import com.durhack.sharpshot.gui.NodeCreatorElement
 import com.durhack.sharpshot.nodes.*
 import com.durhack.sharpshot.nodes.io.AsciiNode
 import com.durhack.sharpshot.nodes.io.InNode
@@ -37,6 +38,7 @@ object NodeRegistry {
                                    )
 
     private val factories = nodes.map { it.type to it.jsonFactory }.toMap()
+    val nodeCreatorElements = nodes.map { NodeCreatorElement(it) }
 
     fun fromJson(json: JsonObject): INode {
         val type = json.get("type").asString

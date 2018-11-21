@@ -2,8 +2,8 @@ package com.durhack.sharpshot.nodes.io
 
 import com.durhack.sharpshot.Bullet
 import com.durhack.sharpshot.Direction
-import com.durhack.sharpshot.gui.Triangle
-import com.durhack.sharpshot.gui.getNumberInput
+import com.durhack.sharpshot.gui.shapes.Triangle
+import com.durhack.sharpshot.gui.util.getNumberInput
 import com.durhack.sharpshot.nodes.INode
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
@@ -18,7 +18,9 @@ class InNode(private val index: Int?) : AbstractInputNode() {
 
     override fun run(bullet: Bullet) = mapOf(bullet.direction to bullet.value, Direction.UP to input)
 
-    override fun graphic() = Triangle(rotation, Color.web("#FFFF00"), "IN${index ?: ""}")
+    override fun graphic() = Triangle(rotation,
+                                                                       Color.web("#FFFF00"),
+                                                                       "IN${index ?: ""}")
     override fun reset() {}
 
     override val type = "input"
@@ -26,7 +28,7 @@ class InNode(private val index: Int?) : AbstractInputNode() {
     override val tooltip = "Provides Input at program start and every time a bullet passes through"
     override val factory = {
         val index = getNumberInput("Enter Input Index",
-                                   "Blank to shoot empty bullet at start\nArguments are 0-indexed")
+                                                                  "Blank to shoot empty bullet at start\nArguments are 0-indexed")
         if(index.isPresent){
             val string = index.get()
             if(string.isBlank()){

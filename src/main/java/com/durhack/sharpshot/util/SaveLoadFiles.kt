@@ -1,6 +1,6 @@
 package com.durhack.sharpshot.util
 
-import com.durhack.sharpshot.Container
+import com.durhack.sharpshot.gui.container.Container
 import javafx.scene.control.Alert
 import javafx.stage.FileChooser
 import javafx.stage.Stage

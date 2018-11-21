@@ -2,7 +2,7 @@ package com.durhack.sharpshot.nodes.routing
 
 import com.durhack.sharpshot.Bullet
 import com.durhack.sharpshot.Direction
-import com.durhack.sharpshot.gui.Triangle
+import com.durhack.sharpshot.gui.shapes.Triangle
 import com.durhack.sharpshot.nodes.INode
 import javafx.scene.paint.Color
 import java.math.BigInteger

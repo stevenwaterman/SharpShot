@@ -1,45 +1,48 @@
-package com.durhack.sharpshot.gui
+package com.durhack.sharpshot.gui.container
 
-import com.durhack.sharpshot.Container
 import com.durhack.sharpshot.Coordinate
 import com.durhack.sharpshot.GRID_SIZE
 import com.durhack.sharpshot.TICK_RATE
 import com.durhack.sharpshot.nodes.INode
-import com.durhack.sharpshot.util.Listeners
 import javafx.animation.TranslateTransition
 import javafx.scene.Node
+import javafx.scene.Parent
 import javafx.scene.input.MouseButton
-import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.shape.StrokeType
 import javafx.util.Duration
+import tornadofx.*
+import java.math.BigInteger
 import java.util.*
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.set
 
-class Grid(val container: Container, private val getUiSelectedNode: () -> INode?) : Pane() {
-    val completionListeners = Listeners()
+class ContainerView(val container: Container, private val getUiSelectedNode: () -> INode?) : Fragment() {
+    val running = container.running
 
-    private var running = false
     var timer = Timer()
 
+    override val root = pane {
+        prefWidth = container.width * GRID_SIZE.toDouble()
+        prefHeight = container.height * GRID_SIZE.toDouble()
+    }
+
     init {
-        // Call program completion listeners when container is done
-        container.completionListeners.add(completionListeners)
-        resize((container.width * GRID_SIZE).toDouble(), (container.height * GRID_SIZE).toDouble())
         render()
     }
 
-    fun render() {
-        children.clear()
+    fun render(): Parent {
+        root.children.clear()
 
-        for ((coordinate, node) in container.nodes) {
+        container.nodes.forEach { (coordinate, node) ->
             val graphic = node.graphic()
             graphic.relocate((coordinate.x * GRID_SIZE).toDouble(), (coordinate.y * GRID_SIZE).toDouble())
-            children.add(graphic)
+            root.children.add(graphic)
         }
 
-        for ((coordinate, bullet) in container.bullets) {
-
+        container.bullets.forEach { (coordinate, bullet) ->
             val graphic = bullet.toGraphic()
 
             val translateTransition = TranslateTransition(Duration.millis(TICK_RATE.toDouble()))
@@ -53,21 +56,22 @@ class Grid(val container: Container, private val getUiSelectedNode: () -> INode?
             translateTransition.toY = (bullet.direction.deltaY * GRID_SIZE).toDouble()
 
             translateTransition.isAutoReverse = false
-            children.add(graphic)
+            root.children.add(graphic)
             translateTransition.play()
         }
 
-        for (x in 0..container.width) {
+        (0..container.width).forEach { x ->
             for (y in 0..container.height) {
                 val background = emptyGraphic(Coordinate(x, y))
                 background.relocate((x * GRID_SIZE).toDouble(), (y * GRID_SIZE).toDouble())
-                children.add(background)
+                root.children.add(background)
             }
         }
+
+        return root
     }
 
     fun tick() {
-        running = true
         container.tick()
         render()
     }
@@ -75,7 +79,6 @@ class Grid(val container: Container, private val getUiSelectedNode: () -> INode?
     fun reset() {
         timer.cancel()
         container.reset()
-        running = false
         render()
     }
 
@@ -84,9 +87,10 @@ class Grid(val container: Container, private val getUiSelectedNode: () -> INode?
         rectangle.stroke = Color.GRAY
         rectangle.strokeWidth = 0.5
         rectangle.strokeType = StrokeType.CENTERED
+
         rectangle.setOnMousePressed { mouseEvent ->
-            val currentNode = container.nodes[coordinate]
-            if (!running) {
+            if (!running.get()) {
+                val currentNode = container.nodes[coordinate]
                 if (currentNode == null) {
                     val newNode = getUiSelectedNode()
                     if (newNode != null && mouseEvent.button == MouseButton.PRIMARY) {
@@ -112,13 +116,10 @@ class Grid(val container: Container, private val getUiSelectedNode: () -> INode?
 
     fun clearAll() {
         container.clearAll()
-        App.clearOutput()
         reset()
     }
 
-    fun load(newContainer: Container) {
-        container.clearAll()
-        container.nodes.putAll(newContainer.nodes)
-        render()
+    fun start(inputs: List<BigInteger?>) {
+        container.start(inputs)
     }
 }
