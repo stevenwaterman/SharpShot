@@ -1,8 +1,10 @@
 package com.durhack.sharpshot.gui
 
-import com.durhack.sharpshot.gui.util.ContainerSizeDialog
+import com.durhack.sharpshot.DEFAULT_TICK_RATE
 import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.SimpleLongProperty
 import javafx.beans.property.SimpleStringProperty
+import javafx.geometry.Orientation
 import javafx.geometry.Pos
 import tornadofx.*
 
@@ -13,6 +15,9 @@ class ControlBar : View("Control Bar") {
     val input = SimpleStringProperty("")
     val running = SimpleBooleanProperty(false)
     val containerSet = SimpleBooleanProperty(false)
+
+    val tickRateProp = SimpleLongProperty(DEFAULT_TICK_RATE)
+    private val internalTickRateProp = SimpleLongProperty(DEFAULT_TICK_RATE)
 
     override val root = hbox(16, Pos.CENTER) {
         button("New") {
@@ -44,7 +49,7 @@ class ControlBar : View("Control Bar") {
         }
 
         button("Load") {
-            enableWhen(running.not().and(containerSet))
+            enableWhen(running.not())
             action {
                 mainView.loadContainer()
             }
@@ -61,6 +66,21 @@ class ControlBar : View("Control Bar") {
             enableWhen(running.not().and(containerSet))
             action {
                 mainView.clear()
+            }
+        }
+
+        label("Delay")
+
+        textfield(internalTickRateProp) {
+            prefWidth = 50.0
+            isDisable = true
+        }
+
+        slider(range = 5..1000, orientation = Orientation.HORIZONTAL) {
+            enableWhen(containerSet)
+            bind(internalTickRateProp)
+            setOnMouseReleased {
+                tickRateProp.set(internalTickRateProp.get())
             }
         }
     }

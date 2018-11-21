@@ -1,8 +1,8 @@
 package com.durhack.sharpshot.logic
 
-import com.durhack.sharpshot.nodes.other.HaltNode
 import com.durhack.sharpshot.nodes.INode
 import com.durhack.sharpshot.nodes.io.AbstractInputNode
+import com.durhack.sharpshot.nodes.other.HaltNode
 import javafx.beans.property.SimpleBooleanProperty
 import java.math.BigInteger
 import java.util.*

@@ -1,5 +1,6 @@
-package com.durhack.sharpshot.gui.util
+package com.durhack.sharpshot.gui
 
+import com.durhack.sharpshot.gui.util.Dialog
 import javafx.beans.property.SimpleIntegerProperty
 import tornadofx.*
 

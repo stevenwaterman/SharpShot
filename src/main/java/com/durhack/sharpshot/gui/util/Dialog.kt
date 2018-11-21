@@ -14,14 +14,14 @@ abstract class Dialog<T>(title: String) : View(title) {
     override val root = vbox(16) {
         add(dialogContentsHolder)
         hbox(16, Pos.CENTER) {
-            button("Cancel") {
-                action {
-                    close()
-                }
-            }
             button("Ok") {
                 action {
                     submitted = true
+                    close()
+                }
+            }
+            button("Cancel") {
+                action {
                     close()
                 }
             }

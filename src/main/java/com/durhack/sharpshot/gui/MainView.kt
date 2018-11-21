@@ -1,34 +1,33 @@
 package com.durhack.sharpshot.gui
 
-import com.durhack.sharpshot.TICK_RATE
 import com.durhack.sharpshot.logic.Container
 import com.durhack.sharpshot.serialisation.SaveLoadFiles
 import com.durhack.sharpshot.util.asBigInteger
-import javafx.application.Platform
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
 import tornadofx.*
 import java.math.BigInteger
-import java.util.*
+
 
 class MainView : View() {
     private val controlBar: ControlBar by inject()
     private val nodeCreator: NodeCreator by inject()
     private val outputPane: OutputPane by inject()
-    private val containerScrollPane = scrollpane { }
+    private val containerScrollPane = CenteredScrollPane()
 
     private val running = SimpleBooleanProperty(false)
 
     private var containerView: ContainerView? = null
         set(value) {
             field = value
-            containerScrollPane.content = value?.root
+
+            containerScrollPane.setContent(value?.root)
             controlBar.containerSet.set(value != null)
         }
 
     private fun setContainer(container: Container) {
-        val newView = ContainerView(container) { nodeCreator.createNode() }
+        val newView = ContainerView(container, controlBar.tickRateProp) { nodeCreator.createNode() }
         running.bind(newView.running)
         containerView = newView
     }
@@ -40,7 +39,7 @@ class MainView : View() {
 
     override val root = borderpane {
         left<NodeCreator>()
-        center = containerScrollPane
+        center = containerScrollPane.root
         left = nodeCreator.root
         right = outputPane.root
         bottom = controlBar.root
@@ -53,42 +52,11 @@ class MainView : View() {
     fun start() {
         val container = containerView ?: return //Exit if container is null
 
-        val timer = Timer()
-        container.timer.cancel()
-        timer.schedule(object : TimerTask() {
-            override fun run() {
-                Platform.runLater { container.tick() }
-            }
-        }, 0, TICK_RATE.toLong())
-        container.timer = timer //TODO allow changing tick rate
-
-        val inputString = controlBar.input.get()
-        val unknownWords = mutableListOf<String>()
-        val numberRegex = Regex("[0-9]+")
-        val integers = inputString.split(",").map { word ->
-            when {
-                word.isBlank() -> null
-                word.matches(numberRegex) -> BigInteger(word)
-                word.length == 1 -> word.first().asBigInteger()
-                else -> {
-                    unknownWords.add(word)
-                    null
-                }
-            }
-        }
-
-        if (unknownWords.isNotEmpty()) {
-            alert(type = Alert.AlertType.ERROR,
-                  buttons = *arrayOf(ButtonType.OK),
-                  header = "Cannot parse inputs",
-                  content = "Inputs must be integers or single ASCII characters\n" +
-                          "The following inputs could not be understood\n" +
-                          unknownWords.joinToString()
-                 )
-        }
-        else {
+        val integers = parseInputs()
+        if (integers != null) {
             outputPane.clearOutput()
             container.start(integers)
+            container.animate()
             container.render()
         }
     }
@@ -111,5 +79,38 @@ class MainView : View() {
 
     fun clear() {
         containerView?.clearAll()
+    }
+
+    private fun parseInputs(): List<BigInteger?>? {
+        val inputString = controlBar.input.get()
+        val unknownWords = mutableListOf<String>()
+        val numberRegex = Regex("[0-9]+")
+        val integers = inputString.split(",")
+                .map { word -> word.trim() }
+                .map { word ->
+                    when {
+                        word.isBlank() -> null
+                        word.matches(numberRegex) -> BigInteger(word)
+                        word.length == 1 -> word.first().asBigInteger()
+                        else -> {
+                            unknownWords.add(word)
+                            null
+                        }
+                    }
+                }
+
+        if (unknownWords.isEmpty()) {
+            return integers
+        }
+
+        alert(type = Alert.AlertType.ERROR,
+              buttons = *arrayOf(ButtonType.OK),
+              header = "Cannot parse inputs",
+              content = "Inputs must be integers or single ASCII characters\n" +
+                      "The following inputs could not be understood\n" +
+                      unknownWords.joinToString()
+             )
+        return null
+
     }
 }
