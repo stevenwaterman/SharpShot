@@ -26,8 +26,9 @@ class ContainerView(val container: Container,
                     private val getUiSelectedNode: () -> INode?) : Fragment() {
     val running = container.running
 
-    var animating = false
-    var timer = Timer()
+    private var animating = false
+    private var timer = Timer()
+    private var tickRateChanged = false
 
     override val root = pane {
         minWidth = container.width * GRID_SIZE.toDouble()
@@ -42,7 +43,16 @@ class ContainerView(val container: Container,
         timer = Timer()
         timer.schedule(object : TimerTask() {
             override fun run() {
-                tick()
+                if (tickRateChanged) {
+                    tickRateChanged = false
+
+                    if (animating) { //Needed to ensure we can stop it
+                        animate()
+                    }
+                }
+                else{
+                    tick()
+                }
             }
         }, 0, tickRateProp.get())
 
@@ -53,7 +63,7 @@ class ContainerView(val container: Container,
         render()
         tickRateProp.onChange {
             if (animating) {
-                animate()
+                tickRateChanged = true
             }
         }
     }
