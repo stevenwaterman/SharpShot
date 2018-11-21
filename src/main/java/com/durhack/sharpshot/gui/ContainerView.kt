@@ -5,6 +5,7 @@ import com.durhack.sharpshot.logic.Container
 import com.durhack.sharpshot.logic.Coordinate
 import com.durhack.sharpshot.nodes.INode
 import javafx.animation.Interpolator
+import javafx.animation.Transition
 import javafx.animation.TranslateTransition
 import javafx.beans.value.ObservableLongValue
 import javafx.scene.Node
@@ -58,42 +59,47 @@ class ContainerView(val container: Container,
     }
 
     fun render() {
+        val newChildren = mutableListOf<Node>()
+        val transitions = mutableListOf<Transition>()
+
+        container.nodes.forEach { (coordinate, node) ->
+            val graphic = node.graphic()
+            graphic.relocate((coordinate.x * GRID_SIZE).toDouble(), (coordinate.y * GRID_SIZE).toDouble())
+            newChildren.add(graphic)
+        }
+
+        container.bullets.forEach { (coordinate, bullet) ->
+            val graphic = bullet.toGraphic()
+
+            val transition = TranslateTransition(Duration.millis(tickRateProp.get().toDouble()))
+            transition.node = graphic
+
+            var prevPos = Coordinate(coordinate.x, coordinate.y)
+            prevPos = Coordinate(prevPos.x - bullet.direction.deltaX,
+                                 prevPos.y - bullet.direction.deltaY)
+            graphic.relocate((prevPos.x * GRID_SIZE).toDouble(), (prevPos.y * GRID_SIZE).toDouble())
+
+            transition.toX = (bullet.direction.deltaX * GRID_SIZE).toDouble()
+            transition.toY = (bullet.direction.deltaY * GRID_SIZE).toDouble()
+            transition.interpolator = Interpolator.LINEAR
+
+            transition.isAutoReverse = false
+            newChildren.add(graphic)
+            transitions.add(transition)
+        }
+
+        (0..(container.width - 1)).forEach { x ->
+            for (y in 0..(container.height - 1)) {
+                val background = emptyGraphic(Coordinate(x, y))
+                background.relocate((x * GRID_SIZE).toDouble(), (y * GRID_SIZE).toDouble())
+                newChildren.add(background)
+            }
+        }
+
         runAsync { } ui {
             root.children.clear()
-
-            container.nodes.forEach { (coordinate, node) ->
-                val graphic = node.graphic()
-                graphic.relocate((coordinate.x * GRID_SIZE).toDouble(), (coordinate.y * GRID_SIZE).toDouble())
-                root.children.add(graphic)
-            }
-
-            container.bullets.forEach { (coordinate, bullet) ->
-                val graphic = bullet.toGraphic()
-
-                val translateTransition = TranslateTransition(Duration.millis(tickRateProp.get().toDouble()))
-                translateTransition.node = graphic
-
-                var prevPos = Coordinate(coordinate.x, coordinate.y)
-                prevPos = Coordinate(prevPos.x - bullet.direction.deltaX,
-                                     prevPos.y - bullet.direction.deltaY)
-                graphic.relocate((prevPos.x * GRID_SIZE).toDouble(), (prevPos.y * GRID_SIZE).toDouble())
-
-                translateTransition.toX = (bullet.direction.deltaX * GRID_SIZE).toDouble()
-                translateTransition.toY = (bullet.direction.deltaY * GRID_SIZE).toDouble()
-                translateTransition.interpolator = Interpolator.LINEAR //TODO is this what we want?
-
-                translateTransition.isAutoReverse = false
-                root.children.add(graphic)
-                translateTransition.play()
-            }
-
-            (0..(container.width - 1)).forEach { x ->
-                for (y in 0..(container.height - 1)) {
-                    val background = emptyGraphic(Coordinate(x, y))
-                    background.relocate((x * GRID_SIZE).toDouble(), (y * GRID_SIZE).toDouble())
-                    root.children.add(background)
-                }
-            }
+            root.children.addAll(newChildren)
+            transitions.forEach { transition -> transition.play() }
         }
     }
 
