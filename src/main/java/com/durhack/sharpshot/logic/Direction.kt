@@ -1,4 +1,4 @@
-package com.durhack.sharpshot
+package com.durhack.sharpshot.logic
 
 enum class Direction(val deltaX: Int, val deltaY: Int, val quarters: Int) {
     UP(0, -1, 0),
@@ -16,15 +16,15 @@ enum class Direction(val deltaX: Int, val deltaY: Int, val quarters: Int) {
     val others get() = (1..3).map { plusQuarters(it) }
     val degrees get() = quarters * 90.0
 
-    companion object{
+    companion object {
         fun ofQuarters(quarters: Int): Direction {
             val adjusted = (quarters + 4) % 4
 
             return when (adjusted) {
-                0    -> Direction.UP
-                1    -> Direction.RIGHT
-                2    -> Direction.DOWN
-                3    -> Direction.LEFT
+                0 -> UP
+                1 -> RIGHT
+                2 -> DOWN
+                3 -> LEFT
                 else -> throw IllegalArgumentException("Quarters must be 0-3")
             }
         }

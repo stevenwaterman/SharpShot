@@ -1,15 +1,11 @@
-package com.durhack.sharpshot.util
+package com.durhack.sharpshot.serialisation
 
-import com.durhack.sharpshot.gui.container.Container
+import com.durhack.sharpshot.logic.Container
 import javafx.scene.control.Alert
 import javafx.stage.FileChooser
 import javafx.stage.Stage
 import javafx.stage.Window
-import java.io.BufferedReader
-import java.io.BufferedWriter
-import java.io.FileReader
-import java.io.FileWriter
-import java.io.IOException
+import java.io.*
 
 object SaveLoadFiles {
 

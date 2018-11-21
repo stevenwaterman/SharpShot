@@ -1,6 +1,6 @@
 package com.durhack.sharpshot.gui
 
-import com.durhack.sharpshot.gui.container.ContainerSizeDialog
+import com.durhack.sharpshot.gui.util.ContainerSizeDialog
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
@@ -15,7 +15,7 @@ class ControlBar : View("Control Bar") {
     val containerSet = SimpleBooleanProperty(false)
 
     override val root = hbox(16, Pos.CENTER) {
-        button("New"){
+        button("New") {
             enableWhen(running.not())
             action {
                 val (width, height) = containerSizeDialog.getInput() ?: return@action
@@ -45,19 +45,19 @@ class ControlBar : View("Control Bar") {
 
         button("Load") {
             enableWhen(running.not().and(containerSet))
-            action{
-                 mainView.loadContainer()
+            action {
+                mainView.loadContainer()
             }
         }
 
         button("Save") {
             enableWhen(running.not().and(containerSet))
-            action{
+            action {
                 mainView.saveContainer()
             }
         }
 
-        button("Clear All"){
+        button("Clear All") {
             enableWhen(running.not().and(containerSet))
             action {
                 mainView.clear()

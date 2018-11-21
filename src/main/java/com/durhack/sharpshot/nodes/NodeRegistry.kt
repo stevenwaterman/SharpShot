@@ -1,7 +1,6 @@
-package com.durhack.sharpshot
+package com.durhack.sharpshot.nodes
 
 import com.durhack.sharpshot.gui.NodeCreatorElement
-import com.durhack.sharpshot.nodes.*
 import com.durhack.sharpshot.nodes.io.AsciiNode
 import com.durhack.sharpshot.nodes.io.InNode
 import com.durhack.sharpshot.nodes.io.ListNode
@@ -10,6 +9,10 @@ import com.durhack.sharpshot.nodes.math.AddNode
 import com.durhack.sharpshot.nodes.math.DivNode
 import com.durhack.sharpshot.nodes.math.MultNode
 import com.durhack.sharpshot.nodes.math.SubNode
+import com.durhack.sharpshot.nodes.other.ConstantNode
+import com.durhack.sharpshot.nodes.other.HaltNode
+import com.durhack.sharpshot.nodes.other.RandomNode
+import com.durhack.sharpshot.nodes.other.StackNode
 import com.durhack.sharpshot.nodes.routing.*
 import com.google.gson.JsonObject
 import java.math.BigInteger

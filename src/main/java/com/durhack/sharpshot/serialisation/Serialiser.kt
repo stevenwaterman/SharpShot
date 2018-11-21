@@ -1,8 +1,8 @@
-package com.durhack.sharpshot.util
+package com.durhack.sharpshot.serialisation
 
-import com.durhack.sharpshot.Coordinate
-import com.durhack.sharpshot.NodeRegistry
-import com.durhack.sharpshot.gui.container.Container
+import com.durhack.sharpshot.logic.Coordinate
+import com.durhack.sharpshot.nodes.NodeRegistry
+import com.durhack.sharpshot.logic.Container
 import com.google.gson.*
 
 internal object Serialiser {
@@ -32,7 +32,7 @@ internal object Serialiser {
         val container = Container(width, height)
 
         val nodesJson = json["nodes"].asJsonArray
-        nodesJson.forEach {jsonElement ->
+        nodesJson.forEach { jsonElement ->
             val jsonObject = jsonElement.asJsonObject
             val coordinateJson = jsonObject["coordinate"].asJsonObject
             val nodeJson = jsonObject["node"].asJsonObject

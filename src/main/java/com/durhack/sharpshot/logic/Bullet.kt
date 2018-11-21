@@ -1,5 +1,6 @@
-package com.durhack.sharpshot
+package com.durhack.sharpshot.logic
 
+import com.durhack.sharpshot.GRID_SIZE
 import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.control.Label

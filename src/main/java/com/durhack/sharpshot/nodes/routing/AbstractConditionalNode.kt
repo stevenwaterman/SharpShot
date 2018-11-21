@@ -1,7 +1,7 @@
 package com.durhack.sharpshot.nodes.routing
 
-import com.durhack.sharpshot.Bullet
-import com.durhack.sharpshot.Direction
+import com.durhack.sharpshot.logic.Bullet
+import com.durhack.sharpshot.logic.Direction
 import com.durhack.sharpshot.nodes.INode
 import java.math.BigInteger
 
@@ -11,7 +11,7 @@ abstract class AbstractConditionalNode : INode() {
         val value = bullet.value ?: return mapOf(bullet.direction to bullet.value)
         return when {
             branch(value) -> mapOf(Direction.UP to value)
-            else          -> mapOf(bullet.direction to value)
+            else -> mapOf(bullet.direction to value)
         }
     }
 

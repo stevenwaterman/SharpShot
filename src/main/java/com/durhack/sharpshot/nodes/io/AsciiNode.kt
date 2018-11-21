@@ -1,7 +1,7 @@
 package com.durhack.sharpshot.nodes.io
 
-import com.durhack.sharpshot.Bullet
-import com.durhack.sharpshot.Direction
+import com.durhack.sharpshot.logic.Bullet
+import com.durhack.sharpshot.logic.Direction
 import com.durhack.sharpshot.GRID_SIZE
 import com.durhack.sharpshot.gui.OutputPane
 import com.durhack.sharpshot.nodes.INode

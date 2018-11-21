@@ -1,7 +1,7 @@
 package com.durhack.sharpshot.nodes.routing
 
-import com.durhack.sharpshot.Bullet
-import com.durhack.sharpshot.Direction
+import com.durhack.sharpshot.logic.Bullet
+import com.durhack.sharpshot.logic.Direction
 import com.durhack.sharpshot.GRID_SIZE
 import com.durhack.sharpshot.nodes.INode
 import javafx.scene.paint.Color

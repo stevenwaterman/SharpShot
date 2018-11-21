@@ -1,9 +1,8 @@
 package com.durhack.sharpshot.gui
 
 import com.durhack.sharpshot.TICK_RATE
-import com.durhack.sharpshot.gui.container.Container
-import com.durhack.sharpshot.gui.container.ContainerView
-import com.durhack.sharpshot.util.SaveLoadFiles
+import com.durhack.sharpshot.logic.Container
+import com.durhack.sharpshot.serialisation.SaveLoadFiles
 import com.durhack.sharpshot.util.asBigInteger
 import javafx.application.Platform
 import javafx.beans.property.SimpleBooleanProperty
@@ -17,12 +16,12 @@ class MainView : View() {
     private val controlBar: ControlBar by inject()
     private val nodeCreator: NodeCreator by inject()
     private val outputPane: OutputPane by inject()
-    private val containerScrollPane = scrollpane {  }
+    private val containerScrollPane = scrollpane { }
 
     private val running = SimpleBooleanProperty(false)
 
     private var containerView: ContainerView? = null
-        set(value){
+        set(value) {
             field = value
             containerScrollPane.content = value?.root
             controlBar.containerSet.set(value != null)
@@ -87,7 +86,7 @@ class MainView : View() {
                           unknownWords.joinToString()
                  )
         }
-        else{
+        else {
             outputPane.clearOutput()
             container.start(integers)
             container.render()

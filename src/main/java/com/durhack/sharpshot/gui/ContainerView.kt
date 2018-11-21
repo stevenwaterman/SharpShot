@@ -1,8 +1,9 @@
-package com.durhack.sharpshot.gui.container
+package com.durhack.sharpshot.gui
 
-import com.durhack.sharpshot.Coordinate
+import com.durhack.sharpshot.logic.Coordinate
 import com.durhack.sharpshot.GRID_SIZE
 import com.durhack.sharpshot.TICK_RATE
+import com.durhack.sharpshot.logic.Container
 import com.durhack.sharpshot.nodes.INode
 import javafx.animation.TranslateTransition
 import javafx.scene.Node
@@ -49,7 +50,8 @@ class ContainerView(val container: Container, private val getUiSelectedNode: () 
             translateTransition.node = graphic
 
             var prevPos = Coordinate(coordinate.x, coordinate.y)
-            prevPos = Coordinate(prevPos.x - bullet.direction.deltaX, prevPos.y - bullet.direction.deltaY)
+            prevPos = Coordinate(prevPos.x - bullet.direction.deltaX,
+                                                             prevPos.y - bullet.direction.deltaY)
             graphic.relocate((prevPos.x * GRID_SIZE).toDouble(), (prevPos.y * GRID_SIZE).toDouble())
 
             translateTransition.toX = (bullet.direction.deltaX * GRID_SIZE).toDouble()

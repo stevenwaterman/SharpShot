@@ -1,6 +1,6 @@
 package com.durhack.sharpshot.nodes.routing
 
-import com.durhack.sharpshot.Bullet
+import com.durhack.sharpshot.logic.Bullet
 import com.durhack.sharpshot.nodes.INode
 import com.durhack.sharpshot.gui.shapes.Diamond
 import javafx.scene.paint.Color

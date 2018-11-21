@@ -1,8 +1,9 @@
-package com.durhack.sharpshot.nodes
+package com.durhack.sharpshot.nodes.other
 
-import com.durhack.sharpshot.Bullet
-import com.durhack.sharpshot.Direction
+import com.durhack.sharpshot.logic.Bullet
+import com.durhack.sharpshot.logic.Direction
 import com.durhack.sharpshot.GRID_SIZE
+import com.durhack.sharpshot.nodes.INode
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import java.math.BigInteger
@@ -21,7 +22,7 @@ class RandomNode : INode() {
         n = n.abs()
         val rand = Random()
         var result = BigInteger(n.bitLength(), rand)
-        while (result.compareTo(n) >= 0) {
+        while (result >= n) {
             result = BigInteger(n.bitLength(), rand)
         }
         return result.multiply(BigInteger(sign.toString() + ""))
