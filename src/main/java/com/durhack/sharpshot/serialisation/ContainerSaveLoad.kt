@@ -1,6 +1,5 @@
 package com.durhack.sharpshot.serialisation
 
-import com.durhack.sharpshot.gui.container.StaticContainerView
 import com.durhack.sharpshot.logic.Container
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Scene

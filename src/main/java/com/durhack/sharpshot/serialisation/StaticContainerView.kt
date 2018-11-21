@@ -1,4 +1,4 @@
-package com.durhack.sharpshot.gui.container
+package com.durhack.sharpshot.serialisation
 
 import com.durhack.sharpshot.GRID_SIZE
 import com.durhack.sharpshot.logic.Container
