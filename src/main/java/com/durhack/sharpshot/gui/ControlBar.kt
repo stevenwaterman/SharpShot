@@ -1,6 +1,7 @@
 package com.durhack.sharpshot.gui
 
 import com.durhack.sharpshot.DEFAULT_TICK_RATE
+import com.durhack.sharpshot.gui.container.ContainerSizeDialog
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleLongProperty
 import javafx.beans.property.SimpleStringProperty
@@ -55,7 +56,7 @@ class ControlBar : View("Control Bar") {
             }
         }
 
-        button("Save") {
+        button("save") {
             enableWhen(running.not().and(containerSet))
             action {
                 mainView.saveContainer()

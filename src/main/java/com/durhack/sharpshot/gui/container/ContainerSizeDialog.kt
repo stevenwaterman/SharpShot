@@ -1,4 +1,4 @@
-package com.durhack.sharpshot.gui
+package com.durhack.sharpshot.gui.container
 
 import com.durhack.sharpshot.gui.util.Dialog
 import javafx.beans.property.SimpleIntegerProperty

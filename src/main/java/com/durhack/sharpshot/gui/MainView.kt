@@ -1,7 +1,8 @@
 package com.durhack.sharpshot.gui
 
+import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.logic.Container
-import com.durhack.sharpshot.serialisation.SaveLoadFiles
+import com.durhack.sharpshot.serialisation.ContainerSaveLoad
 import com.durhack.sharpshot.util.asBigInteger
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.scene.control.Alert
@@ -66,15 +67,13 @@ class MainView : View() {
     }
 
     fun loadContainer() {
-        val container = SaveLoadFiles.loadFromFile(primaryStage)
-        if (container != null) {
-            setContainer(container)
-        }
+        val container = ContainerSaveLoad.load() ?: return
+        setContainer(container)
     }
 
     fun saveContainer() {
-        val containerGui = containerView ?: return
-        SaveLoadFiles.saveToFile(primaryStage, containerGui.container)
+        val container = containerView?.container ?: return
+        ContainerSaveLoad.save(container)
     }
 
     fun clear() {

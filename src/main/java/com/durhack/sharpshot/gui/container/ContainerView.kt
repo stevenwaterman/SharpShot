@@ -1,4 +1,4 @@
-package com.durhack.sharpshot.gui
+package com.durhack.sharpshot.gui.container
 
 import com.durhack.sharpshot.GRID_SIZE
 import com.durhack.sharpshot.logic.Container
@@ -84,9 +84,8 @@ class ContainerView(val container: Container,
             val transition = TranslateTransition(Duration.millis(tickRateProp.get().toDouble()))
             transition.node = graphic
 
-            var prevPos = Coordinate(coordinate.x, coordinate.y)
-            prevPos = Coordinate(prevPos.x - bullet.direction.deltaX,
-                                 prevPos.y - bullet.direction.deltaY)
+            val currentPos = Coordinate(coordinate.x, coordinate.y)
+            val prevPos = currentPos.plus(bullet.direction.inverse)
             graphic.relocate((prevPos.x * GRID_SIZE).toDouble(), (prevPos.y * GRID_SIZE).toDouble())
 
             transition.toX = (bullet.direction.deltaX * GRID_SIZE).toDouble()
