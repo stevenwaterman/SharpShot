@@ -1,9 +1,10 @@
-package com.durhack.sharpshot.nodes
+package com.durhack.sharpshot.nodes.other
 
-import com.durhack.sharpshot.Bullet
-import com.durhack.sharpshot.Direction
-import com.durhack.sharpshot.gui.Triangle
-import com.durhack.sharpshot.gui.getNumberInput
+import com.durhack.sharpshot.logic.Bullet
+import com.durhack.sharpshot.logic.Direction
+import com.durhack.sharpshot.gui.shapes.Triangle
+import com.durhack.sharpshot.gui.util.getNumberInput
+import com.durhack.sharpshot.nodes.INode
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import javafx.scene.paint.Color
@@ -19,14 +20,18 @@ class ConstantNode(var value: BigInteger?) : INode() {
                          Direction.UP to value
                         )
 
-    override fun graphic() = Triangle(rotation, Color.LIMEGREEN, value?.toString() ?: "")
+    override fun graphic() = Triangle(rotation,
+                                      Color.LIMEGREEN,
+                                      value?.toString() ?: "")
+
     override fun reset() {}
 
     override val type = "constant"
 
     override val tooltip = "Whenever a bullet passes through, release another bullet with pre-set value"
     override val factory = {
-        val value = getNumberInput("Enter Input Index", "Blank to shoot empty bullet at start\nArguments are 0-indexed")
+        val value = getNumberInput("Enter Input Index",
+                                   "Blank to shoot empty bullet at start\nArguments are 0-indexed")
         if (value.isPresent) {
             val string = value.get()
             when {

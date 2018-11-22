@@ -1,4 +1,4 @@
-package com.durhack.sharpshot
+package com.durhack.sharpshot.logic
 
 
 import com.google.gson.JsonElement

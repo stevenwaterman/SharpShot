@@ -1,6 +1,6 @@
-package com.durhack.sharpshot.gui
+package com.durhack.sharpshot.gui.shapes
 
-import com.durhack.sharpshot.Direction
+import com.durhack.sharpshot.logic.Direction
 import com.durhack.sharpshot.GRID_SIZE
 import javafx.geometry.HPos
 import javafx.scene.control.Label
@@ -10,7 +10,12 @@ import javafx.scene.shape.Polygon
 
 class Triangle(rotation: Direction, color: Color, s: String?) : GridPane() {
     init {
-        val polygon = Polygon(0.0, GRID_SIZE.toDouble(), GRID_SIZE.toDouble(), GRID_SIZE.toDouble(), GRID_SIZE * 0.5, 0.0)
+        val polygon = Polygon(0.0,
+                              GRID_SIZE.toDouble(),
+                              GRID_SIZE.toDouble(),
+                              GRID_SIZE.toDouble(),
+                              GRID_SIZE * 0.5,
+                              0.0)
         polygon.rotate = rotation.degrees
         polygon.fill = color
         add(polygon, 0, 0)

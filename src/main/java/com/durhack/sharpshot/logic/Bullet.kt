@@ -1,5 +1,6 @@
-package com.durhack.sharpshot
+package com.durhack.sharpshot.logic
 
+import com.durhack.sharpshot.GRID_SIZE
 import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.control.Label
@@ -13,7 +14,6 @@ import java.math.BigInteger
  * Immutable
  */
 class Bullet(val direction: Direction, val value: BigInteger?) {
-
     fun toGraphic(): Node {
         val stackPane = StackPane()
 
