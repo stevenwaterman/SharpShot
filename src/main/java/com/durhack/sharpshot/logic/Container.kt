@@ -4,33 +4,24 @@ import com.durhack.sharpshot.nodes.INode
 import com.durhack.sharpshot.nodes.io.AbstractInputNode
 import com.durhack.sharpshot.nodes.other.HaltNode
 import javafx.beans.property.SimpleBooleanProperty
+import tornadofx.*
 import java.math.BigInteger
-import java.util.*
 
 class Container(val width: Int, val height: Int) {
     val running = SimpleBooleanProperty()
 
-    val nodes = HashMap<Coordinate, INode>()
-    val bullets = HashMap<Coordinate, Bullet>()
+    val nodes = mutableMapOf<Coordinate, INode>().observable()
+    val bullets = mutableMapOf<Coordinate, Bullet>().observable()
 
     fun start(input: List<BigInteger?>) {
-        val newBullets = HashMap<Coordinate, Bullet>()
-
-        // Input nodes spawn 0 if their index == 0
-        for (coordinate in nodes.keys) {
-            val node = nodes[coordinate]
-            if (node is AbstractInputNode) {
-                val bulletParams = node.input(input)
-
-                for ((_, value) in bulletParams) {
-                    val newBullet = Bullet(node.rotation, value)
-                    val newCoordinate = coordinate.plus(newBullet.direction)
-                    newBullets[newCoordinate] = newBullet
-                }
-            }
-        }
-
-        bullets.putAll(newBullets)
+        bullets.putAll(
+                nodes.keys.flatMap { coordinate ->
+                    val node = nodes[coordinate] as? AbstractInputNode
+                            ?: return@flatMap listOf<Pair<Coordinate, Bullet>>()
+                    node.input(input).map { (_, value) ->
+                        coordinate to Bullet(node.rotation, value)
+                    }
+                }.toMap())
 
         running.set(true)
     }
@@ -44,18 +35,17 @@ class Container(val width: Int, val height: Int) {
     fun tick() {
         var haltNodeHit = false
 
-        val bulletMovements = mutableListOf<Pair<Movement, Bullet>>()
-
         //Bullets on nodes
         val captured = bullets.mapNotNull { (coord, bullet) ->
             val node = nodes[coord] ?: return@mapNotNull null
             return@mapNotNull Triple(coord, node, bullet)
         }.toList()
 
-
         //Bullets not on nodes
         val capturedLocations = captured.map { it.first }
         val freeBullets = bullets.filterKeys { it !in capturedLocations }
+
+        val bulletMovements = mutableListOf<Pair<Movement, Bullet>>()
 
         //Generate movements for free bullets
         bulletMovements.addAll(freeBullets.map { (coord, bullet) ->

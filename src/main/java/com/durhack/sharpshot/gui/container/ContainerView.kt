@@ -1,12 +1,14 @@
 package com.durhack.sharpshot.gui.container
 
 import com.durhack.sharpshot.GRID_SIZE
+import com.durhack.sharpshot.gui.util.ui
 import com.durhack.sharpshot.logic.Container
 import com.durhack.sharpshot.logic.Coordinate
 import com.durhack.sharpshot.nodes.INode
 import javafx.animation.Interpolator
 import javafx.animation.Transition
 import javafx.animation.TranslateTransition
+import javafx.beans.InvalidationListener
 import javafx.beans.value.ObservableLongValue
 import javafx.scene.Node
 import javafx.scene.input.MouseButton
@@ -50,7 +52,7 @@ class ContainerView(val container: Container,
                         animate()
                     }
                 }
-                else{
+                else {
                     tick()
                 }
             }
@@ -60,68 +62,79 @@ class ContainerView(val container: Container,
     }
 
     init {
-        render()
+        quickRender()
         tickRateProp.onChange {
             if (animating) {
                 tickRateChanged = true
             }
         }
+
+        container.nodes.addListener(InvalidationListener { quickRender() })
+        container.bullets.addListener(InvalidationListener { animatedRender() })
     }
 
-    fun render() {
-        val newChildren = mutableListOf<Node>()
-        val transitions = mutableListOf<Transition>()
+    private fun quickRender() {
+        val newNodes = mutableListOf<Node>()
 
         container.nodes.forEach { (coordinate, node) ->
             val graphic = node.graphic()
             graphic.relocate((coordinate.x * GRID_SIZE).toDouble(), (coordinate.y * GRID_SIZE).toDouble())
-            newChildren.add(graphic)
-        }
-
-        container.bullets.forEach { (coordinate, bullet) ->
-            val graphic = bullet.toGraphic()
-
-            val transition = TranslateTransition(Duration.millis(tickRateProp.get().toDouble()))
-            transition.node = graphic
-
-            val currentPos = Coordinate(coordinate.x, coordinate.y)
-            val prevPos = currentPos.plus(bullet.direction.inverse)
-            graphic.relocate((prevPos.x * GRID_SIZE).toDouble(), (prevPos.y * GRID_SIZE).toDouble())
-
-            transition.toX = (bullet.direction.deltaX * GRID_SIZE).toDouble()
-            transition.toY = (bullet.direction.deltaY * GRID_SIZE).toDouble()
-            transition.interpolator = Interpolator.LINEAR
-
-            transition.isAutoReverse = false
-            newChildren.add(graphic)
-            transitions.add(transition)
+            newNodes.add(graphic)
         }
 
         (0..(container.width - 1)).forEach { x ->
             for (y in 0..(container.height - 1)) {
                 val background = emptyGraphic(Coordinate(x, y))
                 background.relocate((x * GRID_SIZE).toDouble(), (y * GRID_SIZE).toDouble())
-                newChildren.add(background)
+                newNodes.add(background)
             }
         }
 
-        runAsync { } ui {
+        ui {
             root.children.clear()
-            root.children.addAll(newChildren)
+            root.children.addAll(newNodes)
+        }
+    }
+
+    private fun animatedRender() {
+        quickRender()
+
+        val bullets = mutableListOf<Node>()
+        val transitions = mutableListOf<Transition>()
+        val tickRate = tickRateProp.get().toDouble()
+
+        for ((coordinate, bullet) in container.bullets) {
+            val graphic = bullet.toGraphic()
+            bullets.add(graphic)
+
+            TranslateTransition(Duration.millis(tickRate)).run {
+                val currentPos = Coordinate(coordinate.x, coordinate.y)
+                val prevPos = currentPos.plus(bullet.direction.inverse)
+                graphic.relocate((prevPos.x * GRID_SIZE).toDouble(), (prevPos.y * GRID_SIZE).toDouble())
+
+                node = graphic
+                toX = (bullet.direction.deltaX * GRID_SIZE).toDouble()
+                toY = (bullet.direction.deltaY * GRID_SIZE).toDouble()
+                interpolator = Interpolator.LINEAR
+                isAutoReverse = false
+                transitions.add(this)
+            }
+        }
+
+        ui {
+            root.children.addAll(bullets)
             transitions.forEach { transition -> transition.play() }
         }
     }
 
     fun tick() {
         container.tick()
-        render()
     }
 
     fun reset() {
         animating = false
         timer.cancel()
         container.reset()
-        render()
     }
 
     private fun emptyGraphic(coordinate: Coordinate): Node {
@@ -137,17 +150,14 @@ class ContainerView(val container: Container,
                     val newNode = getUiSelectedNode()
                     if (newNode != null && mouseEvent.button == MouseButton.PRIMARY) {
                         container.nodes[coordinate] = newNode
-                        render()
                     }
                 }
                 else {
                     if (mouseEvent.button == MouseButton.PRIMARY) {
                         currentNode.rotate()
-                        render()
                     }
                     else if (mouseEvent.button == MouseButton.SECONDARY) {
                         container.nodes.remove(coordinate)
-                        render()
                     }
                 }
             }

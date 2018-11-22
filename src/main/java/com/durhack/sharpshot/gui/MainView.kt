@@ -58,7 +58,6 @@ class MainView : View() {
             outputPane.clearOutput()
             container.start(integers)
             container.animate()
-            container.render()
         }
     }
 

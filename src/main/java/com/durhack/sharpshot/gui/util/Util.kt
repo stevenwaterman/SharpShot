@@ -1,5 +1,6 @@
 package com.durhack.sharpshot.gui.util
 
+import javafx.application.Platform
 import javafx.scene.control.TextInputDialog
 import javafx.scene.layout.*
 import javafx.scene.paint.Color
@@ -17,3 +18,5 @@ fun getNumberInput(header: String, content: String = "", start: BigInteger = Big
 
 fun border(color: Color) =
         Border(BorderStroke(color, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT))
+
+fun ui(function: () -> Unit) = Platform.runLater(function)
