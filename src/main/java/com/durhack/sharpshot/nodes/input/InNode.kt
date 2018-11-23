@@ -1,4 +1,4 @@
-package com.durhack.sharpshot.nodes.io
+package com.durhack.sharpshot.nodes.input
 
 import com.durhack.sharpshot.gui.shapes.Triangle
 import com.durhack.sharpshot.gui.util.getNumberInput

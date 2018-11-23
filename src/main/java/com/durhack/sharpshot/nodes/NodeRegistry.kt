@@ -1,10 +1,8 @@
 package com.durhack.sharpshot.nodes
 
 import com.durhack.sharpshot.gui.NodeCreatorElement
-import com.durhack.sharpshot.nodes.io.AsciiNode
-import com.durhack.sharpshot.nodes.io.InNode
-import com.durhack.sharpshot.nodes.io.ListNode
-import com.durhack.sharpshot.nodes.io.OutNode
+import com.durhack.sharpshot.nodes.input.InNode
+import com.durhack.sharpshot.nodes.input.ListNode
 import com.durhack.sharpshot.nodes.math.AddNode
 import com.durhack.sharpshot.nodes.math.DivNode
 import com.durhack.sharpshot.nodes.math.MultNode
@@ -19,25 +17,22 @@ import java.math.BigInteger
 
 object NodeRegistry {
     val nodes: List<INode> = listOf(
-            AsciiNode(),
             InNode(1),
             ListNode(),
-            OutNode(),
-            AddNode(),
-            DivNode(),
-            MultNode(),
-            SubNode(),
-            RotateNode(),
-            ACRotateNode(),
+            StackNode(),
+            ConstantNode(BigInteger.ONE),
+            RandomNode(),
+            HaltNode(),
+            SplitterNode(),
             BranchNode(),
             IfPositiveNode(),
             IfZeroNode(),
-            SplitterNode(),
+            IfNullNode(),
             VoidNode(),
-            ConstantNode(BigInteger.ONE),
-            HaltNode(),
-            RandomNode(),
-            StackNode()
+            AddNode(),
+            DivNode(),
+            MultNode(),
+            SubNode()
                                    )
 
     private val factories = nodes.map { it.type to it.jsonFactory }.toMap()

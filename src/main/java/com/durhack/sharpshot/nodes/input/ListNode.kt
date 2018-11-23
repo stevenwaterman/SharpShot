@@ -1,4 +1,4 @@
-package com.durhack.sharpshot.nodes.io
+package com.durhack.sharpshot.nodes.input
 
 import com.durhack.sharpshot.logic.Bullet
 import com.durhack.sharpshot.logic.Direction
