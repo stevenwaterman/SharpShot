@@ -47,7 +47,7 @@ class Container(val width: Int, val height: Int) {
         bullets.putAll(newBullets)
 
         //Halt if we hit a halt node
-        if (halt) {
+        if (halt || newBullets.isEmpty()) {
             reset()
         }
     }
