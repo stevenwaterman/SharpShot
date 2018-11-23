@@ -22,6 +22,7 @@ abstract class INode {
     open val factory: () -> INode? = { this::class.java.newInstance() }
 
     abstract val type: String
+
     final override fun toString() = type.split(" ").joinToString(" ") {
         it.first().toUpperCase() + it.drop(1).toLowerCase()
     }

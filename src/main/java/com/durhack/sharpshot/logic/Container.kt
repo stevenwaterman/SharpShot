@@ -1,7 +1,7 @@
 package com.durhack.sharpshot.logic
 
 import com.durhack.sharpshot.nodes.INode
-import com.durhack.sharpshot.nodes.io.AbstractInputNode
+import com.durhack.sharpshot.nodes.input.AbstractInputNode
 import com.durhack.sharpshot.nodes.other.HaltNode
 import javafx.beans.property.SimpleBooleanProperty
 import tornadofx.*
