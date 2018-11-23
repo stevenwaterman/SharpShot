@@ -1,9 +1,9 @@
 package com.durhack.sharpshot.nodes.io
 
-import com.durhack.sharpshot.logic.Bullet
-import com.durhack.sharpshot.logic.Direction
 import com.durhack.sharpshot.gui.shapes.Triangle
 import com.durhack.sharpshot.gui.util.getNumberInput
+import com.durhack.sharpshot.logic.Bullet
+import com.durhack.sharpshot.logic.Direction
 import com.durhack.sharpshot.nodes.INode
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
@@ -13,8 +13,10 @@ import java.math.BigInteger
 class InNode(private val index: Int?) : AbstractInputNode() {
     private var input: BigInteger? = null
 
-    override fun input(inputs: List<BigInteger?>) =
-            mapOf(Direction.UP to (if (index == null) null else inputs.getOrNull(index)))
+    override fun input(inputs: List<BigInteger?>): Map<Direction, BigInteger?> {
+        input = if (index == null) null else inputs.getOrNull(index)
+        return mapOf(Direction.UP to input)
+    }
 
     override fun run(bullet: Bullet) = mapOf(bullet.direction to bullet.value, Direction.UP to input)
 

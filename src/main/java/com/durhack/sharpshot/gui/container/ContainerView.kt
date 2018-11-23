@@ -70,7 +70,6 @@ class ContainerView(val container: Container,
         }
 
         container.nodes.addListener(InvalidationListener { quickRender() })
-        container.bullets.addListener(InvalidationListener { animatedRender() })
     }
 
     private fun quickRender() {
@@ -129,12 +128,14 @@ class ContainerView(val container: Container,
 
     fun tick() {
         container.tick()
+        animatedRender()
     }
 
     fun reset() {
         animating = false
         timer.cancel()
         container.reset()
+        quickRender()
     }
 
     private fun emptyGraphic(coordinate: Coordinate): Node {
