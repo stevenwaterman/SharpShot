@@ -82,7 +82,7 @@ class MainView : View() {
     private fun parseInputs(): List<BigInteger?>? {
         val inputString = controlBar.input.get()
         val unknownWords = mutableListOf<String>()
-        val numberRegex = Regex("[0-9]+")
+        val numberRegex = Regex("[-0-9]+")
         val integers = inputString.split(",")
                 .map { word -> word.trim() }
                 .map { word ->
