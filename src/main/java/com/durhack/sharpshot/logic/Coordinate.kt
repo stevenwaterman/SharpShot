@@ -3,7 +3,6 @@ package com.durhack.sharpshot.logic
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import java.util.*
 
 /**
  * This is an immutable class.
@@ -23,9 +22,7 @@ class Coordinate(val x: Int, val y: Int) {
         return x == that!!.x && y == that.y
     }
 
-    override fun hashCode(): Int {
-        return Objects.hash(x, y)
-    }
+    override fun hashCode() = 31 * x + y //TODO this could be improved with rot16
 
     fun wrap(width: Int, height: Int): Coordinate {
         return Coordinate((x + width) % width, (y + height) % height)
@@ -37,6 +34,8 @@ class Coordinate(val x: Int, val y: Int) {
         json.addProperty("y", y)
         return json
     }
+
+    operator fun plus(oth: Coordinate) = Coordinate(x + oth.x, y + oth.y)
 
     companion object {
         fun fromJson(json: JsonObject): Coordinate {
