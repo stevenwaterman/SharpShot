@@ -156,6 +156,7 @@ class ContainerView(val container: Container,
                 else {
                     if (mouseEvent.button == MouseButton.PRIMARY) {
                         currentNode.rotate()
+                        quickRender()
                     }
                     else if (mouseEvent.button == MouseButton.SECONDARY) {
                         container.nodes.remove(coordinate)
