@@ -2,11 +2,14 @@ package com.durhack.sharpshot.gui.container
 
 import com.durhack.sharpshot.gui.util.Dialog
 import javafx.beans.property.SimpleIntegerProperty
-import tornadofx.*
+import tornadofx.field
+import tornadofx.fieldset
+import tornadofx.form
+import tornadofx.textfield
 
 class ContainerSizeDialog : Dialog<Pair<Int, Int>>("Container Size") {
-    private val gridWidthProp = SimpleIntegerProperty(20)
-    private val gridHeightProp = SimpleIntegerProperty(15)
+    private val gridWidthProp = SimpleIntegerProperty(30)
+    private val gridHeightProp = SimpleIntegerProperty(20)
 
     override fun getValue(): Pair<Int, Int>? {
         val width = gridWidthProp.get()
