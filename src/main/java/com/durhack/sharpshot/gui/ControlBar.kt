@@ -56,7 +56,7 @@ class ControlBar : View("Control Bar") {
             }
         }
 
-        button("save") {
+        button("Save") {
             enableWhen(running.not().and(containerSet))
             action {
                 mainView.saveContainer()
