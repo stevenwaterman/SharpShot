@@ -23,9 +23,7 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.shape.StrokeType
 import javafx.util.Duration
-import tornadofx.Fragment
-import tornadofx.onChange
-import tornadofx.pane
+import tornadofx.*
 import java.math.BigInteger
 import java.util.*
 import kotlin.collections.component1
@@ -37,9 +35,8 @@ class ContainerView(val container: Container,
                     val tickRateProp: ObservableLongValue,
                     private val getUiSelectedNode: () -> INode?) : Fragment() {
     val running = container.running
-    val outputs: ObservableList<BigInteger> = FXCollections.emptyObservableList()
+    val outputs: ObservableList<BigInteger> = FXCollections.observableArrayList()
 
-    private var animating = false
     private var timer = Timer()
     private var tickRateChanged = false
 
@@ -61,7 +58,7 @@ class ContainerView(val container: Container,
         quickRender()
 
         tickRateProp.onChange {
-            if (animating) {
+            if (running.get()) {
                 tickRateChanged = true
             }
         }
@@ -173,17 +170,19 @@ class ContainerView(val container: Container,
                 if (tickRateChanged) {
                     tickRateChanged = false
 
-                    if (animating) { //Needed to ensure we can stop it
+                    if (running.get()) { //Needed to ensure we can stop it
                         animate()
                     }
                 }
                 else {
                     outputs.addAll(tick())
                 }
+
+                if(!running.get()){
+                    timer.cancel()
+                }
             }
         }, 0, tickRateProp.get())
-
-        animating = true
     }
 
     private fun quickRender() {
@@ -258,7 +257,6 @@ class ContainerView(val container: Container,
     }
 
     fun reset() {
-        animating = false
         timer.cancel()
         container.reset()
         quickRender()
@@ -313,15 +311,14 @@ class ContainerView(val container: Container,
         rectangle.setOnDragDropped { event ->
             val db = event.dragboard
             if (db.hasString()) {
-                val sourceCoordsList = db.string.split("-").map { it.toInt() }
+                val sourceCoordsList = db.string.split("-").map(String::toInt)
                 val sourceCoords = Coordinate(sourceCoordsList[0], sourceCoordsList[1])
-                val targetCoords = coordinate
                 withoutRendering {
                     val startNode = container.nodes[sourceCoords]
-                    val endNode = container.nodes[targetCoords]
+                    val endNode = container.nodes[coordinate]
 
                     if (startNode != null) {
-                        container.nodes[targetCoords] = startNode
+                        container.nodes[coordinate] = startNode
                         if (endNode != null) {
                             container.nodes[dragStart] = endNode
                         }

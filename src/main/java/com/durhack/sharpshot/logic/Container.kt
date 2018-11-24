@@ -153,7 +153,7 @@ class Container(width: Int, height: Int) {
                         return@mapNotNull movement to newBullet
                     }
                     else {
-                        outputs[newCoordinate] = bullet
+                        outputs[newCoordinate] = newBullet
                         return@mapNotNull null
                     }
                 }

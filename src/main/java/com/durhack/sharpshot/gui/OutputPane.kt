@@ -1,9 +1,7 @@
 package com.durhack.sharpshot.gui
 
 import javafx.scene.layout.Priority
-import tornadofx.View
-import tornadofx.textarea
-import tornadofx.vgrow
+import tornadofx.*
 import java.math.BigInteger
 
 class OutputPane : View() {
@@ -15,6 +13,7 @@ class OutputPane : View() {
     }
 
     fun setOutput(ints: List<BigInteger?>) {
-        root.text = ints.map { it ?: "" }.joinToString(System.lineSeparator(), "Outputs:")
+        root.text = ints.asSequence().map { it ?: "" }
+                .joinToString(System.lineSeparator(), "Outputs:${System.lineSeparator()}")
     }
 }

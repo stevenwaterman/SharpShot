@@ -9,15 +9,7 @@ import javafx.beans.property.SimpleBooleanProperty
 import javafx.geometry.Pos
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
-import tornadofx.View
-import tornadofx.action
-import tornadofx.alert
-import tornadofx.borderpane
-import tornadofx.button
-import tornadofx.enableWhen
-import tornadofx.hbox
-import tornadofx.paddingAll
-import tornadofx.vbox
+import tornadofx.*
 import java.math.BigInteger
 
 
@@ -153,15 +145,15 @@ class MainView : View() {
         val unknownWords = mutableListOf<String>()
         val numberRegex = Regex("[-0-9]+")
         val integers = inputString.split(",").asSequence().map(String::trim).map { word ->
-                    when {
-                        word.isBlank()            -> null
-                        word.matches(numberRegex) -> BigInteger(word)
-                        word.length == 1          -> word.first().asBigInteger()
-                        else                      -> {
-                            unknownWords.add(word)
-                            null
-                        }
-                    }
+            when {
+                word.isBlank() -> null
+                word.matches(numberRegex) -> BigInteger(word)
+                word.length == 1 -> word.first().asBigInteger()
+                else -> {
+                    unknownWords.add(word)
+                    null
+                }
+            }
         }.toList()
 
         if (unknownWords.isEmpty()) {
