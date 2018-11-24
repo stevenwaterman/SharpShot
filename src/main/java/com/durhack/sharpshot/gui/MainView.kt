@@ -58,12 +58,12 @@ class MainView : View() {
 
             left = vbox(16, Pos.CENTER) {
                 enableWhen(controlBar.containerSet.and(running.not()))
-                button("<-") {
+                button("+") {
                     action {
                         containerView?.addColumnLeft()
                     }
                 }
-                button("->") {
+                button("-") {
                     action {
                         containerView?.removeColumnLeft()
                     }
@@ -72,12 +72,12 @@ class MainView : View() {
 
             right = vbox(16, Pos.CENTER) {
                 enableWhen(controlBar.containerSet.and(running.not()))
-                button("->") {
+                button("+") {
                     action {
                         containerView?.addColumnRight()
                     }
                 }
-                button("<-") {
+                button("-") {
                     action {
                         containerView?.removeColumnRight()
                     }
@@ -86,12 +86,12 @@ class MainView : View() {
 
             top = hbox(16, Pos.CENTER) {
                 enableWhen(controlBar.containerSet.and(running.not()))
-                button("^") {
+                button("+") {
                     action {
                         containerView?.addRowTop()
                     }
                 }
-                button("v") {
+                button("-") {
                     action {
                         containerView?.removeRowTop()
                     }
@@ -100,12 +100,12 @@ class MainView : View() {
 
             bottom = hbox(16, Pos.CENTER) {
                 enableWhen(controlBar.containerSet.and(running.not()))
-                button("v") {
+                button("+") {
                     action {
                         containerView?.addRowBottom()
                     }
                 }
-                button("^") {
+                button("-") {
                     action {
                         containerView?.removeRowBottom()
                     }

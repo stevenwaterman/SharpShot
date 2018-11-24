@@ -14,7 +14,10 @@ import javafx.beans.value.ObservableLongValue
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.scene.Node
+import javafx.scene.input.ClipboardContent
+import javafx.scene.input.Dragboard
 import javafx.scene.input.MouseButton
+import javafx.scene.input.TransferMode
 import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
@@ -29,6 +32,7 @@ import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
 
+
 class ContainerView(val container: Container,
                     val tickRateProp: ObservableLongValue,
                     private val getUiSelectedNode: () -> INode?) : Fragment() {
@@ -39,8 +43,18 @@ class ContainerView(val container: Container,
     private var timer = Timer()
     private var tickRateChanged = false
 
+    private var dragStart: Coordinate? = null
+    private var renderingEnabled = true
+
     override val root = pane {
         updateSize(this)
+    }
+
+    fun withoutRendering(function: () -> Unit) {
+        renderingEnabled = false
+        function()
+        renderingEnabled = true
+        quickRender()
     }
 
     init {
@@ -173,6 +187,10 @@ class ContainerView(val container: Container,
     }
 
     private fun quickRender() {
+        if (!renderingEnabled) {
+            return
+        }
+
         val newNodes = mutableListOf<Node>()
 
         container.nodes.forEach { (coordinate, node) ->
@@ -196,6 +214,10 @@ class ContainerView(val container: Container,
     }
 
     private fun animatedRender() {
+        if (!renderingEnabled) {
+            return
+        }
+
         quickRender()
 
         val bullets = mutableListOf<Node>()
@@ -248,7 +270,7 @@ class ContainerView(val container: Container,
         rectangle.strokeWidth = 0.5
         rectangle.strokeType = StrokeType.CENTERED
 
-        rectangle.setOnMousePressed { mouseEvent ->
+        rectangle.setOnMouseClicked { mouseEvent ->
             if (!running.get()) {
                 val currentNode = container.nodes[coordinate]
                 if (currentNode == null) {
@@ -267,6 +289,53 @@ class ContainerView(val container: Container,
                     }
                 }
             }
+        }
+
+        rectangle.setOnDragDetected {
+            dragStart = coordinate
+        }
+
+        rectangle.setOnDragDetected { event ->
+            val dragBoard: Dragboard = rectangle.startDragAndDrop(TransferMode.MOVE)
+            val content = ClipboardContent()
+            content.putString("${coordinate.x}-${coordinate.y}")
+            dragBoard.setContent(content)
+            event.consume()
+        }
+
+        rectangle.setOnDragOver { event ->
+            if (event.gestureSource !== rectangle && event.dragboard.hasString()) {
+                event.acceptTransferModes(*TransferMode.COPY_OR_MOVE)
+            }
+            event.consume()
+        }
+
+        rectangle.setOnDragDropped { event ->
+            val db = event.dragboard
+            if (db.hasString()) {
+                val sourceCoordsList = db.string.split("-").map { it.toInt() }
+                val sourceCoords = Coordinate(sourceCoordsList[0], sourceCoordsList[1])
+                val targetCoords = coordinate
+                withoutRendering {
+                    val startNode = container.nodes[sourceCoords]
+                    val endNode = container.nodes[targetCoords]
+
+                    if (startNode != null) {
+                        container.nodes[targetCoords] = startNode
+                        if (endNode != null) {
+                            container.nodes[dragStart] = endNode
+                        }
+                        else {
+                            container.nodes.remove(sourceCoords)
+                        }
+                    }
+                }
+                event.isDropCompleted = true
+            }
+            else {
+                event.isDropCompleted = false
+            }
+            event.consume()
         }
 
         return rectangle
