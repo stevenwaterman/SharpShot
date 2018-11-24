@@ -1,9 +1,8 @@
 package com.durhack.sharpshot.gui
 
 import javafx.stage.Stage
-import tornadofx.*
-
-
+import tornadofx.App
+import tornadofx.launch
 
 class Program : App(MainView::class){
     override fun start(stage: Stage) {

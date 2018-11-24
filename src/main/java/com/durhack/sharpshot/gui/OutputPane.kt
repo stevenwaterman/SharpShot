@@ -1,23 +1,20 @@
 package com.durhack.sharpshot.gui
 
-import tornadofx.*
+import javafx.scene.layout.Priority
+import tornadofx.View
+import tornadofx.textarea
+import tornadofx.vgrow
+import java.math.BigInteger
 
 class OutputPane : View() {
     override val root = textarea {
-        maxWidth = 100.0
+        maxWidth = 200.0
         isEditable = false
+        vgrow = Priority.ALWAYS
         isWrapText = true
     }
 
-    fun print(c: Char) {
-        root.appendText(c.toString())
-    }
-
-    fun print(s: String) {
-        root.appendText(s + "\n")
-    }
-
-    fun clearOutput() {
-        root.text = "OUT:\n\n"
+    fun setOutput(ints: List<BigInteger?>) {
+        root.text = ints.map { it ?: "" }.joinToString(System.lineSeparator(), "Outputs:")
     }
 }

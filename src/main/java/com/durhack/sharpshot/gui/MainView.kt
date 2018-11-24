@@ -4,11 +4,20 @@ import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.logic.Container
 import com.durhack.sharpshot.serialisation.ContainerSaveLoad
 import com.durhack.sharpshot.util.asBigInteger
+import javafx.beans.InvalidationListener
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.geometry.Pos
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
-import tornadofx.*
+import tornadofx.View
+import tornadofx.action
+import tornadofx.alert
+import tornadofx.borderpane
+import tornadofx.button
+import tornadofx.enableWhen
+import tornadofx.hbox
+import tornadofx.paddingAll
+import tornadofx.vbox
 import java.math.BigInteger
 
 
@@ -31,6 +40,9 @@ class MainView : View() {
     private fun setContainer(container: Container) {
         val newView = ContainerView(container, controlBar.tickRateProp, nodeCreator::createNode)
         running.bind(newView.running)
+        newView.outputs.addListener(InvalidationListener {
+            outputPane.setOutput(newView.outputs)
+        })
         containerView = newView
     }
 
@@ -40,71 +52,72 @@ class MainView : View() {
     }
 
     override val root = borderpane {
-        left<NodeCreator>()
         center = borderpane {
-            enableWhen(controlBar.containerSet.and(running.not()))
-
+            paddingAll = 8
             center = containerScrollPane.root
 
             left = vbox(16, Pos.CENTER) {
-                button("<-"){
-                    action{
+                enableWhen(controlBar.containerSet.and(running.not()))
+                button("<-") {
+                    action {
                         containerView?.addColumnLeft()
                     }
                 }
-                button("->"){
-                    action{
+                button("->") {
+                    action {
                         containerView?.removeColumnLeft()
                     }
                 }
             }
 
             right = vbox(16, Pos.CENTER) {
-                button("->"){
-                    action{
+                enableWhen(controlBar.containerSet.and(running.not()))
+                button("->") {
+                    action {
                         containerView?.addColumnRight()
                     }
                 }
-                button("<-"){
-                    action{
+                button("<-") {
+                    action {
                         containerView?.removeColumnRight()
                     }
                 }
             }
 
             top = hbox(16, Pos.CENTER) {
-                button("^"){
-                    action{
+                enableWhen(controlBar.containerSet.and(running.not()))
+                button("^") {
+                    action {
                         containerView?.addRowTop()
                     }
                 }
-                button("v"){
-                    action{
+                button("v") {
+                    action {
                         containerView?.removeRowTop()
                     }
                 }
             }
 
             bottom = hbox(16, Pos.CENTER) {
-                button("v"){
-                    action{
+                enableWhen(controlBar.containerSet.and(running.not()))
+                button("v") {
+                    action {
                         containerView?.addRowBottom()
                     }
                 }
-                button("^"){
-                    action{
+                button("^") {
+                    action {
                         containerView?.removeRowBottom()
                     }
                 }
             }
         }
         left = nodeCreator.root
-        right = outputPane.root
-        bottom = controlBar.root
-    }
-
-    init {
-        controlBar.running.bind(running)
+        right = vbox(16, Pos.CENTER) {
+            paddingAll = 16
+            add(outputPane.root)
+            add(controlBar.root)
+        }
     }
 
     fun start() {
@@ -112,7 +125,6 @@ class MainView : View() {
 
         val integers = parseInputs()
         if (integers != null) {
-            outputPane.clearOutput()
             container.start(integers)
             container.animate()
         }
@@ -140,33 +152,27 @@ class MainView : View() {
         val inputString = controlBar.input.get()
         val unknownWords = mutableListOf<String>()
         val numberRegex = Regex("[-0-9]+")
-        val integers = inputString.split(",")
-                .asSequence()
-                .map(String::trim)
-                .map { word ->
+        val integers = inputString.split(",").asSequence().map(String::trim).map { word ->
                     when {
-                        word.isBlank() -> null
+                        word.isBlank()            -> null
                         word.matches(numberRegex) -> BigInteger(word)
-                        word.length == 1 -> word.first().asBigInteger()
-                        else -> {
+                        word.length == 1          -> word.first().asBigInteger()
+                        else                      -> {
                             unknownWords.add(word)
                             null
                         }
                     }
-                }
-                .toList()
+        }.toList()
 
         if (unknownWords.isEmpty()) {
             return integers
         }
 
-        alert(type = Alert.AlertType.ERROR,
-              buttons = *arrayOf(ButtonType.OK),
-              header = "Cannot parse inputs",
-              content = "Inputs must be integers or single ASCII characters\n" +
-                      "The following inputs could not be understood\n" +
-                      unknownWords.joinToString()
-             )
+        alert(
+                type = Alert.AlertType.ERROR,
+                buttons = *arrayOf(ButtonType.OK),
+                header = "Cannot parse inputs",
+                content = "Inputs must be integers or single ASCII characters\n" + "The following inputs could not be understood\n" + unknownWords.joinToString())
         return null
 
     }

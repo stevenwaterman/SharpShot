@@ -1,7 +1,6 @@
 package com.durhack.sharpshot.gui.container
 
 import com.durhack.sharpshot.GRID_SIZE
-import com.durhack.sharpshot.gui.OutputPane
 import com.durhack.sharpshot.gui.util.ui
 import com.durhack.sharpshot.logic.Container
 import com.durhack.sharpshot.logic.Coordinate
@@ -12,6 +11,8 @@ import javafx.animation.Transition
 import javafx.animation.TranslateTransition
 import javafx.beans.InvalidationListener
 import javafx.beans.value.ObservableLongValue
+import javafx.collections.FXCollections
+import javafx.collections.ObservableList
 import javafx.scene.Node
 import javafx.scene.input.MouseButton
 import javafx.scene.layout.Pane
@@ -19,7 +20,9 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.shape.StrokeType
 import javafx.util.Duration
-import tornadofx.*
+import tornadofx.Fragment
+import tornadofx.onChange
+import tornadofx.pane
 import java.math.BigInteger
 import java.util.*
 import kotlin.collections.component1
@@ -30,12 +33,11 @@ class ContainerView(val container: Container,
                     val tickRateProp: ObservableLongValue,
                     private val getUiSelectedNode: () -> INode?) : Fragment() {
     val running = container.running
+    val outputs: ObservableList<BigInteger> = FXCollections.emptyObservableList()
 
     private var animating = false
     private var timer = Timer()
     private var tickRateChanged = false
-
-    private val outputPane: OutputPane by inject()
 
     override val root = pane {
         updateSize(this)
@@ -162,7 +164,7 @@ class ContainerView(val container: Container,
                     }
                 }
                 else {
-                    tick()
+                    outputs.addAll(tick())
                 }
             }
         }, 0, tickRateProp.get())
@@ -224,14 +226,13 @@ class ContainerView(val container: Container,
         }
     }
 
-    fun tick() {
+    fun tick(): List<BigInteger?> {
         val outputs = container.tick()
-        outputs.forEach { _, bullet ->
-            val value = bullet.value ?: return@forEach
-            outputPane.print(value.toString())
-        }
-
         animatedRender()
+
+        return outputs.map { (_, bullet) ->
+            bullet.value
+        }
     }
 
     fun reset() {
@@ -277,6 +278,7 @@ class ContainerView(val container: Container,
     }
 
     fun start(inputs: List<BigInteger?>) {
+        outputs.clear()
         container.start(inputs)
     }
 }
