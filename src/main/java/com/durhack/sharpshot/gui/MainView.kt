@@ -21,6 +21,10 @@ class MainView : View() {
 
     private val running = SimpleBooleanProperty(false)
 
+    init {
+        controlBar.running.bind(running)
+    }
+
     private var containerView: ContainerView? = null
         set(value) {
             field = value
