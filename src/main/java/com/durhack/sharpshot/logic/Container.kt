@@ -4,11 +4,27 @@ import com.durhack.sharpshot.nodes.INode
 import com.durhack.sharpshot.nodes.input.AbstractInputNode
 import com.durhack.sharpshot.nodes.other.HaltNode
 import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.SimpleIntegerProperty
 import tornadofx.*
 import java.math.BigInteger
 
-class Container(val width: Int, val height: Int) {
+class Container(width: Int, height: Int) {
     val running = SimpleBooleanProperty()
+
+    val widthProp = SimpleIntegerProperty(width)
+    val heightProp = SimpleIntegerProperty(height)
+
+    var width: Int
+        get() = widthProp.get()
+        set(value) {
+            widthProp.set(value)
+        }
+
+    var height: Int
+        get() = heightProp.get()
+        set(value) {
+            heightProp.set(value)
+        }
 
     val nodes = mutableMapOf<Coordinate, INode>().observable()
     val bullets = mutableMapOf<Coordinate, Bullet>().observable()
@@ -132,11 +148,11 @@ class Container(val width: Int, val height: Int) {
                     val newBullet = Bullet(unrotatedDirection, value)
 
                     val newCoordinate = coord.plus(newBullet.direction)
-                    if(isInside(newCoordinate)) {
+                    if (isInside(newCoordinate)) {
                         val movement = Movement(coord, newCoordinate)
                         return@mapNotNull movement to newBullet
                     }
-                    else{
+                    else {
                         outputs[newCoordinate] = bullet
                         return@mapNotNull null
                     }
@@ -146,12 +162,12 @@ class Container(val width: Int, val height: Int) {
     private fun moveBullets(bullets: Map<Coordinate, Bullet>): Map<Movement, Bullet> =
             bullets.mapNotNull { (coord, bullet) ->
                 val newCoord = coord.plus(bullet.direction)
-                if(isInside(newCoord)) {
+                if (isInside(newCoord)) {
                     return@mapNotNull Movement(coord, newCoord) to bullet
                 }
-                else{
+                else {
                     outputs[newCoord] = bullet
-                    return@mapNotNull  null
+                    return@mapNotNull null
                 }
             }.toMap()
 

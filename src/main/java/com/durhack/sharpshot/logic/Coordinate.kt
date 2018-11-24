@@ -24,10 +24,6 @@ class Coordinate(val x: Int, val y: Int) {
 
     override fun hashCode() = 31 * x + y //TODO this could be improved with rot16
 
-    fun wrap(width: Int, height: Int): Coordinate {
-        return Coordinate((x + width) % width, (y + height) % height)
-    }
-
     fun toJson(): JsonElement {
         val json = JsonObject()
         json.addProperty("x", x)

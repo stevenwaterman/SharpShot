@@ -16,7 +16,7 @@ fun getNumberInput(header: String, content: String = "", start: BigInteger = Big
     return dialog.showAndWait()
 }
 
-fun border(color: Color) =
+fun createBorder(color: Color) =
         Border(BorderStroke(color, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT))
 
 fun ui(function: () -> Unit) = Platform.runLater(function)

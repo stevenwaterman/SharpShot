@@ -5,6 +5,7 @@ import com.durhack.sharpshot.logic.Container
 import com.durhack.sharpshot.serialisation.ContainerSaveLoad
 import com.durhack.sharpshot.util.asBigInteger
 import javafx.beans.property.SimpleBooleanProperty
+import javafx.geometry.Pos
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
 import tornadofx.*
@@ -40,7 +41,63 @@ class MainView : View() {
 
     override val root = borderpane {
         left<NodeCreator>()
-        center = containerScrollPane.root
+        center = borderpane {
+            enableWhen(controlBar.containerSet.and(running.not()))
+
+            center = containerScrollPane.root
+
+            left = vbox(16, Pos.CENTER) {
+                button("<-"){
+                    action{
+                        containerView?.addColumnLeft()
+                    }
+                }
+                button("->"){
+                    action{
+                        containerView?.removeColumnLeft()
+                    }
+                }
+            }
+
+            right = vbox(16, Pos.CENTER) {
+                button("->"){
+                    action{
+                        containerView?.addColumnRight()
+                    }
+                }
+                button("<-"){
+                    action{
+                        containerView?.removeColumnRight()
+                    }
+                }
+            }
+
+            top = hbox(16, Pos.CENTER) {
+                button("^"){
+                    action{
+                        containerView?.addRowTop()
+                    }
+                }
+                button("v"){
+                    action{
+                        containerView?.removeRowTop()
+                    }
+                }
+            }
+
+            bottom = hbox(16, Pos.CENTER) {
+                button("v"){
+                    action{
+                        containerView?.addRowBottom()
+                    }
+                }
+                button("^"){
+                    action{
+                        containerView?.removeRowBottom()
+                    }
+                }
+            }
+        }
         left = nodeCreator.root
         right = outputPane.root
         bottom = controlBar.root
