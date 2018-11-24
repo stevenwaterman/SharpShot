@@ -1,6 +1,7 @@
 package com.durhack.sharpshot.gui.container
 
 import com.durhack.sharpshot.GRID_SIZE
+import com.durhack.sharpshot.gui.OutputPane
 import com.durhack.sharpshot.gui.util.ui
 import com.durhack.sharpshot.logic.Container
 import com.durhack.sharpshot.logic.Coordinate
@@ -31,6 +32,8 @@ class ContainerView(val container: Container,
     private var animating = false
     private var timer = Timer()
     private var tickRateChanged = false
+
+    private val outputPane: OutputPane by inject()
 
     override val root = pane {
         minWidth = container.width * GRID_SIZE.toDouble()
@@ -127,7 +130,12 @@ class ContainerView(val container: Container,
     }
 
     fun tick() {
-        container.tick()
+        val outputs = container.tick()
+        outputs.forEach { coordinate, bullet ->
+            val value = bullet.value ?: return@forEach
+            outputPane.print(value.toString())
+        }
+
         animatedRender()
     }
 

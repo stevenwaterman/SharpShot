@@ -14,6 +14,7 @@ class Container(val width: Int, val height: Int) {
     val bullets = mutableMapOf<Coordinate, Bullet>().observable()
 
     private var halt = false
+    private val outputs = mutableMapOf<Coordinate, Bullet>()
 
     fun start(input: List<BigInteger?>) {
         bullets.putAll(nodes.keys.flatMap { coordinate ->
@@ -32,7 +33,9 @@ class Container(val width: Int, val height: Int) {
      * stored bullets -> process and output
      * all bullets -> check
      */
-    fun tick() {
+    fun tick(): Map<Coordinate, Bullet> {
+        outputs.clear()
+
         val movements = moveBullets()
         val swapsCollided = collideSwaps(movements)
         val finalCollided = collideFinal(swapsCollided)
@@ -50,6 +53,8 @@ class Container(val width: Int, val height: Int) {
         if (halt || newBullets.isEmpty()) {
             reset()
         }
+
+        return outputs.toMap()
     }
 
     private fun collideFinal(movements: Map<Movement, Bullet>): Map<Movement, Bullet> {
@@ -122,22 +127,35 @@ class Container(val width: Int, val height: Int) {
                 val rotatedDirection = bullet.direction.plusQuarters(-node.rotation.quarters)
                 val rotatedBullet = Bullet(rotatedDirection, bullet.value)
 
-                return@flatMap node.run(rotatedBullet).map { (direction, value) ->
+                return@flatMap node.run(rotatedBullet).mapNotNull { (direction, value) ->
                     val unrotatedDirection = direction.plusQuarters(node.rotation.quarters)
                     val newBullet = Bullet(unrotatedDirection, value)
 
-                    val newCoordinate = coord.plus(newBullet.direction).wrap(width, height)
-                    val movement = Movement(coord, newCoordinate)
-
-                    return@map movement to newBullet
+                    val newCoordinate = coord.plus(newBullet.direction)
+                    if(isInside(newCoordinate)) {
+                        val movement = Movement(coord, newCoordinate)
+                        return@mapNotNull movement to newBullet
+                    }
+                    else{
+                        outputs[newCoordinate] = bullet
+                        return@mapNotNull null
+                    }
                 }
             }.toMap()
 
     private fun moveBullets(bullets: Map<Coordinate, Bullet>): Map<Movement, Bullet> =
-            bullets.map { (coord, bullet) ->
-                val newCoord = coord.plus(bullet.direction).wrap(width, height)
-                return@map Movement(coord, newCoord) to bullet
+            bullets.mapNotNull { (coord, bullet) ->
+                val newCoord = coord.plus(bullet.direction)
+                if(isInside(newCoord)) {
+                    return@mapNotNull Movement(coord, newCoord) to bullet
+                }
+                else{
+                    outputs[newCoord] = bullet
+                    return@mapNotNull  null
+                }
             }.toMap()
+
+    private fun isInside(coord: Coordinate) = coord.x in 0..(width - 1) && coord.y in 0..(height - 1)
 
     fun reset() {
         bullets.clear()
