@@ -21,9 +21,7 @@ abstract class Dialog<T>(title: String) : View(title) {
                 }
             }
             button("Cancel") {
-                action {
-                    close()
-                }
+                action(this@Dialog::close)
             }
         }
     }

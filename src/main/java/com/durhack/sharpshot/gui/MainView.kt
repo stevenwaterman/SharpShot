@@ -29,7 +29,7 @@ class MainView : View() {
         }
 
     private fun setContainer(container: Container) {
-        val newView = ContainerView(container, controlBar.tickRateProp) { nodeCreator.createNode() }
+        val newView = ContainerView(container, controlBar.tickRateProp, nodeCreator::createNode)
         running.bind(newView.running)
         containerView = newView
     }
@@ -141,7 +141,8 @@ class MainView : View() {
         val unknownWords = mutableListOf<String>()
         val numberRegex = Regex("[-0-9]+")
         val integers = inputString.split(",")
-                .map { word -> word.trim() }
+                .asSequence()
+                .map(String::trim)
                 .map { word ->
                     when {
                         word.isBlank() -> null
@@ -153,6 +154,7 @@ class MainView : View() {
                         }
                     }
                 }
+                .toList()
 
         if (unknownWords.isEmpty()) {
             return integers

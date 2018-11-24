@@ -31,16 +31,12 @@ class ControlBar : View("Control Bar") {
 
         button("Run") {
             enableWhen(running.not().and(containerSet))
-            action {
-                mainView.start()
-            }
+            action(mainView::start)
         }
 
         button("Reset") {
             enableWhen(running.and(containerSet))
-            action {
-                mainView.reset()
-            }
+            action(mainView::reset)
         }
 
         textfield {
@@ -51,23 +47,17 @@ class ControlBar : View("Control Bar") {
 
         button("Load") {
             enableWhen(running.not())
-            action {
-                mainView.loadContainer()
-            }
+            action(mainView::loadContainer)
         }
 
         button("Save") {
             enableWhen(running.not().and(containerSet))
-            action {
-                mainView.saveContainer()
-            }
+            action(mainView::saveContainer)
         }
 
         button("Clear All") {
             enableWhen(running.not().and(containerSet))
-            action {
-                mainView.clear()
-            }
+            action(mainView::clear)
         }
 
         label("Delay")

@@ -127,7 +127,7 @@ class Container(width: Int, height: Int) {
             return@mapNotNull Triple(coord, node, bullet)
         }
 
-        val freeBullets: Map<Coordinate, Bullet> = (bullets - captured.map { it.first })
+        val freeBullets: Map<Coordinate, Bullet> = (bullets - captured.map(Triple<Coordinate, INode, Bullet>::first))
 
         return moveBullets(freeBullets) + processBullets(captured)
     }

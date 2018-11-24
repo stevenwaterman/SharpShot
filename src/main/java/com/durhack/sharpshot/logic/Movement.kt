@@ -14,7 +14,5 @@ class SwapChecker(val c1: Coordinate, val c2: Coordinate) {
         return c1 + c2 == other.c1 + other.c2
     }
 
-    override fun hashCode(): Int {
-        return c1.hashCode() + c2.hashCode()
-    }
+    override fun hashCode(): Int = c1.hashCode() + c2.hashCode()
 }

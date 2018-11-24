@@ -6,14 +6,12 @@ enum class Direction(val deltaX: Int, val deltaY: Int, val quarters: Int) {
     DOWN(0, 1, 2),
     LEFT(-1, 0, 3);
 
-    fun plusQuarters(add: Int): Direction {
-        return ofQuarters(quarters + add)
-    }
+    fun plusQuarters(add: Int): Direction = ofQuarters(quarters + add)
 
     val inverse get() = plusQuarters(2)
     val clockwise get() = plusQuarters(1)
     val antiClockwise get() = plusQuarters(-1)
-    val others get() = (1..3).map { plusQuarters(it) }
+    val others get() = (1..3).map(this@Direction::plusQuarters)
     val degrees get() = quarters * 90.0
 
     companion object {

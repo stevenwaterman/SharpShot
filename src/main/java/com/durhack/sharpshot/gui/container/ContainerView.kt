@@ -220,7 +220,7 @@ class ContainerView(val container: Container,
 
         ui {
             root.children.addAll(bullets)
-            transitions.forEach { transition -> transition.play() }
+            transitions.forEach(Transition::play)
         }
     }
 
