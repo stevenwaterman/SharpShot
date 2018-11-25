@@ -7,7 +7,16 @@ import javafx.beans.property.SimpleLongProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Orientation
 import javafx.geometry.Pos
-import tornadofx.*
+import tornadofx.View
+import tornadofx.action
+import tornadofx.bind
+import tornadofx.button
+import tornadofx.enableWhen
+import tornadofx.hbox
+import tornadofx.label
+import tornadofx.slider
+import tornadofx.textfield
+import tornadofx.vbox
 
 @Suppress("ConvertLambdaToReference")
 class ControlBar : View("Control Bar") {
@@ -79,7 +88,10 @@ class ControlBar : View("Control Bar") {
             }
 
             slider(range = 1..10, orientation = Orientation.HORIZONTAL) {
-                enableWhen(containerSet)
+                isShowTickMarks = true
+                isSnapToTicks = true
+                majorTickUnit = 1.0
+                minorTickCount = 0
                 bind(internalSpeedProp)
                 setOnMouseReleased {
                     tickRateProp.set(delays[internalSpeedProp.get() - 1].toLong())
