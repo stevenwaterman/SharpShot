@@ -21,7 +21,7 @@ import tornadofx.paddingAll
 import tornadofx.vbox
 import java.math.BigInteger
 
-class MainView : View() {
+class MainView : View("Sharpshot") {
     private val controlBar: ControlBar by inject()
     private val nodeCreator: NodeCreator by inject()
     private val outputPane: OutputPane by inject()
