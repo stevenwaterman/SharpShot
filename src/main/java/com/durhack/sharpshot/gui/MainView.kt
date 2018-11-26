@@ -36,9 +36,17 @@ class MainView : View() {
     private fun setContainer(container: Container) {
         val newView = ContainerView(container, controlBar.tickRateProp, nodeCreator::createNode)
         running.bind(newView.running)
-        newView.outputs.addListener(InvalidationListener {
-            outputPane.setOutput(newView.outputs)
-        })
+
+        val outputs = newView.container.outputs
+        val ticks = newView.container.ticks
+
+        val updateOutput = InvalidationListener {
+            outputPane.setOutput(ticks.get(), outputs)
+        }
+
+        outputs.addListener(updateOutput)
+        ticks.addListener(updateOutput)
+
         containerView = newView
     }
 
@@ -164,12 +172,18 @@ class MainView : View() {
             return integers
         }
 
-        alert(
-                type = Alert.AlertType.ERROR,
-                buttons = *arrayOf(ButtonType.OK),
-                header = "Cannot parse inputs",
-                content = "Inputs must be integers or single ASCII characters\n" + "The following inputs could not be understood\n" + unknownWords.joinToString())
+        alert(type = Alert.AlertType.ERROR,
+              buttons = *arrayOf(ButtonType.OK),
+              header = "Cannot parse inputs",
+              content = listOf(
+                      "Inputs must be integers or single ASCII characters",
+                      "The following inputs could not be understood",
+                      unknownWords.joinToString()
+                              ).joinToString(System.lineSeparator()))
         return null
+    }
 
+    fun skipToEnd() {
+        containerView?.skipToEnd()
     }
 }

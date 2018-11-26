@@ -7,16 +7,7 @@ import javafx.beans.property.SimpleLongProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Orientation
 import javafx.geometry.Pos
-import tornadofx.View
-import tornadofx.action
-import tornadofx.bind
-import tornadofx.button
-import tornadofx.enableWhen
-import tornadofx.hbox
-import tornadofx.label
-import tornadofx.slider
-import tornadofx.textfield
-import tornadofx.vbox
+import tornadofx.*
 
 @Suppress("ConvertLambdaToReference")
 class ControlBar : View("Control Bar") {
@@ -77,26 +68,29 @@ class ControlBar : View("Control Bar") {
             }
         }
 
-        vbox(4, Pos.CENTER) {
-            hbox(16, Pos.CENTER) {
-                label("Speed")
+        hbox(16, Pos.CENTER) {
+            label("Speed")
 
-                textfield(internalSpeedProp) {
-                    prefWidth = 50.0
-                    isDisable = true
-                }
+            textfield(internalSpeedProp) {
+                prefWidth = 50.0
+                isDisable = true
             }
+        }
 
-            slider(range = 1..10, orientation = Orientation.HORIZONTAL) {
-                isShowTickMarks = true
-                isSnapToTicks = true
-                majorTickUnit = 1.0
-                minorTickCount = 0
-                bind(internalSpeedProp)
-                setOnMouseReleased {
-                    tickRateProp.set(delays[internalSpeedProp.get() - 1].toLong())
-                }
+        slider(range = 1..10, orientation = Orientation.HORIZONTAL) {
+            isShowTickMarks = true
+            isSnapToTicks = true
+            majorTickUnit = 1.0
+            minorTickCount = 0
+            bind(internalSpeedProp)
+            setOnMouseReleased {
+                tickRateProp.set(delays[internalSpeedProp.get() - 1].toLong())
             }
+        }
+
+        button("Skip to end") {
+            enableWhen(running.and(containerSet))
+            action { mainView.skipToEnd() }
         }
     }
 }

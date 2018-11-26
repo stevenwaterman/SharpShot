@@ -12,8 +12,10 @@ class OutputPane : View() {
         isWrapText = true
     }
 
-    fun setOutput(ints: List<BigInteger?>) {
-        root.text = ints.asSequence().map { it ?: "" }
-                .joinToString(System.lineSeparator(), "Outputs:${System.lineSeparator()}")
+    fun setOutput(ticks: Int, ints: List<BigInteger?>) {
+        root.text = listOf("Ticks: $ticks", "Outputs:")
+                .asSequence()
+                .plus(ints.map { it?.toString() ?: "None" })
+                .joinToString(System.lineSeparator())
     }
 }

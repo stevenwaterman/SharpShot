@@ -11,8 +11,6 @@ import javafx.animation.Transition
 import javafx.animation.TranslateTransition
 import javafx.beans.InvalidationListener
 import javafx.beans.value.ObservableLongValue
-import javafx.collections.FXCollections
-import javafx.collections.ObservableList
 import javafx.scene.Node
 import javafx.scene.input.ClipboardContent
 import javafx.scene.input.Dragboard
@@ -23,9 +21,7 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.shape.StrokeType
 import javafx.util.Duration
-import tornadofx.Fragment
-import tornadofx.onChange
-import tornadofx.pane
+import tornadofx.*
 import java.math.BigInteger
 import java.util.*
 import kotlin.collections.component1
@@ -37,7 +33,6 @@ class ContainerView(val container: Container,
                     val tickRateProp: ObservableLongValue,
                     private val getUiSelectedNode: () -> INode?) : Fragment() {
     val running = container.running
-    val outputs: ObservableList<BigInteger> = FXCollections.observableArrayList()
 
     private var timer = Timer()
     private var tickRateChanged = false
@@ -73,7 +68,10 @@ class ContainerView(val container: Container,
             quickRender()
         }
 
-        container.nodes.addListener(InvalidationListener { quickRender() })
+        container.nodes.addListener(InvalidationListener {
+            quickRender()
+        })
+        container.bullets.addListener(InvalidationListener { animatedRender() })
     }
 
     private fun updateSize(pane: Pane) {
@@ -175,7 +173,7 @@ class ContainerView(val container: Container,
                     }
                 }
                 else {
-                    outputs.addAll(tick())
+                    container.tick()
                 }
 
                 if(!running.get()){
@@ -219,40 +217,32 @@ class ContainerView(val container: Container,
 
         quickRender()
 
-        val bullets = mutableListOf<Node>()
-        val transitions = mutableListOf<Transition>()
+        val containerBullets = container.bullets
+        if(containerBullets.isEmpty()){
+            return
+        }
+
         val tickRate = tickRateProp.get().toDouble()
 
-        for ((coordinate, bullet) in container.bullets) {
-            val graphic = bullet.toGraphic()
-            bullets.add(graphic)
-
+        val transitions = container.bullets.map { (coordinate, bullet) ->
             TranslateTransition(Duration.millis(tickRate)).run {
                 val currentPos = Coordinate(coordinate.x, coordinate.y)
                 val prevPos = currentPos.plus(bullet.direction.inverse)
-                graphic.relocate((prevPos.x * GRID_SIZE).toDouble(), (prevPos.y * GRID_SIZE).toDouble())
 
-                node = graphic
+                node = bullet.toGraphic()
+                node.relocate((prevPos.x * GRID_SIZE).toDouble(), (prevPos.y * GRID_SIZE).toDouble())
+
                 toX = (bullet.direction.deltaX * GRID_SIZE).toDouble()
                 toY = (bullet.direction.deltaY * GRID_SIZE).toDouble()
                 interpolator = Interpolator.LINEAR
                 isAutoReverse = false
-                transitions.add(this)
+                return@map this
             }
         }
 
         ui {
-            root.children.addAll(bullets)
+            root.children += transitions.map { it.node }
             transitions.forEach(Transition::play)
-        }
-    }
-
-    fun tick(): List<BigInteger?> {
-        val outputs = container.tick()
-        animatedRender()
-
-        return outputs.map { (_, bullet) ->
-            bullet.value
         }
     }
 
@@ -340,7 +330,17 @@ class ContainerView(val container: Container,
     }
 
     fun start(inputs: List<BigInteger?>) {
-        outputs.clear()
         container.start(inputs)
+    }
+
+    fun skipToEnd() {
+        timer.cancel()
+        runAsync {
+            withoutRendering {
+                while (running.get()) {
+                    container.tick()
+                }
+            }
+        }
     }
 }

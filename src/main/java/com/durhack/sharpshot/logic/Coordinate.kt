@@ -32,6 +32,7 @@ class Coordinate(val x: Int, val y: Int) {
     }
 
     operator fun plus(oth: Coordinate) = Coordinate(x + oth.x, y + oth.y)
+    override fun toString() = "Coordinate(x=$x, y=$y)"
 
     companion object {
         fun fromJson(json: JsonObject): Coordinate {

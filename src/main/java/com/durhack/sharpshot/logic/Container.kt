@@ -5,6 +5,8 @@ import com.durhack.sharpshot.nodes.input.AbstractInputNode
 import com.durhack.sharpshot.nodes.other.HaltNode
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleIntegerProperty
+import javafx.collections.FXCollections
+import javafx.collections.ObservableList
 import tornadofx.*
 import java.math.BigInteger
 
@@ -13,6 +15,9 @@ class Container(width: Int, height: Int) {
 
     val widthProp = SimpleIntegerProperty(width)
     val heightProp = SimpleIntegerProperty(height)
+
+    val outputs: ObservableList<BigInteger?> = FXCollections.observableArrayList<BigInteger?>()
+    val ticks = SimpleIntegerProperty(0)
 
     var width: Int
         get() = widthProp.get()
@@ -30,9 +35,11 @@ class Container(width: Int, height: Int) {
     val bullets = mutableMapOf<Coordinate, Bullet>().observable()
 
     private var halt = false
-    private val outputs = mutableMapOf<Coordinate, Bullet>()
 
     fun start(input: List<BigInteger?>) {
+        ticks.set(0)
+        outputs.clear()
+
         bullets.putAll(nodes.keys.flatMap { coordinate ->
             val node = nodes[coordinate] as? AbstractInputNode ?: return@flatMap listOf<Pair<Coordinate, Bullet>>()
             node.input(input).map { (_, value) ->
@@ -49,8 +56,8 @@ class Container(width: Int, height: Int) {
      * stored bullets -> process and output
      * all bullets -> check
      */
-    fun tick(): Map<Coordinate, Bullet> {
-        outputs.clear()
+    fun tick(){
+        ticks.set(ticks.get() + 1)
 
         val movements = moveBullets()
         val swapsCollided = collideSwaps(movements)
@@ -69,8 +76,6 @@ class Container(width: Int, height: Int) {
         if (halt || newBullets.isEmpty()) {
             reset()
         }
-
-        return outputs.toMap()
     }
 
     private fun collideFinal(movements: Map<Movement, Bullet>): Map<Movement, Bullet> {
@@ -135,7 +140,8 @@ class Container(width: Int, height: Int) {
     private fun processBullets(captured: List<Triple<Coordinate, INode, Bullet>>): Map<Movement, Bullet> =
             captured.flatMap { (coord, node, bullet) ->
                 // special case
-                // if any halt nodes get hit freeBulletLocations.add(by a bullet, halt at end of
+                // if any halt nodes get hit by a bullet, halt at end of tick
+                // !halt condition added to improve speed
                 if (!halt && node is HaltNode) {
                     halt = true
                 }
@@ -153,7 +159,7 @@ class Container(width: Int, height: Int) {
                         return@mapNotNull movement to newBullet
                     }
                     else {
-                        outputs[newCoordinate] = newBullet
+                        outputs.add(newBullet.value)
                         return@mapNotNull null
                     }
                 }
@@ -166,7 +172,7 @@ class Container(width: Int, height: Int) {
                     return@mapNotNull Movement(coord, newCoord) to bullet
                 }
                 else {
-                    outputs[newCoord] = bullet
+                    outputs.add(bullet.value)
                     return@mapNotNull null
                 }
             }.toMap()
@@ -176,6 +182,7 @@ class Container(width: Int, height: Int) {
     fun reset() {
         bullets.clear()
         nodes.forEach { _, node -> node.reset() }
+        halt = false
         running.set(false)
     }
 
