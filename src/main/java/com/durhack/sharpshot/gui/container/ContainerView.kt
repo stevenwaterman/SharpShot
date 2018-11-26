@@ -23,7 +23,9 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.shape.StrokeType
 import javafx.util.Duration
-import tornadofx.*
+import tornadofx.Fragment
+import tornadofx.onChange
+import tornadofx.pane
 import java.math.BigInteger
 import java.util.*
 import kotlin.collections.component1
@@ -39,8 +41,6 @@ class ContainerView(val container: Container,
 
     private var timer = Timer()
     private var tickRateChanged = false
-
-    private var dragStart: Coordinate? = null
     private var renderingEnabled = true
 
     override val root = pane {
@@ -289,10 +289,6 @@ class ContainerView(val container: Container,
             }
         }
 
-        rectangle.setOnDragDetected {
-            dragStart = coordinate
-        }
-
         rectangle.setOnDragDetected { event ->
             val dragBoard: Dragboard = rectangle.startDragAndDrop(TransferMode.MOVE)
             val content = ClipboardContent()
@@ -310,7 +306,7 @@ class ContainerView(val container: Container,
 
         rectangle.setOnDragDropped { event ->
             val db = event.dragboard
-            if (db.hasString()) {
+            if (!running.get() && db.hasString()) {
                 val sourceCoordsList = db.string.split("-").map(String::toInt)
                 val sourceCoords = Coordinate(sourceCoordsList[0], sourceCoordsList[1])
                 withoutRendering {
@@ -320,7 +316,7 @@ class ContainerView(val container: Container,
                     if (startNode != null) {
                         container.nodes[coordinate] = startNode
                         if (endNode != null) {
-                            container.nodes[dragStart] = endNode
+                            container.nodes[sourceCoords] = endNode
                         }
                         else {
                             container.nodes.remove(sourceCoords)
