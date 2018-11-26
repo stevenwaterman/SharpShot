@@ -1,6 +1,7 @@
 package com.durhack.sharpshot.gui
 
 import com.durhack.sharpshot.gui.container.ContainerView
+import com.durhack.sharpshot.gui.util.ui
 import com.durhack.sharpshot.logic.Container
 import com.durhack.sharpshot.serialisation.ContainerSaveLoad
 import com.durhack.sharpshot.util.asBigInteger
@@ -9,9 +10,16 @@ import javafx.beans.property.SimpleBooleanProperty
 import javafx.geometry.Pos
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
-import tornadofx.*
+import tornadofx.View
+import tornadofx.action
+import tornadofx.alert
+import tornadofx.borderpane
+import tornadofx.button
+import tornadofx.enableWhen
+import tornadofx.hbox
+import tornadofx.paddingAll
+import tornadofx.vbox
 import java.math.BigInteger
-
 
 class MainView : View() {
     private val controlBar: ControlBar by inject()
@@ -20,6 +28,8 @@ class MainView : View() {
     private val containerScrollPane = CenteredScrollPane()
 
     private val running = SimpleBooleanProperty(false)
+
+    private lateinit var updateOutput: InvalidationListener
 
     init {
         controlBar.running.bind(running)
@@ -40,8 +50,10 @@ class MainView : View() {
         val outputs = newView.container.outputs
         val ticks = newView.container.ticks
 
-        val updateOutput = InvalidationListener {
-            outputPane.setOutput(ticks.get(), outputs)
+        updateOutput = InvalidationListener {
+            if (!newView.skipping) {
+                outputPane.setOutput(ticks.get(), outputs)
+            }
         }
 
         outputs.addListener(updateOutput)
@@ -158,10 +170,10 @@ class MainView : View() {
         val numberRegex = Regex("[-0-9]+")
         val integers = inputString.split(",").asSequence().map(String::trim).map { word ->
             when {
-                word.isBlank() -> null
+                word.isBlank()            -> null
                 word.matches(numberRegex) -> BigInteger(word)
-                word.length == 1 -> word.first().asBigInteger()
-                else -> {
+                word.length == 1          -> word.first().asBigInteger()
+                else                      -> {
                     unknownWords.add(word)
                     null
                 }
@@ -172,18 +184,22 @@ class MainView : View() {
             return integers
         }
 
-        alert(type = Alert.AlertType.ERROR,
-              buttons = *arrayOf(ButtonType.OK),
-              header = "Cannot parse inputs",
-              content = listOf(
-                      "Inputs must be integers or single ASCII characters",
-                      "The following inputs could not be understood",
-                      unknownWords.joinToString()
-                              ).joinToString(System.lineSeparator()))
+        alert(
+                type = Alert.AlertType.ERROR,
+                buttons = *arrayOf(ButtonType.OK),
+                header = "Cannot parse inputs",
+                content = listOf(
+                        "Inputs must be integers or single ASCII characters",
+                        "The following inputs could not be understood",
+                        unknownWords.joinToString()).joinToString(System.lineSeparator()))
         return null
     }
 
     fun skipToEnd() {
-        containerView?.skipToEnd()
+        val containerView = containerView ?: return
+        containerView.skipToEnd()
+        ui {
+            outputPane.setOutput(containerView.container.ticks.get(), containerView.container.outputs)
+        }
     }
 }

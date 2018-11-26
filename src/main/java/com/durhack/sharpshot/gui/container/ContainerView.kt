@@ -1,6 +1,7 @@
 package com.durhack.sharpshot.gui.container
 
 import com.durhack.sharpshot.GRID_SIZE
+import com.durhack.sharpshot.MAX_TICKS
 import com.durhack.sharpshot.gui.util.ui
 import com.durhack.sharpshot.logic.Container
 import com.durhack.sharpshot.logic.Coordinate
@@ -21,7 +22,9 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.shape.StrokeType
 import javafx.util.Duration
-import tornadofx.*
+import tornadofx.Fragment
+import tornadofx.onChange
+import tornadofx.pane
 import java.math.BigInteger
 import java.util.*
 import kotlin.collections.component1
@@ -33,6 +36,9 @@ class ContainerView(val container: Container,
                     val tickRateProp: ObservableLongValue,
                     private val getUiSelectedNode: () -> INode?) : Fragment() {
     val running = container.running
+
+    var skipping = false
+        private set
 
     private var timer = Timer()
     private var tickRateChanged = false
@@ -71,7 +77,10 @@ class ContainerView(val container: Container,
         container.nodes.addListener(InvalidationListener {
             quickRender()
         })
-        container.bullets.addListener(InvalidationListener { animatedRender() })
+
+        container.bullets.addListener(InvalidationListener {
+            animatedRender()
+        })
     }
 
     private fun updateSize(pane: Pane) {
@@ -176,7 +185,7 @@ class ContainerView(val container: Container,
                     container.tick()
                 }
 
-                if(!running.get()){
+                if (!running.get()) {
                     timer.cancel()
                 }
             }
@@ -218,7 +227,7 @@ class ContainerView(val container: Container,
         quickRender()
 
         val containerBullets = container.bullets
-        if(containerBullets.isEmpty()){
+        if (containerBullets.isEmpty()) {
             return
         }
 
@@ -247,6 +256,7 @@ class ContainerView(val container: Container,
     }
 
     fun reset() {
+        skipping = false
         timer.cancel()
         container.reset()
         quickRender()
@@ -330,14 +340,16 @@ class ContainerView(val container: Container,
     }
 
     fun start(inputs: List<BigInteger?>) {
+        skipping = false
         container.start(inputs)
     }
 
     fun skipToEnd() {
-        timer.cancel()
-        runAsync {
+        if (!skipping) {
+            timer.cancel()
+            skipping = true
             withoutRendering {
-                while (running.get()) {
+                while (running.get() && container.ticks.get() <= MAX_TICKS) {
                     container.tick()
                 }
             }
