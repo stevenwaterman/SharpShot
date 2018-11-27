@@ -1,15 +1,35 @@
 package com.durhack.sharpshot.gui
 
+import com.durhack.sharpshot.gui.util.ui
+import com.durhack.sharpshot.logic.Container
+import javafx.beans.InvalidationListener
 import javafx.beans.property.SimpleStringProperty
 import javafx.scene.layout.Priority
-import tornadofx.View
-import tornadofx.bind
-import tornadofx.textarea
-import tornadofx.vgrow
-import java.math.BigInteger
+import tornadofx.*
 
 class OutputPane : View() {
     private val stringProp = SimpleStringProperty("Outputs:")
+    var container: Container? = null
+        set(container) {
+            field = container
+            container ?: return
+
+            container.ticks.addListener(invalidationListener)
+            container.outputs.addListener(invalidationListener)
+            updateOutput()
+        }
+
+    /**
+     * Cheap synchronisation because we don't care about missed updates
+     */
+    private var updating: Boolean = false
+
+    private val invalidationListener = InvalidationListener {
+        if (!updating) {
+            updating = true
+            updateOutput()
+        }
+    }
 
     override val root = textarea {
         bind(stringProp)
@@ -19,9 +39,24 @@ class OutputPane : View() {
         isWrapText = true
     }
 
-    fun setOutput(ticks: Int, ints: List<BigInteger?>) {
-        stringProp.set(listOf("Ticks: $ticks", "Outputs:").asSequence().plus(ints.map {
-            it?.toString() ?: "None"
-        }).joinToString(System.lineSeparator()))
+    fun updateOutput() {
+        val container = container
+
+        ui {
+            if (container == null) {
+                stringProp.set("")
+            }
+            else {
+                val string = emptySequence<String>()
+                        .plus("Ticks: ${container.ticks.get()}")
+                        .plus("Outputs:")
+                        .plus(container.outputs.map { it?.toString() ?: "None" })
+                        .joinToString(System.lineSeparator())
+
+                stringProp.set(string)
+            }
+
+            updating = false
+        }
     }
 }

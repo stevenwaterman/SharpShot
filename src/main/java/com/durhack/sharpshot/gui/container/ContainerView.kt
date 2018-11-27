@@ -22,9 +22,7 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.shape.StrokeType
 import javafx.util.Duration
-import tornadofx.Fragment
-import tornadofx.onChange
-import tornadofx.pane
+import tornadofx.*
 import java.math.BigInteger
 import java.util.*
 import kotlin.collections.component1
@@ -48,7 +46,7 @@ class ContainerView(val container: Container,
         updateSize(this)
     }
 
-    fun withoutRendering(function: () -> Unit) {
+    private fun withoutRendering(function: () -> Unit) {
         renderingEnabled = false
         function()
         renderingEnabled = true
