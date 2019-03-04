@@ -16,7 +16,7 @@ class PutIntNode : AbstractOutputNode() {
     override fun print(bullet: Bullet) : String = bullet.value.toString()
 
     override fun graphic() = Diamond(rotation,
-            Color.web("#FFFF00"),
+            Color.web("#00FFFF"),
             "INT")
 
     override fun reset() {}

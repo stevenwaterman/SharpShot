@@ -11,7 +11,7 @@ class SplitterNode : INode() {
      */
     override fun run(bullet: Bullet) = bullet.direction.inverse.others.map { it to bullet.value }.toMap()
 
-    override fun graphic() = Diamond(rotation, Color.web("#FF6699"), "Y")
+    override fun graphic() = Diamond(rotation, Color.web("#FF9966"), "Y")
     override fun reset() {}
     override val type = "splitter"
     override val tooltip = "A bullet in one side produces 3 bullets in the others"

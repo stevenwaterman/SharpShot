@@ -6,7 +6,7 @@ import java.math.BigInteger
 
 class IfPositiveNode : AbstractConditionalNode() {
     override fun branch(value: BigInteger?) = value?.signum() == 1
-    override fun graphic() = Triangle(rotation, Color.web("#FF9900"), ">0")
+    override fun graphic() = Triangle(rotation, Color.web("#FF6699"), ">0")
     override val type = "branch if positive"
     override val tooltip = "Redirects all positive bullets (>0). Other bullets pass through unaffected"
 }

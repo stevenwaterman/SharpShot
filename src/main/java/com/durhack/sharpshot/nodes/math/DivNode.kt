@@ -13,6 +13,6 @@ class DivNode : AbstractMathNode() {
     }
 
     override val type = "divide"
-    override fun graphic() = Triangle(rotation, Color.web("#CC66FF"), "÷")
+    override fun graphic() = Triangle(rotation, Color.web("#add8e6"), "÷")
     override val tooltip = "Adds two bullets"
 }
