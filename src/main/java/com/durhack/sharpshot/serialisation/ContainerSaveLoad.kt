@@ -24,12 +24,12 @@ object ContainerSaveLoad {
      */
     fun save(container: Container): Boolean {
         val file =
-                chooseFile("save Location",
-                           listOf(FileChooser.ExtensionFilter("Png Images", "*.png")).toTypedArray(),
+                chooseFile("Save",
+                           listOf(FileChooser.ExtensionFilter("Sharpshot File", "*.ss")).toTypedArray(),
                            FileChooserMode.Save
                           ) {
                     initialDirectory = File(System.getProperty("user.dir"))
-                    initialFileName = "export"
+                    initialFileName = "program.ss"
                 }.firstOrNull() ?: return false
         return save(container, file)
     }
@@ -55,8 +55,8 @@ object ContainerSaveLoad {
     }
 
     fun load(): Container? {
-        val file = chooseFile("Select Image",
-                              listOf(FileChooser.ExtensionFilter("Png Images", "*.png")).toTypedArray(),
+        val file = chooseFile("Load",
+                              listOf(FileChooser.ExtensionFilter("Sharpshot File", "*.ss")).toTypedArray(),
                               FileChooserMode.Single
                              ) {
             initialDirectory = File(System.getProperty("user.dir"))
