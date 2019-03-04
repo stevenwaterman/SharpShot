@@ -1,13 +1,18 @@
 package com.durhack.sharpshot.logic
 
+import com.durhack.sharpshot.gui.OutputPane
 import com.durhack.sharpshot.nodes.INode
 import com.durhack.sharpshot.nodes.input.AbstractInputNode
 import com.durhack.sharpshot.nodes.other.HaltNode
+import com.durhack.sharpshot.nodes.output.AbstractOutputNode
 import javafx.beans.property.SimpleBooleanProperty
 import tornadofx.*
 import java.math.BigInteger
 
 class Container(val width: Int, val height: Int) {
+    private var outputPane: OutputPane? = null
+    fun setOutputPane(pane : OutputPane) { outputPane = pane }
+
     val running = SimpleBooleanProperty()
 
     val nodes = mutableMapOf<Coordinate, INode>().observable()
@@ -118,6 +123,9 @@ class Container(val width: Int, val height: Int) {
                 if (!halt && node is HaltNode) {
                     halt = true
                 }
+
+                if(node is AbstractOutputNode)
+                    outputPane?.print(node.print(bullet))
 
                 val rotatedDirection = bullet.direction.plusQuarters(-node.rotation.quarters)
                 val rotatedBullet = Bullet(rotatedDirection, bullet.value)

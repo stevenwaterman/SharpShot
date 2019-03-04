@@ -9,10 +9,6 @@ class OutputPane : View() {
         isWrapText = true
     }
 
-    fun print(c: Char) {
-        root.appendText(c.toString())
-    }
-
     fun print(s: String) {
         root.appendText(s + "\n")
     }

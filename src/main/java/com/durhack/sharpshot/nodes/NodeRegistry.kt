@@ -11,6 +11,7 @@ import com.durhack.sharpshot.nodes.other.ConstantNode
 import com.durhack.sharpshot.nodes.other.HaltNode
 import com.durhack.sharpshot.nodes.other.RandomNode
 import com.durhack.sharpshot.nodes.other.StackNode
+import com.durhack.sharpshot.nodes.output.PutIntNode
 import com.durhack.sharpshot.nodes.routing.*
 import com.google.gson.JsonObject
 import java.math.BigInteger
@@ -20,6 +21,7 @@ object NodeRegistry {
             InNode(1),
             ListNode(),
             StackNode(),
+            PutIntNode(),
             ConstantNode(BigInteger.ONE),
             RandomNode(),
             HaltNode(),

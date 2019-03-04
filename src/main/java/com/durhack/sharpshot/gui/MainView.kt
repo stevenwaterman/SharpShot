@@ -29,6 +29,7 @@ class MainView : View("sharpshot") {
 
     private fun setContainer(container: Container) {
         val newView = ContainerView(container, controlBar.tickRateProp) { nodeCreator.createNode() }
+        container.setOutputPane(outputPane)
         running.bind(newView.running)
         containerView = newView
     }
