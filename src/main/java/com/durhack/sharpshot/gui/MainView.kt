@@ -82,7 +82,7 @@ class MainView : View("sharpshot") {
     private fun parseInputs(): List<BigInteger?>? {
         val inputString = controlBar.input.get()
         val unknownWords = mutableListOf<String>()
-        val numberRegex = Regex("[-0-9]+")
+        val numberRegex = Regex("[+|-]?\\d+")
         val integers = inputString.split(",")
                 .map { word -> word.trim() }
                 .map { word ->
@@ -104,8 +104,8 @@ class MainView : View("sharpshot") {
         alert(type = Alert.AlertType.ERROR,
               buttons = *arrayOf(ButtonType.OK),
               header = "Cannot parse inputs",
-              content = "Inputs must be integers or single ASCII characters\n" +
-                      "The following inputs could not be understood\n" +
+              content = "Inputs must be integers\n" + // (ASCII not yet implemented)
+                       "The following inputs could not be understood\n" +
                       unknownWords.joinToString()
              )
         return null
