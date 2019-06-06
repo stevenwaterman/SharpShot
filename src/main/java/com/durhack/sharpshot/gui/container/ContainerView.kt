@@ -180,7 +180,8 @@ class ContainerView(val container: Container,
                     }
                 }
                 else {
-                    container.tick()
+                    withoutRendering(container::tick)
+                    animatedRender()
                 }
 
                 if (!running.get()) {
@@ -224,14 +225,14 @@ class ContainerView(val container: Container,
 
         quickRender()
 
+        val tickRate = tickRateProp.get().toDouble()
+
         val containerBullets = container.bullets
         if (containerBullets.isEmpty()) {
             return
         }
 
-        val tickRate = tickRateProp.get().toDouble()
-
-        val transitions = container.bullets.map { (coordinate, bullet) ->
+        val transitions = containerBullets.map { (coordinate, bullet) ->
             TranslateTransition(Duration.millis(tickRate)).run {
                 val currentPos = Coordinate(coordinate.x, coordinate.y)
                 val prevPos = currentPos.plus(bullet.direction.inverse)

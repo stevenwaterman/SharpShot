@@ -57,24 +57,26 @@ class Container(width: Int, height: Int) {
      * all bullets -> check
      */
     fun tick(){
-        ticks.set(ticks.get() + 1)
+        synchronized(this) {
+            ticks.set(ticks.get() + 1)
 
-        val movements = moveBullets()
-        val swapsCollided = collideSwaps(movements)
-        val finalCollided = collideFinal(swapsCollided)
+            val movements = moveBullets()
+            val swapsCollided = collideSwaps(movements)
+            val finalCollided = collideFinal(swapsCollided)
 
-        //Move bullets
-        val newBullets = finalCollided.map { (movement, bullet) ->
-            movement.to to bullet
-        }.toMap()
+            //Move bullets
+            val newBullets = finalCollided.map { (movement, bullet) ->
+                movement.to to bullet
+            }.toMap()
 
-        //replace old bullets with new bullets
-        bullets.clear()
-        bullets.putAll(newBullets)
+            //replace old bullets with new bullets
+            bullets.clear()
+            bullets.putAll(newBullets)
 
-        //Halt if we hit a halt node
-        if (halt || newBullets.isEmpty()) {
-            reset()
+            //Halt if we hit a halt node
+            if (halt || newBullets.isEmpty()) {
+                reset()
+            }
         }
     }
 
