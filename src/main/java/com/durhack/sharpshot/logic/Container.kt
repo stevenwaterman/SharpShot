@@ -4,11 +4,32 @@ import com.durhack.sharpshot.nodes.INode
 import com.durhack.sharpshot.nodes.input.AbstractInputNode
 import com.durhack.sharpshot.nodes.other.HaltNode
 import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.SimpleIntegerProperty
+import javafx.collections.FXCollections
+import javafx.collections.ObservableList
 import tornadofx.*
 import java.math.BigInteger
 
-class Container(val width: Int, val height: Int) {
+class Container(width: Int, height: Int) {
     val running = SimpleBooleanProperty()
+
+    val widthProp = SimpleIntegerProperty(width)
+    val heightProp = SimpleIntegerProperty(height)
+
+    val outputs: ObservableList<BigInteger?> = FXCollections.observableArrayList<BigInteger?>()
+    val ticks = SimpleIntegerProperty(0)
+
+    var width: Int
+        get() = widthProp.get()
+        set(value) {
+            widthProp.set(value)
+        }
+
+    var height: Int
+        get() = heightProp.get()
+        set(value) {
+            heightProp.set(value)
+        }
 
     val nodes = mutableMapOf<Coordinate, INode>().observable()
     val bullets = mutableMapOf<Coordinate, Bullet>().observable()
@@ -16,6 +37,9 @@ class Container(val width: Int, val height: Int) {
     private var halt = false
 
     fun start(input: List<BigInteger?>) {
+        ticks.set(0)
+        outputs.clear()
+
         bullets.putAll(nodes.keys.flatMap { coordinate ->
             val node = nodes[coordinate] as? AbstractInputNode ?: return@flatMap listOf<Pair<Coordinate, Bullet>>()
             node.input(input).map { (_, value) ->
@@ -32,23 +56,27 @@ class Container(val width: Int, val height: Int) {
      * stored bullets -> process and output
      * all bullets -> check
      */
-    fun tick() {
-        val movements = moveBullets()
-        val swapsCollided = collideSwaps(movements)
-        val finalCollided = collideFinal(swapsCollided)
+    fun tick(){
+        synchronized(this) {
+            ticks.set(ticks.get() + 1)
 
-        //Move bullets
-        val newBullets = finalCollided.map { (movement, bullet) ->
-            movement.to to bullet
-        }.toMap()
+            val movements = moveBullets()
+            val swapsCollided = collideSwaps(movements)
+            val finalCollided = collideFinal(swapsCollided)
 
-        //replace old bullets with new bullets
-        bullets.clear()
-        bullets.putAll(newBullets)
+            //Move bullets
+            val newBullets = finalCollided.map { (movement, bullet) ->
+                movement.to to bullet
+            }.toMap()
 
-        //Halt if we hit a halt node
-        if (halt || newBullets.isEmpty()) {
-            reset()
+            //replace old bullets with new bullets
+            bullets.clear()
+            bullets.putAll(newBullets)
+
+            //Halt if we hit a halt node
+            if (halt || newBullets.isEmpty()) {
+                reset()
+            }
         }
     }
 
@@ -106,7 +134,7 @@ class Container(val width: Int, val height: Int) {
             return@mapNotNull Triple(coord, node, bullet)
         }
 
-        val freeBullets: Map<Coordinate, Bullet> = (bullets - captured.map { it.first })
+        val freeBullets: Map<Coordinate, Bullet> = (bullets - captured.map(Triple<Coordinate, INode, Bullet>::first))
 
         return moveBullets(freeBullets) + processBullets(captured)
     }
@@ -114,7 +142,8 @@ class Container(val width: Int, val height: Int) {
     private fun processBullets(captured: List<Triple<Coordinate, INode, Bullet>>): Map<Movement, Bullet> =
             captured.flatMap { (coord, node, bullet) ->
                 // special case
-                // if any halt nodes get hit freeBulletLocations.add(by a bullet, halt at end of
+                // if any halt nodes get hit by a bullet, halt at end of tick
+                // !halt condition added to improve speed
                 if (!halt && node is HaltNode) {
                     halt = true
                 }
@@ -122,26 +151,40 @@ class Container(val width: Int, val height: Int) {
                 val rotatedDirection = bullet.direction.plusQuarters(-node.rotation.quarters)
                 val rotatedBullet = Bullet(rotatedDirection, bullet.value)
 
-                return@flatMap node.run(rotatedBullet).map { (direction, value) ->
+                return@flatMap node.run(rotatedBullet).mapNotNull { (direction, value) ->
                     val unrotatedDirection = direction.plusQuarters(node.rotation.quarters)
                     val newBullet = Bullet(unrotatedDirection, value)
 
-                    val newCoordinate = coord.plus(newBullet.direction).wrap(width, height)
-                    val movement = Movement(coord, newCoordinate)
-
-                    return@map movement to newBullet
+                    val newCoordinate = coord.plus(newBullet.direction)
+                    if (isInside(newCoordinate)) {
+                        val movement = Movement(coord, newCoordinate)
+                        return@mapNotNull movement to newBullet
+                    }
+                    else {
+                        outputs.add(newBullet.value)
+                        return@mapNotNull null
+                    }
                 }
             }.toMap()
 
     private fun moveBullets(bullets: Map<Coordinate, Bullet>): Map<Movement, Bullet> =
-            bullets.map { (coord, bullet) ->
-                val newCoord = coord.plus(bullet.direction).wrap(width, height)
-                return@map Movement(coord, newCoord) to bullet
+            bullets.mapNotNull { (coord, bullet) ->
+                val newCoord = coord.plus(bullet.direction)
+                if (isInside(newCoord)) {
+                    return@mapNotNull Movement(coord, newCoord) to bullet
+                }
+                else {
+                    outputs.add(bullet.value)
+                    return@mapNotNull null
+                }
             }.toMap()
+
+    private fun isInside(coord: Coordinate) = coord.x in 0..(width - 1) && coord.y in 0..(height - 1)
 
     fun reset() {
         bullets.clear()
         nodes.forEach { _, node -> node.reset() }
+        halt = false
         running.set(false)
     }
 

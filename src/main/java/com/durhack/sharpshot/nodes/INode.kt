@@ -19,7 +19,7 @@ abstract class INode {
     abstract fun reset()
 
     abstract val tooltip: String
-    open val factory: () -> INode? = { this::class.java.newInstance() }
+    open val factory: () -> INode? = this::class.java::newInstance
 
     abstract val type: String
 

@@ -1,36 +1,37 @@
 package com.durhack.sharpshot.gui.util
 
 import javafx.geometry.Pos
-import javafx.scene.Node
-import tornadofx.*
+import tornadofx.Form
+import tornadofx.View
+import tornadofx.action
+import tornadofx.button
+import tornadofx.hbox
+import tornadofx.stackpane
 
 abstract class Dialog<T>(title: String) : View(title) {
     protected abstract fun getValue(): T?
     private var submitted = false
 
-    abstract fun getDialogContents(): Node
-    private val dialogContentsHolder = stackpane { }
+    abstract fun getDialogContents(): Form
 
-    override val root = vbox(16) {
-        add(dialogContentsHolder)
-        hbox(16, Pos.CENTER) {
-            button("Ok") {
-                action {
-                    submitted = true
-                    close()
+    override val root = stackpane { }
+
+    fun getInput(): T? {
+        root.children.clear()
+
+        getDialogContents().run {
+            hbox(16, Pos.CENTER) {
+                button("Ok") {
+                    action {
+                        submitted = true
+                        close()
+                    }
                 }
-            }
-            button("Cancel") {
-                action {
-                    close()
+                button("Cancel") {
+                    action(this@Dialog::close)
                 }
             }
         }
-    }
-
-    fun getInput(): T? {
-        dialogContentsHolder.children.clear()
-        dialogContentsHolder.children.add(getDialogContents())
 
         submitted = false
         openModal(block = true, resizable = false)

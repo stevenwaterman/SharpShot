@@ -1,6 +1,7 @@
 package com.durhack.sharpshot
 
-//This has to be >0. Can go as low as 10 without issue
-const val DEFAULT_TICK_RATE = 150L
+import com.durhack.sharpshot.logic.Coordinate
 
-const val GRID_SIZE = 32
+const val GRID_SIZE = 48
+const val MAX_TICKS = 1000 * 1000
+val DEFAULT_CONTAINER_SIZE = Coordinate(15, 10)

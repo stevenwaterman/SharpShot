@@ -49,4 +49,6 @@ class Bullet(val direction: Direction, val value: BigInteger?) {
         result = 31 * result + (value?.hashCode() ?: 0)
         return result
     }
+
+    override fun toString() = "Bullet(direction=$direction, value=$value)"
 }

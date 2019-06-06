@@ -7,8 +7,8 @@ import javafx.scene.paint.Color
 import java.math.BigInteger
 import java.util.*
 
-fun getNumberInput(header: String, content: String = "", start: BigInteger = BigInteger.ZERO): Optional<String> {
-    val dialog = TextInputDialog(start.toString())
+fun getNumberInput(header: String, content: String = "", start: BigInteger? = null): Optional<String> {
+    val dialog = TextInputDialog(start?.toString() ?: "")
     dialog.title = "New Node"
     dialog.headerText = header
     dialog.contentText = content
@@ -16,7 +16,7 @@ fun getNumberInput(header: String, content: String = "", start: BigInteger = Big
     return dialog.showAndWait()
 }
 
-fun border(color: Color) =
+fun createBorder(color: Color) =
         Border(BorderStroke(color, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT))
 
 fun ui(function: () -> Unit) = Platform.runLater(function)

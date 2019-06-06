@@ -55,7 +55,7 @@ class Png {
                 val childNodes = pngmeta.standardTextNode.childNodes
 
                 return (0..childNodes.length)
-                        .map { index -> childNodes.item(index) }
+                        .map(childNodes::item)
                         .first { node ->
                             node.attributes.getNamedItem("keyword").nodeValue == "comment"
                         }

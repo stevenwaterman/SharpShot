@@ -36,7 +36,7 @@ object NodeRegistry {
                                    )
 
     private val factories = nodes.map { it.type to it.jsonFactory }.toMap()
-    val nodeCreatorElements = nodes.map { NodeCreatorElement(it) }
+    val nodeCreatorElements = nodes.map(::NodeCreatorElement)
 
     fun fromJson(json: JsonObject): INode {
         val type = json.get("type").asString
