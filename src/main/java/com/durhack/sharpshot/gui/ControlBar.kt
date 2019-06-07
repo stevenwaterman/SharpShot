@@ -1,6 +1,6 @@
 package com.durhack.sharpshot.gui
 
-import com.durhack.sharpshot.gui.container.ContainerSizeDialog
+import com.durhack.sharpshot.gui.util.ContainerSizeDialog
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleLongProperty
@@ -28,19 +28,19 @@ class ControlBar : View("Control Bar") {
                 enableWhen(running.not())
                 action {
                     val (width, height) = containerSizeDialog.getInput() ?: return@action
-                    mainView.newContainer(width, height)
+
                 }
             }
 
             button("Clear All") {
                 enableWhen(running.not().and(containerSet))
-                action { mainView.clear() }
+                action { mainView.controller.clear() }
             }
         }
 
         textfield {
             enableWhen(running.not().and(containerSet))
-            promptText = "comma separated input"
+            promptText = "comma separated initialise"
             bind(input)
         }
 
@@ -52,7 +52,7 @@ class ControlBar : View("Control Bar") {
 
             button("Reset") {
                 enableWhen(running.and(containerSet))
-                action { mainView.reset() }
+                action { mainView.controller.reset() }
             }
         }
 
@@ -88,9 +88,9 @@ class ControlBar : View("Control Bar") {
             }
         }
 
-        button("Skip to end") {
+        button("Skip 1000 ticks") {
             enableWhen(running.and(containerSet))
-            action { mainView.skipToEnd() }
+            action { mainView.controller.simulate(1000) }
         }
     }
 }

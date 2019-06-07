@@ -1,7 +1,11 @@
 package com.durhack.sharpshot.gui
 
+import com.durhack.sharpshot.core.state.Container
+import com.durhack.sharpshot.core.state.Direction
+import com.durhack.sharpshot.gui.container.ContainerController
 import com.durhack.sharpshot.gui.container.ContainerView
-import com.durhack.sharpshot.logic.Container
+import com.durhack.sharpshot.gui.container.decreaseSize
+import com.durhack.sharpshot.gui.container.increaseSize
 import com.durhack.sharpshot.serialisation.ContainerSaveLoad
 import com.durhack.sharpshot.util.asBigInteger
 import javafx.beans.InvalidationListener
@@ -26,27 +30,9 @@ class MainView : View("Sharpshot") {
         controlBar.running.bind(running)
     }
 
-    private var containerView: ContainerView? = null
-        set(value) {
-            field = value
-
-            containerScrollPane.setContent(value?.root)
-            controlBar.containerSet.set(value != null)
-        }
-
-    private fun setContainer(container: Container) {
-        val newView = ContainerView(container, controlBar.tickRateProp, nodeCreator::createNode)
-        running.bind(newView.running)
-
-        outputPane.container = container
-
-        containerView = newView
-    }
-
-    fun newContainer(width: Int, height: Int) {
-        val container = Container(width, height)
-        setContainer(container)
-    }
+    private val container: Container = Container(15, 15)
+    private val containerView: ContainerView = ContainerView(container)
+    val controller = ContainerController(containerView)
 
     override val root = borderpane {
         center = borderpane {
@@ -57,12 +43,12 @@ class MainView : View("Sharpshot") {
                 enableWhen(controlBar.containerSet.and(running.not()))
                 button("+") {
                     action {
-                        containerView?.addColumnLeft()
+                        container.increaseSize(Direction.LEFT)
                     }
                 }
                 button("-") {
                     action {
-                        containerView?.removeColumnLeft()
+                        container.decreaseSize(Direction.RIGHT)
                     }
                 }
             }
@@ -71,12 +57,12 @@ class MainView : View("Sharpshot") {
                 enableWhen(controlBar.containerSet.and(running.not()))
                 button("+") {
                     action {
-                        containerView?.addColumnRight()
+                        container.increaseSize(Direction.RIGHT)
                     }
                 }
                 button("-") {
                     action {
-                        containerView?.removeColumnRight()
+                        container.decreaseSize(Direction.LEFT)
                     }
                 }
             }
@@ -85,12 +71,12 @@ class MainView : View("Sharpshot") {
                 enableWhen(controlBar.containerSet.and(running.not()))
                 button("+") {
                     action {
-                        containerView?.addRowTop()
+                        container.increaseSize(Direction.UP)
                     }
                 }
                 button("-") {
                     action {
-                        containerView?.removeRowTop()
+                        container.decreaseSize(Direction.DOWN)
                     }
                 }
             }
@@ -99,12 +85,12 @@ class MainView : View("Sharpshot") {
                 enableWhen(controlBar.containerSet.and(running.not()))
                 button("+") {
                     action {
-                        containerView?.addRowBottom()
+                        container.increaseSize(Direction.DOWN)
                     }
                 }
                 button("-") {
                     action {
-                        containerView?.removeRowBottom()
+                        container.decreaseSize(Direction.UP)
                     }
                 }
             }
@@ -118,31 +104,18 @@ class MainView : View("Sharpshot") {
     }
 
     fun start() {
-        val container = containerView ?: return //Exit if container is null
-
-        val integers = parseInputs()
-        if (integers != null) {
-            container.start(integers)
-            container.animate()
-        }
-    }
-
-    fun reset() {
-        containerView?.reset()
+        val integers = parseInputs() ?: return
+        controller.start(integers)
     }
 
     fun loadContainer() {
-        val container = ContainerSaveLoad.load() ?: return
-        setContainer(container)
+        val loaded = ContainerSaveLoad.load() ?: return
+        controller.clear()
+        container.setTo(loaded)
     }
 
     fun saveContainer() {
-        val container = containerView?.container ?: return
         ContainerSaveLoad.save(container)
-    }
-
-    fun clear() {
-        containerView?.clearAll()
     }
 
     private fun parseInputs(): List<BigInteger?>? {
@@ -174,10 +147,5 @@ class MainView : View("Sharpshot") {
                         "The following inputs could not be understood",
                         unknownWords.joinToString()).joinToString(System.lineSeparator()))
         return null
-    }
-
-    fun skipToEnd() {
-        val containerView = containerView ?: return
-        containerView.skipToEnd()
     }
 }

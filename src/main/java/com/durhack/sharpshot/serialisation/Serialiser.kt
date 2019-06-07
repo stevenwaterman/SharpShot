@@ -1,8 +1,8 @@
 package com.durhack.sharpshot.serialisation
 
-import com.durhack.sharpshot.logic.Container
-import com.durhack.sharpshot.logic.Coordinate
-import com.durhack.sharpshot.nodes.NodeRegistry
+import com.durhack.sharpshot.core.state.Container
+import com.durhack.sharpshot.core.state.Coordinate
+import com.durhack.sharpshot.core.nodes.NodeRegistry
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject

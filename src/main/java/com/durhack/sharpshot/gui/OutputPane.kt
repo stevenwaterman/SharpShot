@@ -1,7 +1,6 @@
 package com.durhack.sharpshot.gui
 
-import com.durhack.sharpshot.gui.util.ui
-import com.durhack.sharpshot.logic.Container
+import com.durhack.sharpshot.core.state.Container
 import javafx.beans.InvalidationListener
 import javafx.beans.property.SimpleStringProperty
 import javafx.scene.layout.Priority
@@ -14,8 +13,8 @@ class OutputPane : View() {
             field = container
             container ?: return
 
-            container.ticks.addListener(invalidationListener)
-            container.outputs.addListener(invalidationListener)
+            //container.ticks.addListener(invalidationListener)
+            //container.outputs.addListener(invalidationListener)
             updateOutput()
         }
 
@@ -41,7 +40,7 @@ class OutputPane : View() {
 
     fun updateOutput() {
         val container = container
-
+        /*
         ui {
             if (container == null) {
                 stringProp.set("")
@@ -58,5 +57,7 @@ class OutputPane : View() {
 
             updating = false
         }
+        */
+        //TODO
     }
 }

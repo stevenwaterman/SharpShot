@@ -1,6 +1,6 @@
 package com.durhack.sharpshot.serialisation
 
-import com.durhack.sharpshot.logic.Container
+import com.durhack.sharpshot.core.state.Container
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Scene
 import javafx.scene.SceneAntialiasing
@@ -19,12 +19,12 @@ object ContainerSaveLoad {
 
     /**
      * If path is null, a file chooser will pop up
-     * If title is null, a text input will pop up
+     * If title is null, a text initialise will pop up
      * If title is blank (empty space only), no title will be added
      */
     fun save(container: Container): Boolean {
         val file =
-                chooseFile("save Location",
+                chooseFile("Save Location",
                            listOf(FileChooser.ExtensionFilter("Png Images", "*.png")).toTypedArray(),
                            FileChooserMode.Save
                           ) {

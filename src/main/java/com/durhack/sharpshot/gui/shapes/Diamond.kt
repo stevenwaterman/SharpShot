@@ -1,7 +1,7 @@
 package com.durhack.sharpshot.gui.shapes
 
-import com.durhack.sharpshot.logic.Direction
-import com.durhack.sharpshot.GRID_SIZE
+import com.durhack.sharpshot.core.state.Direction
+import com.durhack.sharpshot.util.GRID_SIZE
 import javafx.geometry.HPos
 import javafx.scene.control.Label
 import javafx.scene.layout.GridPane

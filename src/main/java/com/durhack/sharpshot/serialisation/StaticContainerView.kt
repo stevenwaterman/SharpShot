@@ -1,7 +1,7 @@
 package com.durhack.sharpshot.serialisation
 
-import com.durhack.sharpshot.GRID_SIZE
-import com.durhack.sharpshot.logic.Container
+import com.durhack.sharpshot.util.GRID_SIZE
+import com.durhack.sharpshot.core.state.Container
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.shape.StrokeType

@@ -1,7 +1,7 @@
 package com.durhack.sharpshot.gui
 
-import com.durhack.sharpshot.nodes.NodeRegistry
-import com.durhack.sharpshot.nodes.INode
+import com.durhack.sharpshot.core.nodes.INode
+import com.durhack.sharpshot.core.nodes.NodeRegistry
 import javafx.scene.control.Label
 import javafx.scene.control.SelectionMode
 import javafx.scene.control.Tooltip
