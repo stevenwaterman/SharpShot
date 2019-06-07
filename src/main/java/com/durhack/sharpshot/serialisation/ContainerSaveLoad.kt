@@ -1,6 +1,8 @@
 package com.durhack.sharpshot.serialisation
 
 import com.durhack.sharpshot.core.state.Container
+import com.durhack.sharpshot.gui.container.ContainerView
+import com.durhack.sharpshot.util.container
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Scene
 import javafx.scene.SceneAntialiasing
@@ -22,7 +24,7 @@ object ContainerSaveLoad {
      * If title is null, a text initialise will pop up
      * If title is blank (empty space only), no title will be added
      */
-    fun save(container: Container): Boolean {
+    fun save(containerView: ContainerView): Boolean {
         val file =
                 chooseFile("Save Location",
                            listOf(FileChooser.ExtensionFilter("Png Images", "*.png")).toTypedArray(),
@@ -31,12 +33,10 @@ object ContainerSaveLoad {
                     initialDirectory = File(System.getProperty("user.dir"))
                     initialFileName = "export"
                 }.firstOrNull() ?: return false
-        return save(container, file)
+        return saveToFile(containerView, file)
     }
 
-    fun save(container: Container,
-             file: File): Boolean {
-        val containerView = StaticContainerView(container)
+    private fun saveToFile(containerView: ContainerView, file: File): Boolean {
         val pane = containerView.root
 
         val width = pane.minWidth
@@ -61,10 +61,10 @@ object ContainerSaveLoad {
                              ) {
             initialDirectory = File(System.getProperty("user.dir"))
         }.firstOrNull() ?: return null
-        return load(file)
+        return loadFromFile(file)
     }
 
-    fun load(file: File): Container {
+    private fun loadFromFile(file: File): Container {
         val json = Png.read(file.absolutePath)
         return Serialiser.loadContainer(json)
     }

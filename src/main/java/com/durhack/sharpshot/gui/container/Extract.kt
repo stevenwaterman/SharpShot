@@ -1,10 +1,10 @@
 package com.durhack.sharpshot.gui.container
 
-import com.durhack.sharpshot.core.nodes.INode
+import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Coordinate
 
-class Extract(allNodes: Map<Coordinate, INode>, low: Coordinate, high: Coordinate) {
-    var nodes: Map<Coordinate, INode> private set
+class Extract(allNodes: Map<Coordinate, AbstractNode>, low: Coordinate, high: Coordinate) {
+    var nodes: Map<Coordinate, AbstractNode> private set
     var width: Int private set
     var height: Int private set
 

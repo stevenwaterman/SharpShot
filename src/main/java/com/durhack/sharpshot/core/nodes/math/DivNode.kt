@@ -1,7 +1,5 @@
 package com.durhack.sharpshot.core.nodes.math
 
-import com.durhack.sharpshot.gui.shapes.Triangle
-import javafx.scene.paint.Color
 import java.math.BigInteger
 
 class DivNode : AbstractMathNode() {
@@ -13,6 +11,5 @@ class DivNode : AbstractMathNode() {
     }
 
     override val type = "divide"
-    override fun graphic() = Triangle(direction, Color.web("#CC66FF"), "÷")
     override val tooltip = "Adds two bullets"
 }

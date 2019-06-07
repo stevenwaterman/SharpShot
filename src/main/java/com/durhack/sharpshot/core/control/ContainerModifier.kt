@@ -1,8 +1,9 @@
-package com.durhack.sharpshot.gui.container
+package com.durhack.sharpshot.core.control
 
 import com.durhack.sharpshot.core.state.Container
 import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.core.state.Direction
+import com.durhack.sharpshot.gui.container.Extract
 
 fun Container.minCoord() = Coordinate(0, 0)
 fun Container.maxCoord() = Coordinate(width - 1, height - 1)

@@ -1,11 +1,13 @@
 package com.durhack.sharpshot.gui.container
 
-import com.durhack.sharpshot.core.state.Container
 import com.durhack.sharpshot.util.KTimer
+import com.durhack.sharpshot.util.container
+import tornadofx.*
 import java.math.BigInteger
 
-class ContainerController(val containerView: ContainerView) {
-    private val container: Container get() = containerView.container
+class ContainerController : Controller() {
+    val view: ContainerView by inject()
+
     private val timer: KTimer = KTimer("Post-Animation Render Timer")
     private val out: MutableList<BigInteger?> = mutableListOf()
     val outputs: List<BigInteger?> get() = out.toList()
@@ -18,15 +20,15 @@ class ContainerController(val containerView: ContainerView) {
     fun quickTick() {
         val report = container.tick()
         ticks++
-        containerView.render()
+        view.render()
         out.addAll(report.outputs)
     }
 
     fun animatedTick(lengthMs: Long) {
         val report = container.tick()
         ticks++
-        containerView.animate(report.collisionReport, lengthMs)
-        timer.schedule(lengthMs, containerView::render)
+        view.animate(report.collisionReport, lengthMs)
+        timer.schedule(lengthMs, view::render)
         out.addAll(report.outputs)
     }
 
@@ -39,7 +41,7 @@ class ContainerController(val containerView: ContainerView) {
             if(report.halted) return@repeat
         }
 
-        containerView.render()
+        view.render()
     }
 
     fun reset() {
@@ -47,7 +49,7 @@ class ContainerController(val containerView: ContainerView) {
         container.clearBullets()
         out.clear()
         ticks = 0
-        containerView.render()
+        view.render()
     }
 
     fun clear() {
@@ -55,6 +57,6 @@ class ContainerController(val containerView: ContainerView) {
         container.clearBullets()
         out.clear()
         ticks = 0
-        containerView.render()
+        view.render()
     }
 }

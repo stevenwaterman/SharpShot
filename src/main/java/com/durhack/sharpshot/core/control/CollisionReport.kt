@@ -1,10 +1,10 @@
 package com.durhack.sharpshot.core.control
 
-import com.durhack.sharpshot.core.state.BulletMovement
-import com.durhack.sharpshot.core.state.Collision
+import com.durhack.sharpshot.core.state.tick.BulletMovement
+import com.durhack.sharpshot.core.state.tick.Collision
 
-class CollisionReport(val swap: Set<Collision>,
-                      val final: Set<Collision>,
+class CollisionReport(val swap: List<Collision>,
+                      val final: List<Collision>,
                       val survived: Set<BulletMovement>) {
     val bulletsToRemove =
             listOf(

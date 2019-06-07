@@ -1,13 +1,11 @@
 package com.durhack.sharpshot.core.nodes.other
 
-import com.durhack.sharpshot.gui.shapes.Triangle
-import com.durhack.sharpshot.core.nodes.INode
+import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Direction
-import javafx.scene.paint.Color
 import java.math.BigInteger
 import java.util.*
 
-class StackNode : INode() {
+class StackNode : AbstractNode() {
     private val stack = Stack<BigInteger?>()
 
     override fun process(relativeDirection: Direction, value: BigInteger?): Map<Direction, BigInteger?> {
@@ -29,6 +27,5 @@ class StackNode : INode() {
 
     override val type = "stack"
 
-    override fun graphic() = Triangle(direction, Color.web("#FFFF00"), "S" + stack.size)
     override val tooltip = "Inputs in the back pop from the stack, inputs to other sides get added to the stack"
 }

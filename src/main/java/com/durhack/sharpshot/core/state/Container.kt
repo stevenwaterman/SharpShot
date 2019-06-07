@@ -2,15 +2,17 @@ package com.durhack.sharpshot.core.state
 
 import com.durhack.sharpshot.core.control.CollisionReport
 import com.durhack.sharpshot.core.control.TickReport
-import com.durhack.sharpshot.core.nodes.INode
+import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.nodes.input.AbstractInputNode
 import com.durhack.sharpshot.core.nodes.other.HaltNode
+import com.durhack.sharpshot.core.state.tick.*
 import com.durhack.sharpshot.util.IdiotProgrammerException
 import com.durhack.sharpshot.util.filterType
+import com.durhack.sharpshot.util.pairDuplicates
 import java.math.BigInteger
 
-class Container(var width: Int, var height: Int) {
-    val nodes = mutableMapOf<Coordinate, INode>()
+class Container(var width: Int, var height: Int){
+    val nodes = mutableMapOf<Coordinate, AbstractNode>()
     val bullets = mutableListOf<Bullet>()
 
     fun clearBullets() {
@@ -22,7 +24,7 @@ class Container(var width: Int, var height: Int) {
     }
 
     fun resetNodes() {
-        nodes.values.forEach(INode::reset)
+        nodes.values.forEach(AbstractNode::reset)
     }
 
     fun launch(input: List<BigInteger?>) {
@@ -95,7 +97,8 @@ class Container(var width: Int, var height: Int) {
 
         val finalCollisions = finalCollisions(movements)
 
-        val finalRemove = finalCollisions.map(Collision::a) + finalCollisions.map(Collision::b)
+        val finalRemove = finalCollisions.map(Collision::a) + finalCollisions.map(
+                Collision::b)
         remaining.removeAll(finalRemove)
 
         return CollisionReport(swapCollisions, finalCollisions, remaining)
@@ -107,29 +110,7 @@ class Container(var width: Int, var height: Int) {
      * I.e. pairs where one is the inverse of the other
      * Return only i for each pair i,j
      */
-    private fun swapCollisions(movements: Set<BulletMovement>): Set<Collision> {
-        val processing = movements.toMutableList()
-        val output = mutableSetOf<Collision>()
-
-        while (processing.isNotEmpty()) {
-            val search = processing.first()
-            val from = search.movement.from
-            val to = search.movement.to
-            processing.removeAt(0)
-
-            val found = processing.firstOrNull { (_, movement) ->
-                movement.from == to && movement.to == from
-            }
-
-            if (found != null) {
-                processing.remove(found)
-                val collision = Collision(search, found)
-                output.add(collision)
-            }
-        }
-
-        return output
-    }
+    private fun swapCollisions(movements: Set<BulletMovement>) = baseCollide(movements, ::SwapCheck)
 
     /**
      * Given a list of movements (s1,t1), (s2,t2), (s3,t3)...
@@ -137,27 +118,15 @@ class Container(var width: Int, var height: Int) {
      * I.e. pairs where both end in the same square
      * Return both i and j for each pair
      */
-    private fun finalCollisions(movements: Set<BulletMovement>): Set<Collision> {
-        val processing = movements.toMutableList()
-        val output = mutableSetOf<Collision>()
+    private fun finalCollisions(movements: Set<BulletMovement>) = baseCollide(movements, ::FinalCheck)
 
-        while (processing.isNotEmpty()) {
-            val search = processing.first()
-            val to = search.movement.to
-            processing.removeAt(0)
-
-            val found = processing.firstOrNull { (_, movement) ->
-                movement.to == to
-            }
-
-            if (found != null) {
-                processing.remove(found)
-                val collision = Collision(search, found)
-                output.add(collision)
-            }
+    private fun baseCollide(movements: Set<BulletMovement>, checker: (BulletMovement) -> Checker): List<Collision>{
+        val checkers = movements.map(checker)
+        val pairs = checkers.pairDuplicates()
+        val collisions = pairs.map { (a, b) ->
+            Collision(a.bulletMovement, b.bulletMovement)
         }
-
-        return output
+        return collisions
     }
 
     /**
@@ -205,5 +174,7 @@ class Container(var width: Int, var height: Int) {
         clearBullets()
         clearNodes()
         nodes.putAll(oth.nodes)
+        width = oth.width
+        height = oth.height
     }
 }

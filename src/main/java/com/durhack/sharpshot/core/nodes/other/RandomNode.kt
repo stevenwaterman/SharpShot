@@ -1,13 +1,11 @@
 package com.durhack.sharpshot.core.nodes.other
 
-import com.durhack.sharpshot.gui.shapes.Triangle
-import com.durhack.sharpshot.core.nodes.INode
+import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Direction
-import javafx.scene.paint.Color
 import java.math.BigInteger
 import java.util.*
 
-class RandomNode : INode() {
+class RandomNode : AbstractNode() {
     private fun rand(max: BigInteger): BigInteger {
         var n = max
         var sign = 1
@@ -36,7 +34,6 @@ class RandomNode : INode() {
 
     override val type = "random"
 
-    override fun graphic() = Triangle(direction, Color.LIMEGREEN, "?")
     override fun reset() {}
     override val tooltip = "Provides a random output from 0 (inclusive) to initialise bullet value (exclusive)"
 }

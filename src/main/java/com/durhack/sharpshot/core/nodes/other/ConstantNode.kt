@@ -1,15 +1,12 @@
 package com.durhack.sharpshot.core.nodes.other
 
-import com.durhack.sharpshot.gui.shapes.Triangle
-import com.durhack.sharpshot.gui.util.getNumberInput
-import com.durhack.sharpshot.core.nodes.INode
+import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Direction
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import javafx.scene.paint.Color
 import java.math.BigInteger
 
-class ConstantNode(var value: BigInteger?) : INode() {
+class ConstantNode(var value: BigInteger?) : AbstractNode() {
     /**
      * If both the bullet and the output are in the same direction, the second element in the map overrides the first
      * so the initialise bullet is destroyed
@@ -17,29 +14,11 @@ class ConstantNode(var value: BigInteger?) : INode() {
     override fun process(relativeDirection: Direction, value: BigInteger?) =
             mutableMapOf(relativeDirection to value, Direction.UP to value)
 
-    override fun graphic() = Triangle(direction,
-                                      Color.LIMEGREEN,
-                                      value?.toString() ?: "")
-
     override fun reset() {}
 
     override val type = "constant"
 
     override val tooltip = "Whenever a bullet passes through, release another bullet with pre-set value"
-    override val factory = {
-        val value = getNumberInput("Enter Input Index",
-                                   "Blank to shoot empty bullet at start\nArguments are 0-indexed")
-        if (value.isPresent) {
-            val string = value.get()
-            when {
-                string.isBlank() -> ConstantNode(null)
-                else -> ConstantNode(BigInteger(string))
-            }
-        }
-        else {
-            null
-        }
-    }
 
     override fun toJson(): JsonElement {
         val json = super.toJson().asJsonObject

@@ -1,10 +1,10 @@
 package com.durhack.sharpshot.core.nodes.math
 
-import com.durhack.sharpshot.core.nodes.INode
+import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Direction
 import java.math.BigInteger
 
-abstract class AbstractMathNode : INode() {
+abstract class AbstractMathNode : AbstractNode() {
     private var storedVal: BigInteger? = null
 
     protected abstract fun operation(val1: BigInteger, val2: BigInteger): BigInteger?

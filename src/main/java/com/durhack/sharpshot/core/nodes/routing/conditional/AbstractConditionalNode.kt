@@ -1,10 +1,10 @@
 package com.durhack.sharpshot.core.nodes.routing.conditional
 
-import com.durhack.sharpshot.core.nodes.INode
+import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Direction
 import java.math.BigInteger
 
-abstract class AbstractConditionalNode : INode() {
+abstract class AbstractConditionalNode : AbstractNode() {
     /**
      * Null bullets never redirect
      */

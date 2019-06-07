@@ -1,61 +1,69 @@
 package com.durhack.sharpshot.gui.container
 
 import com.durhack.sharpshot.core.control.CollisionReport
-import com.durhack.sharpshot.core.state.BulletMovement
-import com.durhack.sharpshot.core.state.Container
 import com.durhack.sharpshot.core.state.Coordinate
+import com.durhack.sharpshot.core.state.tick.BulletMovement
+import com.durhack.sharpshot.gui.graphics.BulletGraphic
+import com.durhack.sharpshot.gui.graphics.EmptyGraphic
+import com.durhack.sharpshot.gui.graphics.GraphicsRegistry
 import com.durhack.sharpshot.gui.util.ui
-import com.durhack.sharpshot.util.GRID_SIZE
+import com.durhack.sharpshot.util.MAX_SCALE
+import com.durhack.sharpshot.util.MIN_SCALE
+import com.durhack.sharpshot.util.container
 import javafx.animation.Interpolator
 import javafx.animation.Transition
 import javafx.animation.TranslateTransition
 import javafx.scene.Node
-import javafx.scene.layout.Pane
-import javafx.scene.paint.Color
-import javafx.scene.shape.Rectangle
-import javafx.scene.shape.StrokeType
 import javafx.util.Duration
 import tornadofx.*
+import kotlin.math.max
+import kotlin.math.min
 
-class ContainerView(val container: Container) : Fragment() {
-    private val nodeLayer = pane {
-        updateSize(this)
-    }
+class ContainerView() : View() {
+    var scale: Double = 48.0
+        set(value){
+            field = max(min(value, MAX_SCALE), MIN_SCALE)
+            render()
+        }
 
-    private val bulletLayer = pane {
-        updateSize(this)
-    }
+    private val nodeLayer = pane {}
+    private val bulletLayer = pane {}
 
     override val root = stackpane {
         add(nodeLayer)
         add(bulletLayer)
     }
 
-    private fun updateSize(pane: Pane) {
-        pane.minWidth = container.width * GRID_SIZE.toDouble()
-        pane.maxWidth = pane.minWidth
-        pane.minHeight = container.height * GRID_SIZE.toDouble()
-        pane.maxHeight = pane.minHeight
+    init {
+        render()
+
+        root.setOnMouseClicked {
+            println("Button: ${it.button}, X: ${it.x}, Y: ${it.y}, X2: ${it.sceneX}, Y2: ${it.sceneY}")
+        }
     }
 
     fun render() {
+        root.minWidth = container.width * scale
+        root.maxWidth = root.minWidth
+        root.minHeight = container.height * scale
+        root.maxHeight = root.minHeight
+
         val toDisplay = mutableListOf<Node>()
 
         container.nodes.forEach { (coordinate, node) ->
-            val graphic = node.graphic().position(coordinate)
+            val graphic = GraphicsRegistry.getGraphic(coordinate, scale, node)
             toDisplay.add(graphic)
         }
 
         (0..(container.width - 1)).forEach { x ->
             (0..(container.height - 1)).forEach { y ->
-                val graphic = emptyGraphic().position(Coordinate(x, y))
+                val graphic = EmptyGraphic(Coordinate(x,y), scale)
                 toDisplay.add(graphic)
             }
         }
 
-        container.bullets.forEach {
-            val graphic = it.toGraphic()
-            graphic.position(it.coordinate)
+        container.bullets.forEach {bullet ->
+            val graphic = BulletGraphic(bullet = bullet, scale = scale)
             toDisplay.add(graphic)
         }
 
@@ -100,27 +108,12 @@ class ContainerView(val container: Container) : Fragment() {
         val bullet = bulletMovement.bullet
         val movement = bulletMovement.movement
         val from = movement.from
-        val node = bullet.toGraphic()
-        node.position(from)
-        val transition = TranslateTransition(duration)
-        transition.toX = bullet.direction.deltaX * GRID_SIZE * distanceMultiplier
-        transition.toY = bullet.direction.deltaY * GRID_SIZE * distanceMultiplier
+        val node = BulletGraphic(bullet, from, scale)
+        val transition = TranslateTransition(duration, node)
+        transition.toX = bullet.direction.deltaX * scale * distanceMultiplier
+        transition.toY = bullet.direction.deltaY * scale * distanceMultiplier
         transition.interpolator = Interpolator.LINEAR
         transition.isAutoReverse = false
         return transition
-    }
-
-    private fun emptyGraphic() =
-            Rectangle(GRID_SIZE.toDouble(), GRID_SIZE.toDouble(), Color.TRANSPARENT).apply {
-                stroke = Color.GRAY
-                strokeWidth = 0.5
-                strokeType = StrokeType.CENTERED
-            }
-
-    private fun Node.position(coordinate: Coordinate): Node {
-        val x = (coordinate.x * GRID_SIZE).toDouble()
-        val y = (coordinate.y * GRID_SIZE).toDouble()
-        relocate(x, y)
-        return this
     }
 }

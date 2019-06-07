@@ -1,15 +1,12 @@
 package com.durhack.sharpshot.core.nodes.input
 
-import com.durhack.sharpshot.core.nodes.INode
+import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Direction
-import com.durhack.sharpshot.gui.shapes.Triangle
-import com.durhack.sharpshot.gui.util.getNumberInput
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import javafx.scene.paint.Color
 import java.math.BigInteger
 
-class InNode(private val index: Int?) : AbstractInputNode() {
+class InNode(val index: Int?) : AbstractInputNode() {
     private var input: BigInteger? = null
 
     override fun initialise(inputs: List<BigInteger?>): Pair<Direction, BigInteger?>? {
@@ -24,31 +21,11 @@ class InNode(private val index: Int?) : AbstractInputNode() {
                     )
     }
 
-    override fun graphic() = Triangle(direction,
-                                      Color.web("#FFFF00"),
-                                      "IN${index ?: ""}")
-
     override fun reset() {}
 
     override val type = "initialise"
 
     override val tooltip = "Provides Input at program start and every time a bullet passes through"
-    override val factory = {
-        val index = getNumberInput("Enter Input Index",
-                                   "Blank to shoot empty bullet at start\nArguments are 0-indexed")
-        if (index.isPresent) {
-            val string = index.get()
-            if (string.isBlank()) {
-                InNode(null)
-            }
-            else {
-                InNode(string.toInt())
-            }
-        }
-        else {
-            null
-        }
-    }
 
     override fun toJson(): JsonElement {
         val json = super.toJson().asJsonObject
@@ -56,7 +33,7 @@ class InNode(private val index: Int?) : AbstractInputNode() {
         return json
     }
 
-    override val jsonFactory: (JsonObject) -> INode = { json ->
+    override val jsonFactory: (JsonObject) -> AbstractNode = { json ->
         val indexString = json["index"].asString
         val index = when (indexString) {
             "null" -> null

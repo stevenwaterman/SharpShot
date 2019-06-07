@@ -1,8 +1,6 @@
 package com.durhack.sharpshot.core.nodes.input
 
-import com.durhack.sharpshot.gui.shapes.Triangle
 import com.durhack.sharpshot.core.state.Direction
-import javafx.scene.paint.Color
 import java.math.BigInteger
 
 class ListNode : AbstractInputNode() {
@@ -31,6 +29,5 @@ class ListNode : AbstractInputNode() {
 
     override val type = "list"
 
-    override fun graphic() = Triangle(direction, Color.web("#FFFF00"), "LST")
     override val tooltip = "Every time a bullet comes in, outputs the next value in the list of inputs"
 }
