@@ -4,7 +4,7 @@ import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Direction
 import java.math.BigInteger
 
-class SplitterNode : AbstractNode() {
+class SplitterNode(direction: Direction) : AbstractNode(direction) {
     /**
      * Shoot out 3 bullets in other directions
      */
@@ -13,5 +13,4 @@ class SplitterNode : AbstractNode() {
 
     override fun reset() {}
     override val type = "splitter"
-    override val tooltip = "A bullet in one side produces 3 bullets in the others"
 }

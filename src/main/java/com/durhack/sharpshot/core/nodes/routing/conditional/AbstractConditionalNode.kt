@@ -4,7 +4,7 @@ import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Direction
 import java.math.BigInteger
 
-abstract class AbstractConditionalNode : AbstractNode() {
+abstract class AbstractConditionalNode(direction: Direction) : AbstractNode(direction) {
     /**
      * Null bullets never redirect
      */

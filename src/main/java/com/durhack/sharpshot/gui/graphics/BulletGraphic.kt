@@ -6,6 +6,6 @@ import com.durhack.sharpshot.gui.shapes.Square
 import javafx.scene.paint.Color
 
 class BulletGraphic(val bullet: Bullet, coordinate: Coordinate = bullet.coordinate, scale: Double) :
-        Graphic(coordinate, scale, {
+        Graphic(coordinate, scale, 0.5, 0.5, {
             Square(scale * 0.5, bullet.direction, Color.DARKGRAY, bullet.value?.toString() ?: "")
         })

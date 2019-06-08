@@ -1,11 +1,8 @@
 package com.durhack.sharpshot.gui.container
 
 import com.durhack.sharpshot.core.control.CollisionReport
-import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.core.state.tick.BulletMovement
 import com.durhack.sharpshot.gui.graphics.BulletGraphic
-import com.durhack.sharpshot.gui.graphics.EmptyGraphic
-import com.durhack.sharpshot.gui.graphics.GraphicsRegistry
 import com.durhack.sharpshot.gui.util.ui
 import com.durhack.sharpshot.util.MAX_SCALE
 import com.durhack.sharpshot.util.MIN_SCALE
@@ -26,13 +23,16 @@ class ContainerView() : View() {
             render()
         }
 
-    private val nodeLayer = pane {}
+    private val nodeLayer: ContainerStaticView by inject()
     private val bulletLayer = pane {}
 
     override val root = stackpane {
         add(nodeLayer)
         add(bulletLayer)
     }
+
+    val width get() = scale * container.width
+    val height get() = scale * container.height
 
     init {
         render()
@@ -48,28 +48,17 @@ class ContainerView() : View() {
         root.minHeight = container.height * scale
         root.maxHeight = root.minHeight
 
-        val toDisplay = mutableListOf<Node>()
+        nodeLayer.render(scale)
 
-        container.nodes.forEach { (coordinate, node) ->
-            val graphic = GraphicsRegistry.getGraphic(coordinate, scale, node)
-            toDisplay.add(graphic)
-        }
-
-        (0..(container.width - 1)).forEach { x ->
-            (0..(container.height - 1)).forEach { y ->
-                val graphic = EmptyGraphic(Coordinate(x,y), scale)
-                toDisplay.add(graphic)
-            }
-        }
-
+        val bullets = mutableListOf<Node>()
         container.bullets.forEach {bullet ->
             val graphic = BulletGraphic(bullet = bullet, scale = scale)
-            toDisplay.add(graphic)
+            bullets.add(graphic)
         }
 
         ui {
-            nodeLayer.children.clear()
-            nodeLayer.children += toDisplay
+            bulletLayer.clear()
+            bulletLayer.children += bullets
         }
     }
 

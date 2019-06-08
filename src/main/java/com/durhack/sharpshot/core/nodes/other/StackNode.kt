@@ -5,7 +5,7 @@ import com.durhack.sharpshot.core.state.Direction
 import java.math.BigInteger
 import java.util.*
 
-class StackNode : AbstractNode() {
+class StackNode(direction: Direction) : AbstractNode(direction) {
     private val stack = Stack<BigInteger?>()
 
     override fun process(relativeDirection: Direction, value: BigInteger?): Map<Direction, BigInteger?> {
@@ -26,6 +26,4 @@ class StackNode : AbstractNode() {
     }
 
     override val type = "stack"
-
-    override val tooltip = "Inputs in the back pop from the stack, inputs to other sides get added to the stack"
 }

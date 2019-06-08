@@ -5,7 +5,7 @@ import com.durhack.sharpshot.core.state.Direction
 import java.math.BigInteger
 import java.util.*
 
-class RandomNode : AbstractNode() {
+class RandomNode(direction: Direction) : AbstractNode(direction) {
     private fun rand(max: BigInteger): BigInteger {
         var n = max
         var sign = 1
@@ -35,5 +35,4 @@ class RandomNode : AbstractNode() {
     override val type = "random"
 
     override fun reset() {}
-    override val tooltip = "Provides a random output from 0 (inclusive) to initialise bullet value (exclusive)"
 }

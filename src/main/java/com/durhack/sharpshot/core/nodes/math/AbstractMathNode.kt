@@ -4,7 +4,7 @@ import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Direction
 import java.math.BigInteger
 
-abstract class AbstractMathNode : AbstractNode() {
+abstract class AbstractMathNode(direction: Direction) : AbstractNode(direction) {
     private var storedVal: BigInteger? = null
 
     protected abstract fun operation(val1: BigInteger, val2: BigInteger): BigInteger?

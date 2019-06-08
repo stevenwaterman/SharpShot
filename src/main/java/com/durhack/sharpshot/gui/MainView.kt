@@ -1,11 +1,14 @@
 package com.durhack.sharpshot.gui
 
-import com.durhack.sharpshot.core.nodes.input.InNode
+import com.durhack.sharpshot.core.nodes.routing.BranchNode
+import com.durhack.sharpshot.core.state.Bullet
 import com.durhack.sharpshot.core.state.Coordinate
-import com.durhack.sharpshot.gui.container.ContainerController
+import com.durhack.sharpshot.core.state.Direction
 import com.durhack.sharpshot.gui.container.CenteredScrollPane
+import com.durhack.sharpshot.gui.container.ContainerController
 import com.durhack.sharpshot.util.container
 import tornadofx.*
+import java.math.BigInteger
 
 class MainView(): View(){
     private val containerController: ContainerController by inject()
@@ -17,8 +20,13 @@ class MainView(): View(){
             add(containerScrollPane)
 
             //TODO remove
-            val inNode = InNode(5)
-            container.nodes[Coordinate(1, 1)] = inNode
+            container.nodes[Coordinate(1, 1)] = BranchNode(Direction.UP)
+            container.nodes[Coordinate(2, 1)] = BranchNode(Direction.RIGHT)
+            container.nodes[Coordinate(3, 1)] = BranchNode(Direction.DOWN)
+            container.nodes[Coordinate(4, 1)] = BranchNode(Direction.LEFT)
+            container.nodes[Coordinate(10, 5)] = BranchNode(Direction.UP)
+            val bullet = Bullet(Coordinate(2,2), Direction.DOWN, BigInteger.TEN)
+            container.bullets.add(bullet)
             containerView.render()
         }
     }

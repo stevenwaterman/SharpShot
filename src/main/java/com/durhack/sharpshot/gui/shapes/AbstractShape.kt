@@ -5,15 +5,17 @@ import javafx.geometry.HPos
 import javafx.scene.CacheHint
 import javafx.scene.control.Label
 import javafx.scene.layout.GridPane
+import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Polygon
 import javafx.scene.text.Font
+import tornadofx.*
 
 abstract class AbstractShape(points: List<Pair<Number, Number>>,
                              scale: Double,
                              rotation: Direction,
                              color: Color,
-                             labelText: String?) : GridPane() {
+                             labelText: String?) : StackPane() {
     init {
         val normalisedPoints = points
                 .flatMap { (a, b) -> listOf(a, b) }
@@ -22,12 +24,12 @@ abstract class AbstractShape(points: List<Pair<Number, Number>>,
         val polygon = Polygon(*normalisedPoints.toDoubleArray())
         polygon.rotate = rotation.degrees
         polygon.fill = color
-        add(polygon, 0, 0)
+        add(polygon)
 
         if (labelText != null) {
             val label = Label(labelText)
             label.font = Font(scale * 0.5)
-            add(label, 0, 0)
+            add(label)
             GridPane.setHalignment(label, HPos.CENTER)
         }
 

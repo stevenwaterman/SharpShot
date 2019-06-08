@@ -1,9 +1,9 @@
 package com.durhack.sharpshot.core.nodes.routing.conditional
 
+import com.durhack.sharpshot.core.state.Direction
 import java.math.BigInteger
 
-class IfPositiveNode : AbstractConditionalNode() {
+class IfPositiveNode(direction: Direction) : AbstractConditionalNode(direction) {
     override fun branch(value: BigInteger?) = value?.signum() == 1
     override val type = "branch if positive"
-    override val tooltip = "Redirects all positive bullets (>0). Other bullets pass through unaffected"
 }

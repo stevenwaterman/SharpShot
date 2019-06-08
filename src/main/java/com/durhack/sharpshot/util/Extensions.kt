@@ -1,6 +1,8 @@
 package com.durhack.sharpshot.util
 
 import java.math.BigInteger
+import kotlin.math.max
+import kotlin.math.min
 
 fun Char.asBigInteger() = BigInteger(toInt().toString())
 fun BigInteger.asChar() = toInt().toChar()
@@ -20,3 +22,5 @@ fun <T> Iterable<T>.pairDuplicates(): List<Pair<T, T>> {
 
     return pairs
 }
+
+fun Double.clamp(min: Number, max: Number) = min(max.toDouble(), max(min.toDouble(), this))

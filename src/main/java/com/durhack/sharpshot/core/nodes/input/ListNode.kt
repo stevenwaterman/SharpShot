@@ -3,7 +3,7 @@ package com.durhack.sharpshot.core.nodes.input
 import com.durhack.sharpshot.core.state.Direction
 import java.math.BigInteger
 
-class ListNode : AbstractInputNode() {
+class ListNode(direction: Direction) : AbstractInputNode(direction) {
     private val inputs: MutableList<BigInteger?> = mutableListOf()
     private var nextIndex = 0
 
@@ -28,6 +28,4 @@ class ListNode : AbstractInputNode() {
     }
 
     override val type = "list"
-
-    override val tooltip = "Every time a bullet comes in, outputs the next value in the list of inputs"
 }
