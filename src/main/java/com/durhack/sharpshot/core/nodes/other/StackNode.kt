@@ -7,6 +7,7 @@ import java.util.*
 
 class StackNode(direction: Direction) : AbstractNode(direction) {
     private val stack = Stack<BigInteger?>()
+    val stackSize: Int get() = stack.size
 
     override fun process(relativeDirection: Direction, value: BigInteger?): Map<Direction, BigInteger?> {
         val bullets = HashMap<Direction, BigInteger?>()

@@ -2,9 +2,11 @@ package com.durhack.sharpshot.registry.entries
 
 import com.durhack.sharpshot.core.nodes.other.ConstantNode
 import com.durhack.sharpshot.core.state.Direction
+import com.durhack.sharpshot.gui.shapes.Draw
 import com.durhack.sharpshot.registry.AbstractNodeRegistryEntry
 import com.google.gson.JsonObject
 import javafx.scene.canvas.GraphicsContext
+import javafx.scene.paint.Color
 import java.math.BigInteger
 
 class ConstantNodeEntry() : AbstractNodeRegistryEntry<ConstantNode>(
@@ -31,11 +33,13 @@ class ConstantNodeEntry() : AbstractNodeRegistryEntry<ConstantNode>(
         return json
     }
 
+    private val color = Color.GREEN
     override fun draw(node: ConstantNode,
                       gc: GraphicsContext,
                       x: Double,
                       y: Double,
                       scale: Double) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Draw.triangle(gc, node.direction, x, y, scale, color)
+        Draw.text(gc, node.value?.toString() ?: "", x, y, scale)
     }
 }

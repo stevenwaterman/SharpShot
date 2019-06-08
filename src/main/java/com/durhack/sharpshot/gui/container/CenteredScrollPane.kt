@@ -90,7 +90,7 @@ class CenteredScrollPane(val containerView: ContainerView) : Fragment() {
         scale(factor)
         val newSize = containerSize
         val realFactor = newSize.x / oldSize.x
-        if(realFactor == 0.0) return
+        if(realFactor == 1.0) return
 
         val requiredMouseLocation = containerMouseLocation * realFactor
         val scrollingRequired = requiredMouseLocation - sceneMouseLocation

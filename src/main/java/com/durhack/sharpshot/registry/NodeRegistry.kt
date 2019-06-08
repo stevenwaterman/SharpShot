@@ -6,24 +6,41 @@ import com.google.gson.JsonObject
 import javafx.scene.canvas.GraphicsContext
 
 object NodeRegistry {
+    val inNodeEntry = InNodeEntry()
+    val listNodeEntry = ListNodeEntry()
+    val stackNodeEntry = StackNodeEntry()
+    val constantNodeEntry = ConstantNodeEntry()
+    val randomNodeEntry = RandomNodeEntry()
+    val haltNodeEntry = HaltNodeEntry()
+    val splitterNodeEntry = SplitterNodeEntry()
+    val branchNodeEntry = BranchNodeEntry()
+    val ifPositiveNodeEntry = IfPositiveNodeEntry()
+    val ifZeroNodeEntry = IfZeroNodeEntry()
+    val ifNullNodeEntry = IfNullNodeEntry()
+    val voidNodeEntry = VoidNodeEntry()
+    val addNodeEntry = AddNodeEntry()
+    val divNodeEntry = DivNodeEntry()
+    val multNodeEntry = MultNodeEntry()
+    val subNodeEntry = SubNodeEntry()
+
     private val entries: Map<String, AbstractNodeRegistryEntry<out AbstractNode>> =
             listOf(
-                    InNodeEntry(),
-                    ListNodeEntry(),
-                    StackNodeEntry(),
-                    ConstantNodeEntry(),
-                    RandomNodeEntry(),
-                    HaltNodeEntry(),
-                    SplitterNodeEntry(),
-                    BranchNodeEntry(),
-                    IfPositiveNodeEntry(),
-                    IfZeroNodeEntry(),
-                    IfNullNodeEntry(),
-                    VoidNodeEntry(),
-                    AddNodeEntry(),
-                    DivNodeEntry(),
-                    MultNodeEntry(),
-                    SubNodeEntry()
+                    inNodeEntry,
+                    listNodeEntry,
+                    stackNodeEntry,
+                    constantNodeEntry,
+                    randomNodeEntry,
+                    haltNodeEntry,
+                    splitterNodeEntry,
+                    branchNodeEntry,
+                    ifPositiveNodeEntry,
+                    ifZeroNodeEntry,
+                    ifNullNodeEntry,
+                    voidNodeEntry,
+                    addNodeEntry,
+                    divNodeEntry,
+                    multNodeEntry,
+                    subNodeEntry
                   ).associateBy(AbstractNodeRegistryEntry<out AbstractNode>::type)
 
     private fun getEntry(type: String) =

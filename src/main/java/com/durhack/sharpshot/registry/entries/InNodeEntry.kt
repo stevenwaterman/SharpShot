@@ -2,9 +2,11 @@ package com.durhack.sharpshot.registry.entries
 
 import com.durhack.sharpshot.core.nodes.input.InNode
 import com.durhack.sharpshot.core.state.Direction
+import com.durhack.sharpshot.gui.shapes.Draw
 import com.durhack.sharpshot.registry.AbstractNodeRegistryEntry
 import com.google.gson.JsonObject
 import javafx.scene.canvas.GraphicsContext
+import javafx.scene.paint.Color
 
 class InNodeEntry() : AbstractNodeRegistryEntry<InNode>(
         InNode(1, Direction.UP),
@@ -30,11 +32,13 @@ class InNodeEntry() : AbstractNodeRegistryEntry<InNode>(
         return json
     }
 
+    private val color = Color.YELLOW
     override fun draw(node: InNode,
                       gc: GraphicsContext,
                       x: Double,
                       y: Double,
                       scale: Double) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Draw.triangle(gc, node.direction, x, y, scale, color)
+        Draw.text(gc, node.index?.toString() ?: "", x, y, scale, color)
     }
 }
