@@ -3,9 +3,10 @@ package com.durhack.sharpshot.registry
 import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Direction
 import com.google.gson.JsonObject
+import javafx.scene.canvas.Canvas
 import javafx.scene.canvas.GraphicsContext
 
-abstract class AbstractNodeRegistryEntry<T : AbstractNode>(val example: T, val name: String, val tooltip: String) {
+abstract class RegistryEntry<T : AbstractNode>(val example: T, val name: String, val description: String) {
 
     val type: String = example.type
 
@@ -47,4 +48,17 @@ abstract class AbstractNodeRegistryEntry<T : AbstractNode>(val example: T, val n
                       x: Double,
                       y: Double,
                       scale: Double)
+
+    fun getGraphic(scale: Double) = Canvas().apply {
+        width = scale
+        height = scale
+        draw(example, graphicsContext2D, 0.0, 0.0, scale)
+    }
+
+    override fun toString() = "RegistryEntry(name='$name')"
+
+    fun guiCreate(): T {
+        //TODO
+        return example::class.java.getConstructor(Direction::class.java).newInstance(Direction.UP)
+    }
 }

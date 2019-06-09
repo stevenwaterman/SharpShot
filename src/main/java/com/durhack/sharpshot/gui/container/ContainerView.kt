@@ -10,6 +10,7 @@ import com.durhack.sharpshot.util.container
 import javafx.animation.Interpolator
 import javafx.animation.Transition
 import javafx.animation.TranslateTransition
+import javafx.beans.property.SimpleDoubleProperty
 import javafx.scene.Node
 import javafx.util.Duration
 import tornadofx.*
@@ -17,18 +18,25 @@ import kotlin.math.max
 import kotlin.math.min
 
 class ContainerView() : View() {
-    var scale: Double = 48.0
+    companion object{
+        val scaleProp = SimpleDoubleProperty(48.0)
+    }
+
+    var scale: Double
+        get() = scaleProp.get()
         set(value){
-            field = max(min(value, MAX_SCALE), MIN_SCALE)
-            render()
+            scaleProp.set(max(min(value, MAX_SCALE), MIN_SCALE))
+            clickLayer.hide()
         }
 
     private val nodeLayer: ContainerStaticView by inject()
     private val bulletLayer = pane {}
+    private val clickLayer: ClickLayer by inject()
 
     override val root = stackpane {
         add(nodeLayer)
         add(bulletLayer)
+        add(clickLayer)
     }
 
     val width get() = scale * container.width
@@ -37,9 +45,7 @@ class ContainerView() : View() {
     init {
         render()
 
-        root.setOnMouseClicked {
-            println("Button: ${it.button}, X: ${it.x}, Y: ${it.y}, X2: ${it.sceneX}, Y2: ${it.sceneY}")
-        }
+        scaleProp.onChange { render() }
     }
 
     fun render() {

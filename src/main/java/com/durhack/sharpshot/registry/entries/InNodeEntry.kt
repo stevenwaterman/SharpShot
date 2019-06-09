@@ -3,16 +3,16 @@ package com.durhack.sharpshot.registry.entries
 import com.durhack.sharpshot.core.nodes.input.InNode
 import com.durhack.sharpshot.core.state.Direction
 import com.durhack.sharpshot.gui.shapes.Draw
-import com.durhack.sharpshot.registry.AbstractNodeRegistryEntry
+import com.durhack.sharpshot.registry.RegistryEntry
 import com.google.gson.JsonObject
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.paint.Color
 
-class InNodeEntry() : AbstractNodeRegistryEntry<InNode>(
+class InNodeEntry() : RegistryEntry<InNode>(
         InNode(1, Direction.UP),
-        "In Node",
+        "Input",
         "Provides Input at program start and every time a bullet passes through"
-                                                       ) {
+                                           ) {
     override fun create(json: JsonObject): InNode {
         val indexString = json["index"].asString
         val index = when (indexString) {
@@ -32,13 +32,12 @@ class InNodeEntry() : AbstractNodeRegistryEntry<InNode>(
         return json
     }
 
-    private val color = Color.YELLOW
     override fun draw(node: InNode,
                       gc: GraphicsContext,
                       x: Double,
                       y: Double,
                       scale: Double) {
-        Draw.triangle(gc, node.direction, x, y, scale, color)
-        Draw.text(gc, node.index?.toString() ?: "", x, y, scale, color)
+        Draw.triangle(gc, node.direction, x, y, scale, Color.YELLOW)
+        Draw.text(gc, "IN${node.index?.toString() ?: ""}", x, y, scale)
     }
 }

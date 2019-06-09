@@ -7,7 +7,7 @@ import javafx.scene.canvas.Canvas
 import javafx.scene.paint.Color
 import tornadofx.*
 
-class ContainerStaticView : View() {
+class ContainerStaticView() : View() {
     private val renderer = ContainerStaticRenderer()
 
     override val root = pane {

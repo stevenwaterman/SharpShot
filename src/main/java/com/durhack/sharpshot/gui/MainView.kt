@@ -11,13 +11,12 @@ import tornadofx.*
 import java.math.BigInteger
 
 class MainView(): View(){
-    private val containerController: ContainerController by inject()
+    private val controller: ContainerController by inject()
+    private val scrollPane: CenteredScrollPane by inject()
 
     override val root = borderpane {
         center{
-            val containerView = containerController.view
-            val containerScrollPane = CenteredScrollPane(containerView)
-            add(containerScrollPane)
+            add(scrollPane)
 
             //TODO remove
             container.nodes[Coordinate(1, 1)] = BranchNode(Direction.UP)
@@ -27,7 +26,7 @@ class MainView(): View(){
             container.nodes[Coordinate(10, 5)] = BranchNode(Direction.UP)
             val bullet = Bullet(Coordinate(2,2), Direction.DOWN, BigInteger.TEN)
             container.bullets.add(bullet)
-            containerView.render()
+            controller.view.render()
         }
     }
 }

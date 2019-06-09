@@ -24,3 +24,4 @@ fun <T> Iterable<T>.pairDuplicates(): List<Pair<T, T>> {
 }
 
 fun Double.clamp(min: Number, max: Number) = min(max.toDouble(), max(min.toDouble(), this))
+fun Int.clamp(min: Int, max: Int) = min(max, max(min, this))

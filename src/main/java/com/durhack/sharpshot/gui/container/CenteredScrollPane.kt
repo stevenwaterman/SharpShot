@@ -14,7 +14,8 @@ import tornadofx.*
 import java.lang.Math.pow
 import kotlin.math.abs
 
-class CenteredScrollPane(val containerView: ContainerView) : Fragment() {
+class CenteredScrollPane : View() {
+    val containerView: ContainerView by inject()
     val ZOOM_PER_STEP: Double = 1.05
     val paddingAmount = 0e4
     var dragging = false

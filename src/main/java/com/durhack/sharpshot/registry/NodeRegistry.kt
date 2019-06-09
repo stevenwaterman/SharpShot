@@ -9,10 +9,10 @@ object NodeRegistry {
     val inNodeEntry = InNodeEntry()
     val listNodeEntry = ListNodeEntry()
     val stackNodeEntry = StackNodeEntry()
+    val splitterNodeEntry = SplitterNodeEntry()
     val constantNodeEntry = ConstantNodeEntry()
     val randomNodeEntry = RandomNodeEntry()
     val haltNodeEntry = HaltNodeEntry()
-    val splitterNodeEntry = SplitterNodeEntry()
     val branchNodeEntry = BranchNodeEntry()
     val ifPositiveNodeEntry = IfPositiveNodeEntry()
     val ifZeroNodeEntry = IfZeroNodeEntry()
@@ -23,28 +23,30 @@ object NodeRegistry {
     val multNodeEntry = MultNodeEntry()
     val subNodeEntry = SubNodeEntry()
 
-    private val entries: Map<String, AbstractNodeRegistryEntry<out AbstractNode>> =
-            listOf(
-                    inNodeEntry,
-                    listNodeEntry,
-                    stackNodeEntry,
-                    constantNodeEntry,
-                    randomNodeEntry,
-                    haltNodeEntry,
-                    splitterNodeEntry,
-                    branchNodeEntry,
-                    ifPositiveNodeEntry,
-                    ifZeroNodeEntry,
-                    ifNullNodeEntry,
-                    voidNodeEntry,
-                    addNodeEntry,
-                    divNodeEntry,
-                    multNodeEntry,
-                    subNodeEntry
-                  ).associateBy(AbstractNodeRegistryEntry<out AbstractNode>::type)
+    val entries = listOf(
+            inNodeEntry,
+            listNodeEntry,
+            stackNodeEntry,
+            splitterNodeEntry,
+            branchNodeEntry,
+            ifPositiveNodeEntry,
+            ifZeroNodeEntry,
+            ifNullNodeEntry,
+            addNodeEntry,
+            divNodeEntry,
+            multNodeEntry,
+            subNodeEntry,
+            constantNodeEntry,
+            randomNodeEntry,
+            voidNodeEntry,
+            haltNodeEntry
+                        )
+
+    private val mapping: Map<String, RegistryEntry<out AbstractNode>> =
+            entries.associateBy(RegistryEntry<out AbstractNode>::type)
 
     private fun getEntry(type: String) =
-            entries[type] ?: throw IllegalArgumentException("Unrecognised node type $type")
+            mapping[type] ?: throw IllegalArgumentException("Unrecognised node type $type")
 
     private fun getEntry(node: AbstractNode) = getEntry(node.type)
 
