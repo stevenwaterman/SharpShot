@@ -29,7 +29,7 @@ class ContainerStaticRenderer() : Canvas() {
     }
 
     fun drawNodes(container: Container, scale: Double){
-        container.nodes.forEach { coord, node ->
+        container.nodes.forEach { (coord, node) ->
             val x = coord.x * scale
             val y = coord.y * scale
             NodeRegistry.draw(node, gc, x, y, scale)

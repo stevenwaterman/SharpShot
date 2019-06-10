@@ -2,6 +2,7 @@ package com.durhack.sharpshot.gui.container
 
 import com.durhack.sharpshot.core.control.CollisionReport
 import com.durhack.sharpshot.core.state.tick.BulletMovement
+import com.durhack.sharpshot.gui.container.menus.ClickLayer
 import com.durhack.sharpshot.gui.graphics.BulletGraphic
 import com.durhack.sharpshot.gui.util.ui
 import com.durhack.sharpshot.util.MAX_SCALE
@@ -26,7 +27,7 @@ class ContainerView() : View() {
         get() = scaleProp.get()
         set(value){
             scaleProp.set(max(min(value, MAX_SCALE), MIN_SCALE))
-            clickLayer.hide()
+            clickLayer.hideAll()
         }
 
     private val nodeLayer: ContainerStaticView by inject()

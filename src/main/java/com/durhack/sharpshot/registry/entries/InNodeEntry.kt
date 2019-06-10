@@ -2,6 +2,7 @@ package com.durhack.sharpshot.registry.entries
 
 import com.durhack.sharpshot.core.nodes.input.InNode
 import com.durhack.sharpshot.core.state.Direction
+import com.durhack.sharpshot.gui.container.menus.nodecreator.nodeforms.InNodeForm
 import com.durhack.sharpshot.gui.shapes.Draw
 import com.durhack.sharpshot.registry.RegistryEntry
 import com.google.gson.JsonObject
@@ -38,6 +39,12 @@ class InNodeEntry() : RegistryEntry<InNode>(
                       y: Double,
                       scale: Double) {
         Draw.triangle(gc, node.direction, x, y, scale, Color.YELLOW)
-        Draw.text(gc, "IN${node.index?.toString() ?: ""}", x, y, scale)
+        val text = when(node.index) {
+            null -> "E"
+            else -> "IN${node.index}"
+        }
+        Draw.text(gc, text, x, y, scale)
     }
+
+    override fun getNodeForm(close: () -> Unit, success: (InNode) -> Unit) = InNodeForm(close, success)
 }
