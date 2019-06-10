@@ -9,11 +9,13 @@ import com.durhack.sharpshot.registry.RegistryEntry
 import com.durhack.sharpshot.util.clamp
 import com.durhack.sharpshot.util.container
 import javafx.scene.input.KeyCode
+import javafx.scene.input.KeyEvent
 import javafx.scene.input.MouseButton
+import javafx.scene.input.MouseEvent
 import tornadofx.*
 import java.awt.MouseInfo
 
-class ClickLayer : View() {
+class InputLayer : View() {
     private val containerView: ContainerView by inject()
     private val nodeCreator = NodeCreator { nodeSelected(it) }
     private val nodeFormPane = pane {
@@ -28,26 +30,40 @@ class ClickLayer : View() {
     private var formOpen = false
     private val eitherOpen get() = creatorOpen || formOpen
 
+    init {
+        hideNodeCreator()
+
+        nodeCreator.root.addEventHandler(MouseEvent.MOUSE_EXITED){event ->
+            hideNodeCreator()
+        }
+
+        nodeFormPane.addEventHandler(MouseEvent.MOUSE_EXITED){event ->
+            hideNodeForm()
+        }
+    }
+
     override val root = pane {
-        setOnMousePressed {
-            if (!eitherOpen && it.button == MouseButton.PRIMARY) {
+        addEventFilter(MouseEvent.MOUSE_PRESSED){event ->
+            if (!eitherOpen && event.button == MouseButton.PRIMARY) {
                 val scale = ContainerView.scaleProp.get()
-                val xClicked = (it.x / scale).toInt().clamp(0, container.width - 1)
-                val yClicked = (it.y / scale).toInt().clamp(0, container.height - 1)
+                val xClicked = (event.x / scale).toInt().clamp(0, container.width - 1)
+                val yClicked = (event.y / scale).toInt().clamp(0, container.height - 1)
                 coord = Coordinate(xClicked, yClicked)
 
                 if (container.nodes[coord] == null) {
                     showNodeCreator()
                 }
             }
+            else if(eitherOpen && event.button == MouseButton.SECONDARY){
+                hideAll()
+                event.consume()
+            }
         }
 
-        setOnKeyTyped {
-            if (it.code == KeyCode.DELETE) {
-                val loc = mouseLocation()
-            }
-            if (it.code == KeyCode.R) {
-                val loc = mouseLocation()
+        addEventFilter(KeyEvent.KEY_PRESSED) {event ->
+            if (event.code == KeyCode.ESCAPE) {
+                hideAll()
+                event.consume()
             }
         }
 
@@ -55,10 +71,6 @@ class ClickLayer : View() {
         add(nodeFormPane)
     }
     //TODO stop it going off the screen when zoomed in and have it so the left hand side is centered rather than the whole thing
-
-    init {
-        hideNodeCreator()
-    }
 
     private fun nodeSelected(entry: RegistryEntry<out AbstractNode>?) {
         hideNodeCreator()

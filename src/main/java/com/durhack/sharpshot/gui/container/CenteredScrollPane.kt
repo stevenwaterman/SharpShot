@@ -9,18 +9,19 @@ import javafx.scene.control.ScrollPane
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.input.ScrollEvent
+import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import tornadofx.*
 import java.lang.Math.pow
 import kotlin.math.abs
 
 class CenteredScrollPane : View() {
-    val containerView: ContainerView by inject()
-    val ZOOM_PER_STEP: Double = 1.05
-    val paddingAmount = 0e4
-    var dragging = false
+    private val containerView: ContainerView by inject()
+    private val zoomPerStep: Double = 1.05
+    private val paddingAmount = 0e4
+    private var dragging = false
 
-    val inner = stackpane {
+    private val inner = stackpane {
         add(containerView)
         StackPane.setMargin(containerView.root, Insets(paddingAmount))
         alignment = Pos.CENTER
@@ -33,6 +34,12 @@ class CenteredScrollPane : View() {
 
         add(containerView)
     }
+
+    private val eventFilter = pane {
+        hgrow = Priority.ALWAYS
+        vgrow = Priority.ALWAYS
+    }
+
 
     override val root = scrollpane {
         vbarPolicy = ScrollPane.ScrollBarPolicy.NEVER
@@ -62,8 +69,8 @@ class CenteredScrollPane : View() {
                 if (amount != 0.0){
                     val zoomIn = event.deltaY > 0
                     val scaleFactor = when {
-                        zoomIn -> pow(ZOOM_PER_STEP, amount)
-                        else -> pow(1 / ZOOM_PER_STEP, amount)
+                        zoomIn -> pow(zoomPerStep, amount)
+                        else -> pow(1 / zoomPerStep, amount)
                     }
 
                     zoom(event.x, event.y, scaleFactor)

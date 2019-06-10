@@ -2,7 +2,7 @@ package com.durhack.sharpshot.gui.container
 
 import com.durhack.sharpshot.core.control.CollisionReport
 import com.durhack.sharpshot.core.state.tick.BulletMovement
-import com.durhack.sharpshot.gui.container.menus.ClickLayer
+import com.durhack.sharpshot.gui.container.menus.InputLayer
 import com.durhack.sharpshot.gui.graphics.BulletGraphic
 import com.durhack.sharpshot.gui.util.ui
 import com.durhack.sharpshot.util.MAX_SCALE
@@ -18,7 +18,7 @@ import tornadofx.*
 import kotlin.math.max
 import kotlin.math.min
 
-class ContainerView() : View() {
+class ContainerView : View() {
     companion object{
         val scaleProp = SimpleDoubleProperty(48.0)
     }
@@ -27,17 +27,17 @@ class ContainerView() : View() {
         get() = scaleProp.get()
         set(value){
             scaleProp.set(max(min(value, MAX_SCALE), MIN_SCALE))
-            clickLayer.hideAll()
+            inputLayer.hideAll()
         }
 
     private val nodeLayer: ContainerStaticView by inject()
     private val bulletLayer = pane {}
-    private val clickLayer: ClickLayer by inject()
+    private val inputLayer: InputLayer by inject()
 
     override val root = stackpane {
         add(nodeLayer)
         add(bulletLayer)
-        add(clickLayer)
+        add(inputLayer)
     }
 
     val width get() = scale * container.width

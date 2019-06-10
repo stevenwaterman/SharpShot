@@ -1,5 +1,6 @@
 package com.durhack.sharpshot.gui.util
 
+import javafx.beans.property.ObjectProperty
 import javafx.event.Event
 import javafx.scene.control.SpinnerValueFactory
 import javafx.scene.control.TextFormatter
@@ -10,13 +11,12 @@ import java.math.BigInteger
 import java.util.function.UnaryOperator
 
 class BigIntSpinner : Fragment() {
-    val value: BigInteger? get() = root.valueFactory.value
-
     override val root = spinner<BigInteger>(editable = true) {
         valueFactory = BigIntValueFactory()
         valueFactory.converter = BigIntStringConverter()
         editor.textFormatter = IntTextFormatter()
         editor.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume)
+        editor.promptText = "1"
 
         editor.textProperty().onChange { text ->
             val converter = valueFactory.converter
@@ -24,25 +24,24 @@ class BigIntSpinner : Fragment() {
             valueFactory.value = newValue
         }
     }
+
+    val valueProp: ObjectProperty<BigInteger> = root.valueFactory.valueProperty()
 }
 
 private class BigIntValueFactory : SpinnerValueFactory<BigInteger>() {
     override fun increment(steps: Int) {
         if (value == null) {
-            value = BigInteger.ONE
+            value = BigInteger.ONE + steps.toBigInteger()
         }
         else {
-            value.add(BigInteger.valueOf(steps.toLong()))
+            value += BigInteger.valueOf(steps.toLong())
         }
     }
 
     override fun decrement(steps: Int) {
         val captured = value
-        if (captured == null) {
-            value = BigInteger.ONE
-        }
-        else {
-            val newVal = captured.subtract(BigInteger.valueOf(steps.toLong()))
+        if (captured != null) {
+            val newVal = captured - steps.toBigInteger()
             if(newVal < BigInteger.ONE){
                 value = BigInteger.ONE
             }
@@ -64,7 +63,12 @@ private class IntegerFilter: UnaryOperator<TextFormatter.Change?> {
 
 private class BigIntStringConverter: StringConverter<BigInteger?>(){
     override fun toString(int: BigInteger?) = int?.toString() ?: ""
-    override fun fromString(string: String?) = BigInteger(string)
+    override fun fromString(string: String?) = try{
+        BigInteger(string)
+    }
+    catch (ex: NumberFormatException){
+        null
+    }
 }
 
 private class IntTextFormatter: TextFormatter<BigInteger?>(BigIntStringConverter(), null, IntegerFilter())

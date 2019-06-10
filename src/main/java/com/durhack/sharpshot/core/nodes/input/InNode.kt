@@ -20,5 +20,5 @@ class InNode(val index: Int?, direction: Direction) : AbstractInputNode(directio
 
     override fun reset() {}
 
-    override val type = "initialise"
+    override val type = "input"
 }

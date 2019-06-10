@@ -6,7 +6,7 @@ import javafx.geometry.Bounds
 import javafx.scene.control.ScrollPane
 
 /**
- * Basically, the scroll pane skin keeps adding a listener that we don't want that breaks out zooming.
+ * Basically, the scroll pane skin keeps adding a listener that we don't want because it breaks our zooming.
  * Rather than copy the whole class, we use this black magic
  * Trust me, it's better than the alternative
  */
@@ -17,13 +17,17 @@ class HackScrollPaneSkin(scrollPane: ScrollPane): ScrollPaneSkin(scrollPane){
     init {
         val boundsChangeListenerField = ScrollPaneSkin::class.java.getDeclaredField("boundsChangeListener")
         boundsChangeListenerField.isAccessible = true
-        val bcl = boundsChangeListenerField.get(this)
         @Suppress("UNCHECKED_CAST") //KILL ME
-        this.bcl = bcl as ChangeListener<in Bounds>
+        bcl = boundsChangeListenerField.get(this) as ChangeListener<in Bounds>
     }
 
+    /**
+     * This method adds the listener but we can't just copy the code from the code from the superclass with the line
+     * commented out because it calls a load of private methods in the superclass
+     * Instead we just add it and then remove it again KILL ME
+     */
     override fun handleControlPropertyChanged(p: String?) {
         super.handleControlPropertyChanged(p)
-        skinnable.content.layoutBoundsProperty().removeListener(bcl as ChangeListener<in Bounds>)
+        skinnable.content.layoutBoundsProperty().removeListener(bcl)
     }
 }
