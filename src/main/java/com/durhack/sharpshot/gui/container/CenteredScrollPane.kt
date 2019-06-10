@@ -1,6 +1,6 @@
 package com.durhack.sharpshot.gui.container
 
-import com.durhack.sharpshot.util.MyScrollPaneSkin
+import com.durhack.sharpshot.util.HackScrollPaneSkin
 import com.durhack.sharpshot.util.clamp
 import javafx.geometry.Insets
 import javafx.geometry.Point2D
@@ -41,7 +41,7 @@ class CenteredScrollPane : View() {
         isFitToHeight = true
         isFitToWidth = true
 
-        skin = MyScrollPaneSkin(this)
+        skin = HackScrollPaneSkin(this)
 
         setOnMousePressed {
             if (it.button == MouseButton.SECONDARY) {

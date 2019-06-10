@@ -8,8 +8,10 @@ import com.durhack.sharpshot.gui.container.menus.nodecreator.nodeforms.AbstractN
 import com.durhack.sharpshot.registry.RegistryEntry
 import com.durhack.sharpshot.util.clamp
 import com.durhack.sharpshot.util.container
+import javafx.scene.input.KeyCode
 import javafx.scene.input.MouseButton
 import tornadofx.*
+import java.awt.MouseInfo
 
 class ClickLayer : View() {
     private val containerView: ContainerView by inject()
@@ -34,9 +36,18 @@ class ClickLayer : View() {
                 val yClicked = (it.y / scale).toInt().clamp(0, container.height - 1)
                 coord = Coordinate(xClicked, yClicked)
 
-                if(container.nodes[coord] == null){
+                if (container.nodes[coord] == null) {
                     showNodeCreator()
                 }
+            }
+        }
+
+        setOnKeyTyped {
+            if (it.code == KeyCode.DELETE) {
+                val loc = mouseLocation()
+            }
+            if (it.code == KeyCode.R) {
+                val loc = mouseLocation()
             }
         }
 
@@ -95,12 +106,12 @@ class ClickLayer : View() {
         nodeCreator.root.isVisible = false
     }
 
-    private fun showForm(form: AbstractNodeForm<*>){
+    private fun showForm(form: AbstractNodeForm<*>) {
         formOpen = true
         nodeFormPane.add(form)
     }
 
-    private fun hideNodeForm(){
+    private fun hideNodeForm() {
         formOpen = false
         nodeFormPane.clear()
     }
@@ -108,5 +119,13 @@ class ClickLayer : View() {
     fun hideAll() {
         hideNodeCreator()
         hideNodeForm()
+    }
+
+    private fun mouseLocation(): Coordinate?{
+        val point = MouseInfo.getPointerInfo().location
+        val x = point.x
+        val y = point.y
+
+        return null
     }
 }
