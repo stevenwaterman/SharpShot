@@ -8,11 +8,9 @@ import javafx.scene.control.ScrollPane
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.input.ScrollEvent
-import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import tornadofx.*
 import java.lang.Math.pow
-import kotlin.math.abs
 
 class CenteredScrollPane : View() {
     private val containerView: ContainerView by inject()
@@ -34,11 +32,6 @@ class CenteredScrollPane : View() {
         add(containerView)
     }
 
-    private val eventFilter = pane {
-        hgrow = Priority.ALWAYS
-        vgrow = Priority.ALWAYS
-    }
-
 
     override val root = scrollpane {
         vbarPolicy = ScrollPane.ScrollBarPolicy.NEVER
@@ -46,36 +39,13 @@ class CenteredScrollPane : View() {
         isPannable = true
         isFitToHeight = true
         isFitToWidth = true
-
         skin = HackScrollPaneSkin(this)
 
-        setOnMousePressed {
-            if (it.button == MouseButton.SECONDARY) {
-                dragging = true
-            }
-        }
-
-        setOnMouseReleased {
-            if (it.button == MouseButton.SECONDARY) {
-                dragging = false
-            }
-        }
+        setOnMousePressed { if (it.button == MouseButton.SECONDARY) dragging = true }
+        setOnMouseReleased { if (it.button == MouseButton.SECONDARY) dragging = false }
 
         addEventFilter(ScrollEvent.SCROLL) { event: ScrollEvent ->
-            if (!dragging){
-                val amount = abs(event.textDeltaY)
-
-                if (amount != 0.0){
-                    val zoomIn = event.deltaY > 0
-                    val scaleFactor = when {
-                        zoomIn -> pow(zoomPerStep, amount)
-                        else -> pow(1 / zoomPerStep, amount)
-                    }
-
-                    zoom(event.x, event.y, scaleFactor)
-                }
-            }
-
+            if(!dragging) zoom(event.x, event.y, event.textDeltaY)
             event.consume()
         }
 
@@ -85,11 +55,12 @@ class CenteredScrollPane : View() {
     private val containerSize: Point2D get() = Point2D(containerView.width, containerView.height)
     private val rootSize: Point2D get() = Point2D(root.width, root.height)
 
-    private fun zoom(mouseX: Double, mouseY: Double, factor: Double) {
+    private fun zoom(mouseX: Double, mouseY: Double, textDeltaY: Double) {
         val sceneMouseLocation = Point2D(mouseX, mouseY)
         val containerMouseLocation = containerView.root.sceneToLocal(sceneMouseLocation)
 
         val oldSize = containerSize
+        val factor = pow(zoomPerStep, textDeltaY)
         scale(factor)
         val newSize = containerSize
         val realFactor = newSize.x / oldSize.x

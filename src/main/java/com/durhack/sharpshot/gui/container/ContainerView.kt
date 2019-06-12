@@ -2,7 +2,7 @@ package com.durhack.sharpshot.gui.container
 
 import com.durhack.sharpshot.core.control.CollisionReport
 import com.durhack.sharpshot.core.state.tick.BulletMovement
-import com.durhack.sharpshot.gui.container.menus.InputLayer
+import com.durhack.sharpshot.gui.container.menus.ContainerInputLayer
 import com.durhack.sharpshot.gui.graphics.BulletGraphic
 import com.durhack.sharpshot.gui.util.ui
 import com.durhack.sharpshot.util.MAX_SCALE
@@ -31,12 +31,12 @@ class ContainerView : View() {
 
     private val nodeLayer: ContainerStaticView by inject()
     private val bulletLayer = pane {}
-    private val inputLayer: InputLayer by inject()
+    private val containerInputLayer: ContainerInputLayer by inject()
 
     override val root = stackpane {
         add(nodeLayer)
         add(bulletLayer)
-        add(inputLayer)
+        add(containerInputLayer)
     }
 
     val width get() = scale * container.width
@@ -44,7 +44,6 @@ class ContainerView : View() {
 
     init {
         render()
-
         scaleProp.onChange { render() }
     }
 

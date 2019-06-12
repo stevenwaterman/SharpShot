@@ -1,6 +1,7 @@
 package com.durhack.sharpshot.gui.container.menus.createnode
 
 import com.durhack.sharpshot.core.nodes.AbstractNode
+import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.gui.container.menus.createnode.nodeforms.AbstractNodeForm
 import com.durhack.sharpshot.registry.RegistryEntry
@@ -15,11 +16,13 @@ import javafx.scene.layout.*
 import javafx.scene.paint.Color
 import tornadofx.*
 
-class CreateNodeMenu(private val onNodeCreated: (AbstractNode?) -> Unit) : Fragment() {
+class CreateNodeMenu(private val onNodeCreated: (Coordinate, AbstractNode?) -> Unit) : Fragment() {
     val padding = 12.0
     private val borderWidth = 2.0
     private val allBorder = Border(BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths(borderWidth)))
     private val allBackground = Background(BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY))
+
+    private lateinit var coordinate: Coordinate
 
     private val info = NodeInfo()
     private val selector = SelectNodeType({chosen(it)}, {info.show(it)})
@@ -69,19 +72,21 @@ class CreateNodeMenu(private val onNodeCreated: (AbstractNode?) -> Unit) : Fragm
         val form = entry.getNodeForm(
                 close = { formPane.hide() },
                 success = { node ->
-                    onNodeCreated(node)
+                    onNodeCreated(coordinate, node)
                     hideAll()
                 })
 
         if (form == null) {
-            onNodeCreated(entry.createNode())
+            onNodeCreated(coordinate, entry.createNode())
         }
         else {
             showForm(form)
         }
     }
 
-    fun show(click: Point2D) {
+    fun show(coordinate: Coordinate, click: Point2D) {
+        this.coordinate = coordinate
+
         val idealOffset = idealOffset()
         val idealLocation = click + idealOffset
 
