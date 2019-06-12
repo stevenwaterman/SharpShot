@@ -53,7 +53,7 @@ class ContainerView : View() {
         root.minHeight = container.height * scale
         root.maxHeight = root.minHeight
 
-        nodeLayer.render(scale)
+        nodeLayer.render()
 
         val bullets = mutableListOf<Node>()
         container.bullets.forEach {bullet ->

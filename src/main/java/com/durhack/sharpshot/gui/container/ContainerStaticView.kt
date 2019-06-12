@@ -1,6 +1,5 @@
 package com.durhack.sharpshot.gui.container
 
-import com.durhack.sharpshot.core.state.Container
 import com.durhack.sharpshot.registry.NodeRegistry
 import com.durhack.sharpshot.util.container
 import javafx.scene.canvas.Canvas
@@ -14,40 +13,43 @@ class ContainerStaticView() : View() {
         add(renderer)
     }
 
-    fun render(scale: Double){
+    fun render(){
         renderer.clear()
-        renderer.drawNodes(container, scale)
-        renderer.drawGrid(container, scale)
+        renderer.updateWidth()
+        renderer.drawNodes()
+        renderer.drawGrid()
     }
 }
 
 class ContainerStaticRenderer() : Canvas() {
-    val gc = graphicsContext2D
+    private val gc = graphicsContext2D
+
+    fun updateWidth() {
+        width = ContainerView.scaleProp.get() * container.width
+        height = ContainerView.scaleProp.get() * container.height
+    }
 
     fun clear() {
         gc.clearRect(0.0, 0.0, width, height)
     }
 
-    fun drawNodes(container: Container, scale: Double){
+    fun drawNodes(){
         container.nodes.forEach { (coord, node) ->
-            val x = coord.x * scale
-            val y = coord.y * scale
-            NodeRegistry.draw(node, gc, x, y, scale)
+            val x = coord.x * ContainerView.scaleProp.get()
+            val y = coord.y * ContainerView.scaleProp.get()
+            NodeRegistry.draw(node, gc, x, y, ContainerView.scaleProp.get())
         }
     }
 
-    fun drawGrid(container: Container, scale: Double) {
+    fun drawGrid() {
         gc.stroke = Color.GRAY
         gc.lineWidth = 2.0
 
-        width = scale * container.width
-        height = scale * container.height
-
-        (0..container.width).map { it * scale }.forEach {//TODO disable zooming when mouse button is down not just when dragging
+        (0..container.width).map { it * ContainerView.scaleProp.get() }.forEach {//TODO disable zooming when mouse button is down not just when dragging
             gc.strokeLine(it, 0.0, it, height)
         }
 
-        (0..container.height).map { it * scale }.forEach {
+        (0..container.height).map { it * ContainerView.scaleProp.get() }.forEach {
             gc.strokeLine(0.0, it, width, it)
         }
     }

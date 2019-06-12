@@ -1,6 +1,7 @@
 package com.durhack.sharpshot.gui.container.menus.createnode
 
 import com.durhack.sharpshot.core.nodes.AbstractNode
+import com.durhack.sharpshot.gui.util.addClickHandler
 import com.durhack.sharpshot.registry.NodeRegistry
 import com.durhack.sharpshot.registry.RegistryEntry
 import javafx.geometry.Insets
@@ -72,7 +73,7 @@ private class NodeButton<T : AbstractNode>(private val entry: RegistryEntry<T>,
 
         addEventHandler(MouseEvent.MOUSE_ENTERED) { _ -> onHover(entry) }
 
-        addEventHandler(MouseEvent.MOUSE_PRESSED) { event ->
+        addClickHandler { event ->
             if (event.button == MouseButton.PRIMARY) {
                 onClick(entry)
                 event.consume()

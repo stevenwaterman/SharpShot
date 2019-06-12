@@ -24,7 +24,7 @@ class Coordinate(val x: Int, val y: Int) {
 
     operator fun plus(oth: Coordinate): Coordinate {
         val newX = x + oth.x
-        val newY = x + oth.y
+        val newY = y + oth.y
         return Coordinate(newX, newY)
     }
 

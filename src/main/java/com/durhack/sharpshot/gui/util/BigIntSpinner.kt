@@ -10,9 +10,9 @@ import tornadofx.*
 import java.math.BigInteger
 import java.util.function.UnaryOperator
 
-class BigIntSpinner : Fragment() {
+class BigIntSpinner(startValue: BigInteger? = null, onIncrementalChange: (BigInteger?) -> Unit = {}) : Fragment() {
     override val root = spinner<BigInteger>(editable = true) {
-        valueFactory = BigIntValueFactory()
+        valueFactory = BigIntValueFactory(onIncrementalChange)
         valueFactory.converter = BigIntStringConverter()
         editor.textFormatter = IntTextFormatter()
         editor.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume)
@@ -22,12 +22,15 @@ class BigIntSpinner : Fragment() {
             val newValue = converter.fromString(text)
             valueFactory.value = newValue
         }
+
+        valueFactory.value = startValue
     }
 
-    val valueProp: ObjectProperty<BigInteger> = root.valueFactory.valueProperty()
+    private val valueProp: ObjectProperty<BigInteger> = root.valueFactory.valueProperty()
+    var value: BigInteger? by valueProp
 }
 
-private class BigIntValueFactory : SpinnerValueFactory<BigInteger>() {
+private class BigIntValueFactory(private val onIncrementalChange: (BigInteger?) -> Unit) : SpinnerValueFactory<BigInteger>() {
     override fun increment(steps: Int) {
         if (value == null) {
             if(steps != 0){
@@ -37,6 +40,7 @@ private class BigIntValueFactory : SpinnerValueFactory<BigInteger>() {
         else {
             value += BigInteger.valueOf(steps.toLong())
         }
+        onIncrementalChange(value)
     }
 
     override fun decrement(steps: Int) {
@@ -50,6 +54,7 @@ private class BigIntValueFactory : SpinnerValueFactory<BigInteger>() {
                 value = newVal
             }
         }
+        onIncrementalChange(value)
     }
 }
 

@@ -2,6 +2,8 @@ package com.durhack.sharpshot.gui.container
 
 import com.durhack.sharpshot.util.KTimer
 import com.durhack.sharpshot.util.container
+import javafx.collections.FXCollections
+import javafx.collections.ObservableList
 import tornadofx.*
 import java.math.BigInteger
 
@@ -9,8 +11,8 @@ class ContainerController : Controller() {
     val view: ContainerView by inject()
 
     private val timer: KTimer = KTimer("Post-Animation Render Timer")
-    private val out: MutableList<BigInteger?> = mutableListOf()
-    val outputs: List<BigInteger?> get() = out.toList()
+    private val out: ObservableList<BigInteger?> = FXCollections.observableArrayList()
+    val outputs = FXCollections.unmodifiableObservableList(out)
     var ticks = 0
 
     fun start(input: List<BigInteger?>) {

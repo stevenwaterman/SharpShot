@@ -44,7 +44,7 @@ abstract class IntNodeForm<T: AbstractNode>(done: () -> Unit, success: (T) -> Un
             }
             button("Empty") {
                 action {
-                    spinner.valueProp.set(null)
+                    spinner.value = null
                     accept()
                 }
             }
@@ -52,7 +52,7 @@ abstract class IntNodeForm<T: AbstractNode>(done: () -> Unit, success: (T) -> Un
     }
 
     private fun accept(){
-        val value = spinner.valueProp.get()
+        val value = spinner.value
         val node = createNode(value)
         success(node)
         done()

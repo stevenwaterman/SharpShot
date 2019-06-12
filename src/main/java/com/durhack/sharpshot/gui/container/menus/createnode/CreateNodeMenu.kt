@@ -6,6 +6,7 @@ import com.durhack.sharpshot.gui.container.CenteredScrollPane
 import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.gui.container.menus.ContainerInputLayer
 import com.durhack.sharpshot.gui.container.menus.createnode.nodeforms.AbstractNodeForm
+import com.durhack.sharpshot.gui.util.addClickHandler
 import com.durhack.sharpshot.registry.RegistryEntry
 import com.durhack.sharpshot.util.plus
 import javafx.geometry.Insets
@@ -50,7 +51,7 @@ class CreateNodeMenu(private val onNodeCreated: (Coordinate, AbstractNode?) -> U
             hideAll()
         }
 
-        addEventHandler(MouseEvent.MOUSE_PRESSED){
+        addClickHandler {
             if(it.button == MouseButton.SECONDARY){
                 hideAll()
             }

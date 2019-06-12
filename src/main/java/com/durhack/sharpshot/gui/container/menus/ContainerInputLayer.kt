@@ -4,6 +4,7 @@ import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.gui.container.menus.createnode.CreateNodeMenu
+import com.durhack.sharpshot.gui.util.addClickHandler
 import com.durhack.sharpshot.util.clamp
 import com.durhack.sharpshot.util.container
 import javafx.geometry.Point2D
@@ -24,8 +25,13 @@ class ContainerInputLayer : View() {
     override val root = pane {
         add(nodeCreator)
 
-        addEventHandler(MouseEvent.MOUSE_PRESSED) {
-            if (it.button == MouseButton.PRIMARY) clicked(it.x, it.y)
+        addClickHandler {
+            if (it.button == MouseButton.PRIMARY){
+                clicked(it.x, it.y)
+            }
+            else if(it.button == MouseButton.SECONDARY){
+                deleteClicked(it.x, it.y)
+            }
             it.consume()
         }
 
@@ -34,6 +40,18 @@ class ContainerInputLayer : View() {
                 it.code == KeyCode.Q -> rotateHoveredACW()
                 it.code == KeyCode.E -> rotateHoveredCW()
                 it.code in listOf(KeyCode.DELETE, KeyCode.BACK_SPACE, KeyCode.R) -> deleteHovered()
+            }
+        }
+
+        addEventHandler(MouseEvent.MOUSE_PRESSED){
+            if(it.button != MouseButton.SECONDARY){
+                it.consume()
+            }
+        }
+
+        addEventHandler(MouseEvent.MOUSE_DRAGGED){
+            if(it.button != MouseButton.SECONDARY){
+                it.consume()
             }
         }
 
@@ -77,9 +95,22 @@ class ContainerInputLayer : View() {
         containerView.render()
     }
 
+    private fun deleteClicked(x: Double, y: Double) {
+        val coord = getCoord(x, y) ?: return
+        container.nodes.remove(coord)
+        containerView.render()
+    }
+
     private fun clicked(x: Double, y: Double) {
         val coord = getCoord(x, y) ?: return
-        if (container.nodes[coord] == null) nodeCreator.show(coord, Point2D(x, y))
+        val node = container.nodes[coord]
+        if (node == null) {
+            nodeCreator.show(coord, Point2D(x, y))
+        }
+        else{
+            node.direction = node.direction.clockwise
+            containerView.render()
+        }
     }
 
     private fun addNode(coordinate: Coordinate, node: AbstractNode?) {

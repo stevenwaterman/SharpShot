@@ -18,7 +18,6 @@ class CenteredScrollPane : View() {
     private val inner: StackPane = stackpane{
         add(containerView)
         alignment = Pos.CENTER
-        //addEventHandler(MouseEvent.MOUSE_ENTERED){ui{root.requestFocus()}}
     }
 
 
