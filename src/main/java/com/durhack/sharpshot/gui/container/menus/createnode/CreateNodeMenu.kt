@@ -3,6 +3,7 @@ package com.durhack.sharpshot.gui.container.menus.createnode
 import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.gui.container.ContainerView
+import com.durhack.sharpshot.gui.container.menus.ContainerInputLayer
 import com.durhack.sharpshot.gui.container.menus.createnode.nodeforms.AbstractNodeForm
 import com.durhack.sharpshot.registry.RegistryEntry
 import com.durhack.sharpshot.util.plus
@@ -22,6 +23,7 @@ class CreateNodeMenu(private val onNodeCreated: (Coordinate, AbstractNode?) -> U
     private val allBorder = Border(BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths(borderWidth)))
     private val allBackground = Background(BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY))
 
+    private val inputLayer: ContainerInputLayer by inject()
     private lateinit var coordinate: Coordinate
 
     private val info = NodeInfo()
@@ -151,5 +153,6 @@ class CreateNodeMenu(private val onNodeCreated: (Coordinate, AbstractNode?) -> U
     private fun hideAll(){
         root.hide()
         info.reset()
+        inputLayer.root.requestFocus()
     }
 }

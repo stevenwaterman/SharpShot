@@ -16,7 +16,6 @@ class BigIntSpinner : Fragment() {
         valueFactory.converter = BigIntStringConverter()
         editor.textFormatter = IntTextFormatter()
         editor.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume)
-        editor.promptText = "1"
 
         editor.textProperty().onChange { text ->
             val converter = valueFactory.converter
@@ -31,7 +30,9 @@ class BigIntSpinner : Fragment() {
 private class BigIntValueFactory : SpinnerValueFactory<BigInteger>() {
     override fun increment(steps: Int) {
         if (value == null) {
-            value = BigInteger.ONE + steps.toBigInteger()
+            if(steps != 0){
+                value = BigInteger.ONE + steps.toBigInteger()
+            }
         }
         else {
             value += BigInteger.valueOf(steps.toLong())
