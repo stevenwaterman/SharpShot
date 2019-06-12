@@ -4,7 +4,7 @@ import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.gui.container.menus.createnode.nodeforms.AbstractNodeForm
 import com.durhack.sharpshot.registry.RegistryEntry
-import com.durhack.sharpshot.util.minus
+import com.durhack.sharpshot.util.plus
 import javafx.geometry.Insets
 import javafx.geometry.Point2D
 import javafx.scene.input.KeyCode
@@ -81,23 +81,48 @@ class CreateNodeMenu(private val onNodeCreated: (AbstractNode?) -> Unit) : Fragm
         }
     }
 
-    fun show(clickLocation: Point2D) {
-        val ideal = idealLocation(clickLocation)
-        val clamped = clampLocation(ideal)
-        root.layoutX = clamped.x
-        root.layoutY = clamped.y
+    fun show(click: Point2D) {
+        val idealOffset = idealOffset()
+        val idealLocation = click + idealOffset
+
+        val clampedOffset = clampLocation(idealLocation)
+        val clampedLocation = idealLocation + clampedOffset
+
+        root.layoutX = clampedLocation.x
+        root.layoutY = clampedLocation.y
         showChooser()
     }
 
-    private fun idealLocation(location: Point2D): Point2D{
+    private fun idealOffset(): Point2D{
         val xOffset = padding + (selector.root.width / 2) + borderWidth
         val yOffset = padding + (selector.root.height / 2) + borderWidth
-        val offset = Point2D(xOffset, yOffset)
-        return location - offset
+        return Point2D(-xOffset, -yOffset)
     }
 
     private fun clampLocation(location: Point2D): Point2D {
-        return location //TODO
+        val sceneLocation = root.parent.localToScene(location)
+
+        val minX = sceneLocation.x
+        val maxX = minX + root.width
+        val maxAllowableX = root.scene.width
+
+        val xOffset = when {
+            minX < 0 -> -minX
+            maxX > maxAllowableX -> maxAllowableX - maxX
+            else -> 0.0
+        }
+
+        val minY = sceneLocation.y
+        val maxY = minY + root.height
+        val maxAllowableY = root.scene.height
+
+        val yOffset = when{
+            minY < 0 -> -minY
+            maxY > maxAllowableY -> maxAllowableY - maxY
+            else -> 0.0
+        }
+
+        return Point2D(xOffset, yOffset)
     }
 
     private fun showChooser(){
