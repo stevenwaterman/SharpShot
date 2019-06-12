@@ -4,6 +4,8 @@ import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.registry.NodeRegistry
 import com.durhack.sharpshot.registry.RegistryEntry
 import javafx.geometry.Insets
+import javafx.scene.input.KeyCode
+import javafx.scene.input.KeyEvent
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.Background
@@ -20,17 +22,42 @@ class SelectNodeType(click: (RegistryEntry<out AbstractNode>) -> Unit,
     private val gap = 2.0
     private val outerPadding = 4.0
 
+    private val keys = listOf(
+            KeyCode.DIGIT1,
+            KeyCode.DIGIT2,
+            KeyCode.DIGIT3,
+            KeyCode.DIGIT4,
+            KeyCode.Q,
+            KeyCode.W,
+            KeyCode.E,
+            KeyCode.R,
+            KeyCode.A,
+            KeyCode.S,
+            KeyCode.D,
+            KeyCode.F,
+            KeyCode.Z,
+            KeyCode.X,
+            KeyCode.C,
+            KeyCode.V
+                             )
+
     override val root = gridpane {
         hgap = gap
         vgap = gap
         paddingAll = outerPadding
 
-        NodeRegistry.entries.forEachIndexed { index, entry ->
+        NodeRegistry.entries.zip(keys).forEachIndexed { index, (entry, key) ->
             val column = index % perRow
             val row = index / perRow
 
             val button = NodeButton(entry, scale, { hover(entry) }, { click(entry) })
             add(button.root, column, row)
+            addEventHandler(KeyEvent.KEY_PRESSED) { event ->
+                if (event.code == key) {
+                    click(entry)
+                    event.consume()
+                }
+            }
         }
     }
 }

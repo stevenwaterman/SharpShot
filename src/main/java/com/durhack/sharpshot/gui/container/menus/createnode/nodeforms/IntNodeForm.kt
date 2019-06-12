@@ -22,7 +22,10 @@ abstract class IntNodeForm<T: AbstractNode>(done: () -> Unit, success: (T) -> Un
         spacing = 4.0
 
         addEventFilter(KeyEvent.KEY_PRESSED) {event ->
-            if (event.code == KeyCode.ENTER) accept()
+            if (event.code in listOf(KeyCode.ENTER, KeyCode.TAB)){
+                accept()
+                event.consume()
+            }
         }
 
         label(firstLineText){

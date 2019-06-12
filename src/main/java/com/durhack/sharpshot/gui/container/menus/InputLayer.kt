@@ -18,24 +18,20 @@ class InputLayer : View() {
     private lateinit var coord: Coordinate
 
     override val root = pane {
-        addEventHandler(MouseEvent.MOUSE_PRESSED){event ->
-            if (event.button == MouseButton.PRIMARY) {
-                val scale = ContainerView.scaleProp.get()
-                val xClicked = (event.x / scale).toInt().clamp(0, container.width - 1)
-                val yClicked = (event.y / scale).toInt().clamp(0, container.height - 1)
-
-                val newCoord = Coordinate(xClicked, yClicked)
-                if(!newCoord.exists) return@addEventHandler
-
-                coord = newCoord
-                if (container.nodes[coord] == null) {
-                    val clickLocation = Point2D(event.x, event.y)
-                    nodeCreator.show(clickLocation)
-                }
-            }
-        }
-
         add(nodeCreator)
+        addEventHandler(MouseEvent.MOUSE_PRESSED) { if (it.button == MouseButton.PRIMARY) clicked(it.x, it.y) }
+    }
+
+    private fun clicked(x: Double, y: Double) {
+        val scale = ContainerView.scaleProp.get()
+        val xClicked = (x / scale).toInt().clamp(0, container.width - 1)
+        val yClicked = (y / scale).toInt().clamp(0, container.height - 1)
+
+        val newCoord = Coordinate(xClicked, yClicked)
+        if (newCoord.exists){
+            coord = newCoord
+            if (container.nodes[coord] == null) nodeCreator.show(Point2D(x, y))
+        }
     }
 
     private fun addNode(node: AbstractNode?) {

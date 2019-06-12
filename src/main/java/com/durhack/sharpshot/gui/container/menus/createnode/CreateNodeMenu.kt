@@ -130,7 +130,7 @@ class CreateNodeMenu(private val onNodeCreated: (AbstractNode?) -> Unit) : Fragm
 
         formPane.hide()
         root.show()
-        root.requestFocus()
+        selector.root.requestFocus()
     }
 
     private fun showForm(form: AbstractNodeForm<*>){
