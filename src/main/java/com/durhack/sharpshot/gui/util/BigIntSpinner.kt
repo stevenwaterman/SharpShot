@@ -31,7 +31,7 @@ private class BigIntValueFactory : SpinnerValueFactory<BigInteger>() {
     override fun increment(steps: Int) {
         if (value == null) {
             if(steps != 0){
-                value = BigInteger.ONE + steps.toBigInteger()
+                value = BigInteger.ZERO + steps.toBigInteger()
             }
         }
         else {

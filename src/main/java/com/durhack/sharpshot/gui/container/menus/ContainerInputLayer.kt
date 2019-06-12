@@ -24,7 +24,10 @@ class ContainerInputLayer : View() {
     override val root = pane {
         add(nodeCreator)
 
-        addEventHandler(MouseEvent.MOUSE_PRESSED) { if (it.button == MouseButton.PRIMARY) clicked(it.x, it.y) }
+        addEventHandler(MouseEvent.MOUSE_PRESSED) {
+            if (it.button == MouseButton.PRIMARY) clicked(it.x, it.y)
+            it.consume()
+        }
 
         addEventHandler(KeyEvent.KEY_PRESSED){
             when {

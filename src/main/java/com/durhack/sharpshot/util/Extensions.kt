@@ -8,8 +8,11 @@ import kotlin.math.min
 fun Char.asBigInteger() = BigInteger(toInt().toString())
 fun BigInteger.asChar() = toInt().toChar()
 
-inline fun <reified K, reified R> Map<K, *>.filterType(): Map<K, R> =
-        toList().filterIsInstance<Pair<K, R>>().toMap()
+inline fun <reified K, reified R> Map<K, *>.filterType(): Map<K, R> {
+    val dest = mutableMapOf<K, R>()
+    for ((key, value) in this) if (value is R) dest.put(key, value)
+    return dest
+}
 
 fun <T> Iterable<T>.pairDuplicates(): List<Pair<T, T>> {
     val seen = mutableMapOf<T, T>()

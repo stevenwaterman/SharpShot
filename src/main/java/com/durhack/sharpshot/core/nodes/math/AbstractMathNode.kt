@@ -12,8 +12,7 @@ abstract class AbstractMathNode(direction: Direction) : AbstractNode(direction) 
     override fun process(relativeDirection: Direction, value: BigInteger?): Map<Direction, BigInteger?> {
         value ?: return mapOf()
 
-        val immutableVal = storedVal
-        when(immutableVal){
+        when(val immutableVal = storedVal){
             null -> {
                 storedVal = value
                 return mapOf()
@@ -21,7 +20,7 @@ abstract class AbstractMathNode(direction: Direction) : AbstractNode(direction) 
             else -> {
                 val output = operation(immutableVal, value)
                 storedVal = null
-                return mapOf(relativeDirection to output)
+                return mapOf(Direction.UP to output)
             }
         }
     }

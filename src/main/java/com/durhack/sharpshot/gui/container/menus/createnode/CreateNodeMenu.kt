@@ -2,6 +2,7 @@ package com.durhack.sharpshot.gui.container.menus.createnode
 
 import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Coordinate
+import com.durhack.sharpshot.gui.container.CenteredScrollPane
 import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.gui.container.menus.ContainerInputLayer
 import com.durhack.sharpshot.gui.container.menus.createnode.nodeforms.AbstractNodeForm
@@ -9,6 +10,7 @@ import com.durhack.sharpshot.registry.RegistryEntry
 import com.durhack.sharpshot.util.plus
 import javafx.geometry.Insets
 import javafx.geometry.Point2D
+import javafx.scene.Node
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.input.MouseButton
@@ -106,12 +108,21 @@ class CreateNodeMenu(private val onNodeCreated: (Coordinate, AbstractNode?) -> U
         return Point2D(-xOffset, -yOffset)
     }
 
+    private val scrollPane: CenteredScrollPane by inject()
     private fun clampLocation(location: Point2D): Point2D {
-        val sceneLocation = root.parent.localToScene(location)
+        var parentLocation = location
+        var parent: Node = root.parent
+        //TODO is there not a better way to do this?
+        while(parent != scrollPane.root){
+            parentLocation = parent.localToParent(parentLocation)
+            parent = parent.parent
+        }
 
-        val minX = sceneLocation.x
+        val scrollPaneLocation = parentLocation
+
+        val minX = scrollPaneLocation.x
         val maxX = minX + root.width
-        val maxAllowableX = root.scene.width
+        val maxAllowableX = scrollPane.root.width
 
         val xOffset = when {
             minX < 0 -> -minX
@@ -119,9 +130,9 @@ class CreateNodeMenu(private val onNodeCreated: (Coordinate, AbstractNode?) -> U
             else -> 0.0
         }
 
-        val minY = sceneLocation.y
+        val minY = scrollPaneLocation.y
         val maxY = minY + root.height
-        val maxAllowableY = root.scene.height
+        val maxAllowableY = scrollPane.root.height
 
         val yOffset = when{
             minY < 0 -> -minY

@@ -27,7 +27,7 @@ class Container(var width: Int, var height: Int){
         nodes.values.forEach(AbstractNode::reset)
     }
 
-    fun launch(input: List<BigInteger?>) {
+    fun initialise(input: List<BigInteger?>) {
         val inputNodes = nodes.filterType<Coordinate, AbstractInputNode>()
         inputNodes.forEach { (coord, node) ->
             val (dir, value) = node.initialise(input) ?: return@forEach
@@ -158,7 +158,7 @@ class Container(var width: Int, var height: Int){
             createBulletsFromNode(bullet.coordinate, data)
         }
 
-        bullets.clear()
+        bullets.removeAll(toProcess.map { it.first })
         bullets += newBullets
     }
 

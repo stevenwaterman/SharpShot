@@ -14,7 +14,8 @@ class ContainerController : Controller() {
     var ticks = 0
 
     fun start(input: List<BigInteger?>) {
-        container.launch(input)
+        container.initialise(input)
+        view.render()
     }
 
     fun quickTick() {

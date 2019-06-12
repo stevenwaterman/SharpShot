@@ -1,12 +1,10 @@
 package com.durhack.sharpshot.gui.container
 
 import com.durhack.sharpshot.util.*
-import javafx.geometry.Insets
 import javafx.geometry.Point2D
 import javafx.geometry.Pos
 import javafx.scene.control.ScrollPane
 import javafx.scene.input.MouseButton
-import javafx.scene.input.MouseEvent
 import javafx.scene.input.ScrollEvent
 import javafx.scene.layout.StackPane
 import tornadofx.*
@@ -15,21 +13,12 @@ import java.lang.Math.pow
 class CenteredScrollPane : View() {
     private val containerView: ContainerView by inject()
     private val zoomPerStep: Double = 1.05
-    private val paddingAmount = 0e4
     private var dragging = false
 
-    private val inner = stackpane {
+    private val inner: StackPane = stackpane{
         add(containerView)
-        StackPane.setMargin(containerView.root, Insets(paddingAmount))
         alignment = Pos.CENTER
-
-        addEventHandler(MouseEvent.ANY) {
-            if (it.button != MouseButton.SECONDARY) {
-                it.consume()
-            }
-        }
-
-        add(containerView)
+        //addEventHandler(MouseEvent.MOUSE_ENTERED){ui{root.requestFocus()}}
     }
 
 

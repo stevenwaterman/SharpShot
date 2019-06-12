@@ -7,7 +7,7 @@ class InNode(val index: Int?, direction: Direction) : AbstractInputNode(directio
     private var input: BigInteger? = null
 
     override fun initialise(inputs: List<BigInteger?>): Pair<Direction, BigInteger?>? {
-        input = if (index == null) null else inputs.getOrNull(index)
+        input = if (index == null) null else inputs.getOrNull(index-1)
         return Direction.UP to input
     }
 
