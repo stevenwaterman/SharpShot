@@ -1,6 +1,7 @@
 package com.durhack.sharpshot.core.state
 
 
+import com.durhack.sharpshot.util.container
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 
@@ -58,6 +59,8 @@ class Coordinate(val x: Int, val y: Int) {
     }
 
     override fun toString() = "Coordinate(x=$x, y=$y)"
+
+    val exists get()  = container.isInside(this)
 
     companion object {
         fun fromJson(json: JsonObject): Coordinate {

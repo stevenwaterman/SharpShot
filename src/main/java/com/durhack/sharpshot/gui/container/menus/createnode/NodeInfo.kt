@@ -1,4 +1,4 @@
-package com.durhack.sharpshot.gui.container.menus.nodecreator
+package com.durhack.sharpshot.gui.container.menus.createnode
 
 import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.registry.RegistryEntry
@@ -55,5 +55,11 @@ class NodeInfo: Fragment(){
 
         nodeName.text = entry.name
         description.text = entry.description
+    }
+
+    fun reset() {
+        graphicPane.clear()
+        nodeName.text = ""
+        description.text = ""
     }
 }

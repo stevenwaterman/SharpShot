@@ -2,7 +2,7 @@ package com.durhack.sharpshot.registry.entries
 
 import com.durhack.sharpshot.core.nodes.other.ConstantNode
 import com.durhack.sharpshot.core.state.Direction
-import com.durhack.sharpshot.gui.container.menus.nodecreator.nodeforms.ConstantNodeForm
+import com.durhack.sharpshot.gui.container.menus.createnode.nodeforms.ConstantNodeForm
 import com.durhack.sharpshot.gui.shapes.Draw
 import com.durhack.sharpshot.registry.RegistryEntry
 import com.google.gson.JsonObject

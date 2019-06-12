@@ -168,7 +168,7 @@ class Container(var width: Int, var height: Int){
         return outputting.map(Bullet::value)
     }
 
-    private fun isInside(coord: Coordinate) = coord.x in (0 until width) && coord.y in (0 until height)
+    fun isInside(coord: Coordinate) = coord.x in (0 until width) && coord.y in (0 until height)
 
     fun setTo(oth: Container) {
         clearBullets()

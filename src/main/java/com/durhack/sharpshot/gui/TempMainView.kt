@@ -1,10 +1,10 @@
 package com.durhack.sharpshot.gui
 
-import com.durhack.sharpshot.gui.container.menus.nodecreator.NodeCreator
+import com.durhack.sharpshot.gui.container.menus.createnode.CreateNodeMenu
 import tornadofx.*
 
 class TempMainView(): View(){
-    private val creator = NodeCreator() {
+    private val creator = CreateNodeMenu() {
         println(it)
         hideNodeCreator()
     }

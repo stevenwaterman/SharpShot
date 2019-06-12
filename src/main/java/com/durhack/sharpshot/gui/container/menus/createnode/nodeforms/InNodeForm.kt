@@ -1,4 +1,4 @@
-package com.durhack.sharpshot.gui.container.menus.nodecreator.nodeforms
+package com.durhack.sharpshot.gui.container.menus.createnode.nodeforms
 
 import com.durhack.sharpshot.core.nodes.input.InNode
 import com.durhack.sharpshot.core.state.Direction

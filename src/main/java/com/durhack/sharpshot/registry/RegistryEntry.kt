@@ -2,7 +2,7 @@ package com.durhack.sharpshot.registry
 
 import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Direction
-import com.durhack.sharpshot.gui.container.menus.nodecreator.nodeforms.AbstractNodeForm
+import com.durhack.sharpshot.gui.container.menus.createnode.nodeforms.AbstractNodeForm
 import com.google.gson.JsonObject
 import javafx.scene.canvas.Canvas
 import javafx.scene.canvas.GraphicsContext

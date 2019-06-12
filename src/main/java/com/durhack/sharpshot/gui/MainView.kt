@@ -7,6 +7,7 @@ import com.durhack.sharpshot.core.state.Direction
 import com.durhack.sharpshot.gui.container.CenteredScrollPane
 import com.durhack.sharpshot.gui.container.ContainerController
 import com.durhack.sharpshot.util.container
+import javafx.scene.input.KeyEvent
 import tornadofx.*
 import java.math.BigInteger
 
@@ -27,6 +28,10 @@ class MainView(): View(){
             val bullet = Bullet(Coordinate(2,2), Direction.DOWN, BigInteger.TEN)
             container.bullets.add(bullet)
             controller.view.render()
+
+            addEventFilter(KeyEvent.KEY_PRESSED){
+                println("${it.target} ${it.code}")
+            }
         }
     }
 }

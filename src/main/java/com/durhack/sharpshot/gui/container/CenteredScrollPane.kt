@@ -1,7 +1,6 @@
 package com.durhack.sharpshot.gui.container
 
-import com.durhack.sharpshot.util.HackScrollPaneSkin
-import com.durhack.sharpshot.util.clamp
+import com.durhack.sharpshot.util.*
 import javafx.geometry.Insets
 import javafx.geometry.Point2D
 import javafx.geometry.Pos
@@ -85,10 +84,6 @@ class CenteredScrollPane : View() {
 
     private val containerSize: Point2D get() = Point2D(containerView.width, containerView.height)
     private val rootSize: Point2D get() = Point2D(root.width, root.height)
-    private operator fun Point2D.times(oth: Double): Point2D = multiply(oth)
-    private operator fun Point2D.minus(oth: Point2D): Point2D = subtract(oth)
-    private operator fun Point2D.div(oth: Point2D): Point2D = Point2D(x / oth.x, y / oth.y)
-    private fun Point2D.clamp(min: Number, max: Number): Point2D = Point2D(x.clamp(min, max), y.clamp(min, max))
 
     private fun zoom(mouseX: Double, mouseY: Double, factor: Double) {
         val sceneMouseLocation = Point2D(mouseX, mouseY)

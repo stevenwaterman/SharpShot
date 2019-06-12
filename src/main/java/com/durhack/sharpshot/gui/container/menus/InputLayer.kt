@@ -3,141 +3,44 @@ package com.durhack.sharpshot.gui.container.menus
 import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.gui.container.ContainerView
-import com.durhack.sharpshot.gui.container.menus.nodecreator.NodeCreator
-import com.durhack.sharpshot.gui.container.menus.nodecreator.nodeforms.AbstractNodeForm
-import com.durhack.sharpshot.registry.RegistryEntry
+import com.durhack.sharpshot.gui.container.menus.createnode.CreateNodeMenu
 import com.durhack.sharpshot.util.clamp
 import com.durhack.sharpshot.util.container
-import javafx.scene.input.KeyCode
-import javafx.scene.input.KeyEvent
+import javafx.geometry.Point2D
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import tornadofx.*
-import java.awt.MouseInfo
 
 class InputLayer : View() {
     private val containerView: ContainerView by inject()
-    private val nodeCreator = NodeCreator { nodeSelected(it) }
-    private val nodeFormPane = pane {
-        layoutXProperty().bind(nodeCreator.root.layoutXProperty())
-        layoutYProperty().bind(nodeCreator.root.layoutYProperty())
-        prefWidthProperty().bind(nodeCreator.root.prefWidthProperty())
-        prefHeightProperty().bind(nodeCreator.root.prefHeightProperty())
-    }
+    private val nodeCreator = CreateNodeMenu { addNode(it) }
 
     private lateinit var coord: Coordinate
-    private var creatorOpen = false
-    private var formOpen = false
-    private val eitherOpen get() = creatorOpen || formOpen
-
-    init {
-        hideNodeCreator()
-
-        nodeCreator.root.addEventHandler(MouseEvent.MOUSE_EXITED){event ->
-            hideNodeCreator()
-        }
-
-        nodeFormPane.addEventHandler(MouseEvent.MOUSE_EXITED){event ->
-            hideNodeForm()
-        }
-    }
 
     override val root = pane {
-        addEventFilter(MouseEvent.MOUSE_PRESSED){event ->
-            if (!eitherOpen && event.button == MouseButton.PRIMARY) {
+        addEventHandler(MouseEvent.MOUSE_PRESSED){event ->
+            if (event.button == MouseButton.PRIMARY) {
                 val scale = ContainerView.scaleProp.get()
                 val xClicked = (event.x / scale).toInt().clamp(0, container.width - 1)
                 val yClicked = (event.y / scale).toInt().clamp(0, container.height - 1)
-                coord = Coordinate(xClicked, yClicked)
 
+                val newCoord = Coordinate(xClicked, yClicked)
+                if(!newCoord.exists) return@addEventHandler
+
+                coord = newCoord
                 if (container.nodes[coord] == null) {
-                    showNodeCreator()
+                    val clickLocation = Point2D(event.x, event.y)
+                    nodeCreator.show(clickLocation)
                 }
-            }
-            else if(eitherOpen && event.button == MouseButton.SECONDARY){
-                hideAll()
-                event.consume()
-            }
-        }
-
-        addEventFilter(KeyEvent.KEY_PRESSED) {event ->
-            if (event.code == KeyCode.ESCAPE) {
-                hideAll()
-                event.consume()
             }
         }
 
         add(nodeCreator)
-        add(nodeFormPane)
-    }
-    //TODO stop it going off the screen when zoomed in and have it so the left hand side is centered rather than the whole thing
-
-    private fun nodeSelected(entry: RegistryEntry<out AbstractNode>?) {
-        hideNodeCreator()
-        entry ?: return
-
-        val form = entry.getNodeForm(
-                close = { hideNodeForm() },
-                success = { node ->
-                    container.nodes[coord] = node
-                    containerView.render()
-                })
-
-        if (form == null) {
-            val node = entry.createNode()
-            container.nodes[coord] = node
-            containerView.render()
-        }
-        else {
-            showForm(form)
-        }
     }
 
-    private fun showNodeCreator() {
-        creatorOpen = true
-
-        val x = (0.5 + coord.x) * containerView.scale
-        val width = nodeCreator.root.width
-        val topLeftX = x - (width / 2)
-        val maxX = containerView.width - width
-        val clampedX = topLeftX.clamp(0, maxX)
-
-        val y = (0.5 + coord.y) * containerView.scale
-        val height = nodeCreator.root.height
-        val topLeftY = y - (height / 2)
-        val maxY = containerView.height - height
-        val clampedY = topLeftY.clamp(0, maxY)
-
-        nodeCreator.root.layoutX = clampedX
-        nodeCreator.root.layoutY = clampedY
-        nodeCreator.root.isVisible = true
-    }
-
-    private fun hideNodeCreator() {
-        creatorOpen = false
-        nodeCreator.root.isVisible = false
-    }
-
-    private fun showForm(form: AbstractNodeForm<*>) {
-        formOpen = true
-        nodeFormPane.add(form)
-    }
-
-    private fun hideNodeForm() {
-        formOpen = false
-        nodeFormPane.clear()
-    }
-
-    fun hideAll() {
-        hideNodeCreator()
-        hideNodeForm()
-    }
-
-    private fun mouseLocation(): Coordinate?{
-        val point = MouseInfo.getPointerInfo().location
-        val x = point.x
-        val y = point.y
-
-        return null
+    private fun addNode(node: AbstractNode?) {
+        node ?: return
+        container.nodes[coord] = node
+        containerView.render()
     }
 }

@@ -27,7 +27,6 @@ class ContainerView : View() {
         get() = scaleProp.get()
         set(value){
             scaleProp.set(max(min(value, MAX_SCALE), MIN_SCALE))
-            inputLayer.hideAll()
         }
 
     private val nodeLayer: ContainerStaticView by inject()
