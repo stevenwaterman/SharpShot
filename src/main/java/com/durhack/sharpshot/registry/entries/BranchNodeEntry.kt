@@ -17,7 +17,7 @@ class BranchNodeEntry() : RegistryEntry<BranchNode>(
                       gc: GraphicsContext,
                       x: Double,
                       y: Double,
-                      scale: Double) {
+                      scale: Int) {
         Draw.triangle(gc, node.direction, x, y, scale, Color.PINK)
     }
 }

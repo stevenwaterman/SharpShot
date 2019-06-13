@@ -17,7 +17,7 @@ class NodeInfo: Fragment(){
     private val gap = 4.0
     private val outerPadding = 4.0
     private val widthPx = 175.0
-    private val graphicScale = 32.0
+    private val graphicScale = 32
 
     private val graphicPane = stackpane {  }
     private val nodeName = Label().apply {

@@ -25,8 +25,8 @@ class ContainerStaticRenderer() : Canvas() {
     private val gc = graphicsContext2D
 
     fun updateWidth() {
-        width = ContainerView.scaleProp.get() * container.width
-        height = ContainerView.scaleProp.get() * container.height
+        width = ContainerView.scaleProp.get() * container.width + 0.5
+        height = ContainerView.scaleProp.get() * container.height + 0.5
     }
 
     fun clear() {
@@ -37,20 +37,20 @@ class ContainerStaticRenderer() : Canvas() {
         container.nodes.forEach { (coord, node) ->
             val x = coord.x * ContainerView.scaleProp.get()
             val y = coord.y * ContainerView.scaleProp.get()
-            NodeRegistry.draw(node, gc, x, y, ContainerView.scaleProp.get())
+            NodeRegistry.draw(node, gc, x + 0.5, y + 0.5, ContainerView.scale)
         }
     }
 
     fun drawGrid() {
         gc.stroke = Color.GRAY
-        gc.lineWidth = 2.0
+        gc.lineWidth = 1.0
 
         (0..container.width).map { it * ContainerView.scaleProp.get() }.forEach {//TODO disable zooming when mouse button is down not just when dragging
-            gc.strokeLine(it, 0.0, it, height)
+            gc.strokeLine(it + 0.5, 0.0, it +0.5, height)
         }
 
         (0..container.height).map { it * ContainerView.scaleProp.get() }.forEach {
-            gc.strokeLine(0.0, it, width, it)
+            gc.strokeLine(0.0, it + 0.5, width, it + 0.5)
         }
     }
 }

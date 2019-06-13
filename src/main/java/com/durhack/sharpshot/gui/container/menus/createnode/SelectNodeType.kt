@@ -19,7 +19,7 @@ import tornadofx.*
 class SelectNodeType(click: (RegistryEntry<out AbstractNode>) -> Unit,
                      hover: (RegistryEntry<out AbstractNode>) -> Unit) : Fragment() {
     private val perRow = 4
-    private val scale = 24.0
+    private val scale = 24
     private val gap = 2.0
     private val outerPadding = 4.0
 
@@ -64,7 +64,7 @@ class SelectNodeType(click: (RegistryEntry<out AbstractNode>) -> Unit,
 }
 
 private class NodeButton<T : AbstractNode>(private val entry: RegistryEntry<T>,
-                                   scale: Double,
+                                   scale: Int,
                                    onHover: (RegistryEntry<T>) -> Unit,
                                    onClick: (RegistryEntry<T>) -> Unit) : Fragment() {
     override val root = stackpane {

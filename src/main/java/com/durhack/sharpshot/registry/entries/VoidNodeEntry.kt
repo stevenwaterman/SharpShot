@@ -17,7 +17,7 @@ class VoidNodeEntry() : RegistryEntry<VoidNode>(
                       gc: GraphicsContext,
                       x: Double,
                       y: Double,
-                      scale: Double) {
+                      scale: Int) {
         Draw.circle(gc, x, y, scale, Color.BLACK)
     }
 }

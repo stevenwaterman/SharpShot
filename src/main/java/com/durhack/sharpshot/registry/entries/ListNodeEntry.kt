@@ -17,7 +17,7 @@ class ListNodeEntry() : RegistryEntry<ListNode>(
                       gc: GraphicsContext,
                       x: Double,
                       y: Double,
-                      scale: Double) {
+                      scale: Int) {
         Draw.triangle(gc, node.direction, x, y, scale, Color.YELLOW)
         Draw.text(gc, "LST", x, y, scale)
     }

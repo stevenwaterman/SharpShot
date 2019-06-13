@@ -16,16 +16,16 @@ private val leftRotation = Rotate(Direction.LEFT.degrees, 0.5, 0.5)
 object Draw {
 
 
-    fun square(gc: GraphicsContext, x: Double, y: Double, scale: Double, color: Color) {
+    fun square(gc: GraphicsContext, x: Double, y: Double, scale: Int, color: Color) {
         gc.fill = color
         gc.stroke = null
-        gc.fillRect(x, y, scale, scale)
+        gc.fillRect(x, y, scale.toDouble(), scale.toDouble())
     }
 
-    fun circle(gc: GraphicsContext, x: Double, y: Double, scale: Double, color: Color) {
+    fun circle(gc: GraphicsContext, x: Double, y: Double, scale: Int, color: Color) {
         gc.fill = color
         gc.stroke = null
-        gc.fillOval(x, y, scale, scale)
+        gc.fillOval(x, y, scale.toDouble(), scale.toDouble())
     }
 
     private val diamond = DrawablePolygon(listOf(
@@ -35,7 +35,7 @@ object Draw {
             Point2D(0.0, 0.5)
                                                 ))
 
-    fun diamond(gc: GraphicsContext, direction: Direction, x: Double, y: Double, scale: Double, color: Color) {
+    fun diamond(gc: GraphicsContext, direction: Direction, x: Double, y: Double, scale: Int, color: Color) {
         diamond.draw(gc, direction, x, y, scale, color)
     }
 
@@ -45,11 +45,11 @@ object Draw {
             Point2D(1.0, 1.0)
                                                  ))
 
-    fun triangle(gc: GraphicsContext, direction: Direction, x: Double, y: Double, scale: Double, color: Color) {
+    fun triangle(gc: GraphicsContext, direction: Direction, x: Double, y: Double, scale: Int, color: Color) {
         triangle.draw(gc, direction, x, y, scale, color)
     }
 
-    fun text(gc: GraphicsContext, text: String, x: Double, y: Double, scale: Double, color: Color = Color.BLACK) {
+    fun text(gc: GraphicsContext, text: String, x: Double, y: Double, scale: Int, color: Color = Color.BLACK) {
         gc.textAlign = TextAlignment.CENTER
         gc.textBaseline = VPos.CENTER
         gc.fill = color
@@ -67,7 +67,7 @@ class DrawablePolygon(private val upPoints: List<Point2D>) {
     private val leftPoints = upPoints.map(leftRotation::transform)
     private val n = upPoints.size
 
-    fun draw(gc: GraphicsContext, direction: Direction, x: Double, y: Double, scale: Double, color: Color) {
+    fun draw(gc: GraphicsContext, direction: Direction, x: Double, y: Double, scale: Int, color: Color) {
         gc.fill = color
         gc.stroke = null
 

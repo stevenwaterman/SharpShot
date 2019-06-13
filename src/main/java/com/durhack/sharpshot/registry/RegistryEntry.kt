@@ -40,7 +40,7 @@ abstract class RegistryEntry<T : AbstractNode>(val example: T, val name: String,
                    gc: GraphicsContext,
                    x: Double,
                    y: Double,
-                   scale: Double){
+                   scale: Int){
         draw(unsafeCast(node), gc, x, y, scale)
     }
 
@@ -48,11 +48,11 @@ abstract class RegistryEntry<T : AbstractNode>(val example: T, val name: String,
                       gc: GraphicsContext,
                       x: Double,
                       y: Double,
-                      scale: Double)
+                      scale: Int)
 
-    fun getGraphic(scale: Double) = Canvas().apply {
-        width = scale
-        height = scale
+    fun getGraphic(scale: Int) = Canvas().apply {
+        width = scale.toDouble()
+        height = scale.toDouble()
         draw(example, graphicsContext2D, 0.0, 0.0, scale)
     }
 

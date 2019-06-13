@@ -5,6 +5,7 @@ import javafx.beans.InvalidationListener
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.geometry.Pos
+import javafx.scene.control.ScrollPane
 import javafx.scene.layout.Priority
 import javafx.scene.text.Font
 import tornadofx.*
@@ -16,8 +17,8 @@ class Output : View() {
     override val root = vbox(spacing = 8.0){
         prefWidth = 100.0
         alignment = Pos.TOP_CENTER
-        hgrow = Priority.ALWAYS
         vgrow = Priority.ALWAYS
+        hgrow = Priority.ALWAYS
 
         label {
             text = "Out"
@@ -27,10 +28,16 @@ class Output : View() {
         spacer {
             prefHeight = 20.0
         }
-        label {
-            bind(outputObservable)
-            alignment = Pos.TOP_CENTER
-            isFocusTraversable = false
+        scrollpane {
+            isFitToHeight = true
+            isFitToWidth = true
+            hbarPolicy = ScrollPane.ScrollBarPolicy.NEVER
+            vbarPolicy = ScrollPane.ScrollBarPolicy.AS_NEEDED
+            label {
+                bind(outputObservable)
+                alignment = Pos.TOP_CENTER
+                isFocusTraversable = false
+            }
         }
     }
 }

@@ -9,6 +9,7 @@ import javafx.scene.input.ScrollEvent
 import javafx.scene.layout.StackPane
 import tornadofx.*
 import java.lang.Math.pow
+import kotlin.math.roundToInt
 
 class CenteredScrollPane : View() {
     private val containerView: ContainerView by inject()
@@ -59,13 +60,13 @@ class CenteredScrollPane : View() {
 
         val slack = newSize - rootSize
         val fractionalScrollingRequired = scrollingRequired / slack
-        val clamped = fractionalScrollingRequired.clamp(0, 1)
+        val clamped = fractionalScrollingRequired.clamp(0.0, 1.0)
         root.hvalue = clamped.x
         root.vvalue = clamped.y
     }
 
     private fun scale(factor: Double) {
-        containerView.scale *= factor
+        ContainerView.scale = (ContainerView.scale * factor).roundToInt()
         containerView.render()
     }
 }

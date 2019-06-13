@@ -10,14 +10,14 @@ import javafx.scene.paint.Color
 class IfPositiveNodeEntry() : RegistryEntry<IfPositiveNode>(
         IfPositiveNode(Direction.UP),
         "If Positive",
-        "Redirects all values >= 0"
+        "Redirects all values larger than zero"
                                                            ) {
 
     override fun draw(node: IfPositiveNode,
                       gc: GraphicsContext,
                       x: Double,
                       y: Double,
-                      scale: Double) {
+                      scale: Int) {
         Draw.triangle(gc, node.direction, x, y, scale, Color.PINK)
         Draw.text(gc, "+", x, y, scale)
     }

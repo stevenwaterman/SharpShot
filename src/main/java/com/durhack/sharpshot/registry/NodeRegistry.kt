@@ -52,7 +52,7 @@ object NodeRegistry {
 
     fun create(json: JsonObject) = getEntry(json["type"].asString).create(json)
     fun toJson(node: AbstractNode): JsonObject = getEntry(node).unsafeToJson(node)
-    fun draw(node: AbstractNode, gc: GraphicsContext, x: Double, y: Double, scale: Double) {
+    fun draw(node: AbstractNode, gc: GraphicsContext, x: Double, y: Double, scale: Int) {
         getEntry(node.type).unsafeDraw(node, gc, x, y, scale)
     }
 }

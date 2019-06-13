@@ -40,7 +40,7 @@ class ConstantNodeEntry() : RegistryEntry<ConstantNode>(
                       gc: GraphicsContext,
                       x: Double,
                       y: Double,
-                      scale: Double) {
+                      scale: Int) {
         Draw.triangle(gc, node.direction, x, y, scale, Color.GREEN)
         val text = when(node.value) {
             null -> "E"

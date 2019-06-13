@@ -17,7 +17,7 @@ class IfNullNodeEntry() : RegistryEntry<IfNullNode>(
                       gc: GraphicsContext,
                       x: Double,
                       y: Double,
-                      scale: Double) {
+                      scale: Int) {
         Draw.triangle(gc, node.direction, x, y, scale, Color.PINK)
         Draw.text(gc, "E", x, y, scale)
     }

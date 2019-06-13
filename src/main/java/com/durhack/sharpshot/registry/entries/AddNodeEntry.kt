@@ -17,7 +17,7 @@ class AddNodeEntry() : RegistryEntry<AddNode>(
                       gc: GraphicsContext,
                       x: Double,
                       y: Double,
-                      scale: Double) {
+                      scale: Int) {
         Draw.triangle(gc, node.direction, x, y, scale, Color.ORANGE)
         Draw.text(gc, "+", x, y, scale)
     }

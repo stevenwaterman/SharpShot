@@ -37,7 +37,7 @@ class InNodeEntry() : RegistryEntry<InNode>(
                       gc: GraphicsContext,
                       x: Double,
                       y: Double,
-                      scale: Double) {
+                      scale: Int) {
         Draw.triangle(gc, node.direction, x, y, scale, Color.YELLOW)
         val text = when(node.index) {
             null -> "E"

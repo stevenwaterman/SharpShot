@@ -5,29 +5,25 @@ import com.durhack.sharpshot.core.state.tick.BulletMovement
 import com.durhack.sharpshot.gui.container.menus.ContainerInputLayer
 import com.durhack.sharpshot.gui.graphics.BulletGraphic
 import com.durhack.sharpshot.gui.util.ui
-import com.durhack.sharpshot.util.MAX_SCALE
-import com.durhack.sharpshot.util.MIN_SCALE
+import com.durhack.sharpshot.util.MinMaxIntProperty
 import com.durhack.sharpshot.util.container
 import javafx.animation.Interpolator
 import javafx.animation.Transition
 import javafx.animation.TranslateTransition
-import javafx.beans.property.SimpleDoubleProperty
+import javafx.geometry.Insets
 import javafx.scene.Node
+import javafx.scene.layout.Background
+import javafx.scene.layout.BackgroundFill
+import javafx.scene.layout.CornerRadii
+import javafx.scene.paint.Color
 import javafx.util.Duration
 import tornadofx.*
-import kotlin.math.max
-import kotlin.math.min
 
 class ContainerView : View() {
     companion object{
-        val scaleProp = SimpleDoubleProperty(48.0)
+        val scaleProp = MinMaxIntProperty(10, 50, 500)
+        var scale by scaleProp
     }
-
-    var scale: Double
-        get() = scaleProp.get()
-        set(value){
-            scaleProp.set(max(min(value, MAX_SCALE), MIN_SCALE))
-        }
 
     private val nodeLayer: ContainerStaticView by inject()
     private val bulletLayer = pane {}
@@ -37,10 +33,11 @@ class ContainerView : View() {
         add(nodeLayer)
         add(bulletLayer)
         add(containerInputLayer)
+        background = Background(BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY))
     }
 
-    val width get() = scale * container.width
-    val height get() = scale * container.height
+    val width get() = (scale * container.width + 1).toDouble()
+    val height get() = (scale * container.height + 1).toDouble()
 
     init {
         render()
@@ -48,10 +45,10 @@ class ContainerView : View() {
     }
 
     fun render() {
-        root.minWidth = container.width * scale
-        root.maxWidth = root.minWidth
-        root.minHeight = container.height * scale
-        root.maxHeight = root.minHeight
+        root.minWidth = width
+        root.maxWidth = width
+        root.minHeight = height
+        root.maxHeight = height
 
         nodeLayer.render()
 

@@ -17,7 +17,7 @@ class SplitterNodeEntry() : RegistryEntry<SplitterNode>(
                       gc: GraphicsContext,
                       x: Double,
                       y: Double,
-                      scale: Double) {
+                      scale: Int) {
         Draw.diamond(gc, node.direction, x, y, scale, Color.YELLOW)
     }
 }

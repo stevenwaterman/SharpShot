@@ -4,7 +4,7 @@ import com.durhack.sharpshot.core.state.Coordinate
 import javafx.scene.layout.Pane
 
 abstract class Graphic(val coordinate: Coordinate,
-                       scale: Double,
+                       scale: Int,
                        childWidth: Double = 1.0,
                        childHeight: Double = 1.0,
                        node: () -> Pane) : Pane(node()) {
