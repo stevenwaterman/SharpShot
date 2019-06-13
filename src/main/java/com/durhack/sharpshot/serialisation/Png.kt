@@ -1,6 +1,5 @@
 package com.durhack.sharpshot.serialisation
 
-import com.sun.imageio.plugins.png.PNGMetadata
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.IIOImage
@@ -51,18 +50,20 @@ class Png {
                 val metadata = imageReader.getImageMetadata(0)
 
                 //this cast helps getting the contents
-                val pngmeta = metadata as PNGMetadata
-                val childNodes = pngmeta.standardTextNode.childNodes
+                //val pngmeta = metadata as PNGMetadata
+                //val childNodes = pngmeta.standardTextNode.childNodes
 
-                return (0..childNodes.length)
+                /*return (0..childNodes.length)
                         .map(childNodes::item)
                         .first { node ->
                             node.attributes.getNamedItem("keyword").nodeValue == "comment"
                         }
                         .attributes
                         .getNamedItem("value")
-                        .nodeValue
+                        .nodeValue*/
             }
+
+            return "Error"
         }
     }
 }
