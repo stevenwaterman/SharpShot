@@ -29,6 +29,7 @@ class CenteredScrollPane : View() {
         isFitToHeight = true
         isFitToWidth = true
         skin = HackScrollPaneSkin(this)
+        //background = Background.EMPTY
 
         setOnMousePressed { if (it.button == MouseButton.SECONDARY) dragging = true }
         setOnMouseReleased { if (it.button == MouseButton.SECONDARY) dragging = false }

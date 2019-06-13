@@ -28,10 +28,10 @@ fun Container.increaseSize(direction: Direction) {
 
 fun Container.canDecreaseSize(direction: Direction) =
         when (direction) {
-            Direction.UP -> nodes.keys.none { it.y == height - 1 }
-            Direction.LEFT -> nodes.keys.none { it.x == width - 1 }
-            Direction.DOWN -> nodes.keys.none { it.y == 0 }
-            Direction.RIGHT -> nodes.keys.none { it.x == 0 }
+            Direction.UP -> nodes.keys.none { it.y == height - 1 } && height > 1
+            Direction.LEFT -> nodes.keys.none { it.x == width - 1 } && width > 1
+            Direction.DOWN -> nodes.keys.none { it.y == 0 } && height > 1
+            Direction.RIGHT -> nodes.keys.none { it.x == 0 } && width > 1
         }
 
 /**

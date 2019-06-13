@@ -9,9 +9,17 @@ import com.durhack.sharpshot.core.state.tick.*
 import com.durhack.sharpshot.util.IdiotProgrammerException
 import com.durhack.sharpshot.util.filterType
 import com.durhack.sharpshot.util.pairDuplicates
+import javafx.beans.property.SimpleIntegerProperty
+import tornadofx.*
 import java.math.BigInteger
 
-class Container(var width: Int, var height: Int){
+class Container(initWidth: Int, initHeight: Int){
+    val widthProp = SimpleIntegerProperty(initWidth)
+    var width by widthProp
+
+    val heightProp = SimpleIntegerProperty(initHeight)
+    var height: Int by heightProp
+
     val nodes = mutableMapOf<Coordinate, AbstractNode>()
     val bullets = mutableListOf<Bullet>()
 

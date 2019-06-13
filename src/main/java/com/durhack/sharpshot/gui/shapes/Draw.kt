@@ -49,6 +49,37 @@ object Draw {
         triangle.draw(gc, direction, x, y, scale, color)
     }
 
+    private val arrow = DrawablePolygon(listOf(
+            Point2D(0.0, 0.5),
+            Point2D(0.5, 0.0),
+            Point2D(1.0, 0.5),
+            Point2D(0.75, 0.5),
+            Point2D(0.75, 1.0),
+            Point2D(0.25, 1.0),
+            Point2D(0.25, 0.5)
+                                              ))
+
+    fun arrow(gc: GraphicsContext, direction: Direction, x: Double, y: Double, scale: Int, color: Color) {
+        arrow.draw(gc, direction, x, y, scale, color)
+    }
+
+    private val doubleArrow = DrawablePolygon(listOf(
+            Point2D(0.5, 0.0),
+            Point2D(0.75, 0.25),
+            Point2D(0.625, 0.25),
+            Point2D(0.625, 0.75),
+            Point2D(0.75, 0.75),
+            Point2D(0.5, 1.0),
+            Point2D(0.25, 0.75),
+            Point2D(0.375, 0.75),
+            Point2D(0.375, 0.25),
+            Point2D(0.25, 0.25)
+                                              ))
+
+    fun doubleArrow(gc: GraphicsContext, direction: Direction, x: Double, y: Double, scale: Int, color: Color) {
+        doubleArrow.draw(gc, direction, x, y, scale, color)
+    }
+
     fun text(gc: GraphicsContext, text: String, x: Double, y: Double, scale: Int, color: Color = Color.BLACK) {
         gc.textAlign = TextAlignment.CENTER
         gc.textBaseline = VPos.CENTER
