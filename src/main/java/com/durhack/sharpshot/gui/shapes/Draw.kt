@@ -80,6 +80,16 @@ object Draw {
         doubleArrow.draw(gc, direction, x, y, scale, color)
     }
 
+    private val rightAngleTriangle = DrawablePolygon(listOf(
+            Point2D(0.0, 0.0),
+            Point2D(1.0, 0.0),
+            Point2D(0.0, 1.0)
+    ))
+
+    fun rightAngleTriangle(gc: GraphicsContext, direction: Direction, x: Double, y: Double, scale: Int, color: Color) {
+        rightAngleTriangle.draw(gc, direction, x, y, scale, color)
+    }
+
     fun text(gc: GraphicsContext, text: String, x: Double, y: Double, scale: Int, color: Color = Color.BLACK) {
         gc.textAlign = TextAlignment.CENTER
         gc.textBaseline = VPos.CENTER

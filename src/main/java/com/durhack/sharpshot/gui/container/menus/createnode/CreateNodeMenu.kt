@@ -2,7 +2,7 @@ package com.durhack.sharpshot.gui.container.menus.createnode
 
 import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Coordinate
-import com.durhack.sharpshot.gui.container.CenteredScrollPane
+import com.durhack.sharpshot.gui.controls.CenteredScrollPane
 import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.gui.container.menus.ContainerInputLayer
 import com.durhack.sharpshot.gui.container.menus.createnode.nodeforms.AbstractNodeForm

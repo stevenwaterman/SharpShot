@@ -1,5 +1,6 @@
-package com.durhack.sharpshot.gui.container
+package com.durhack.sharpshot.gui.controls
 
+import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.util.*
 import javafx.geometry.Point2D
 import javafx.geometry.Pos
@@ -13,11 +14,12 @@ import kotlin.math.roundToInt
 
 class CenteredScrollPane : View() {
     private val containerView: ContainerView by inject()
+    private val wrapper: ResizingWrapper by inject()
     private val zoomPerStep: Double = 1.05
     private var dragging = false
 
     private val inner: StackPane = stackpane{
-        add(containerView)
+        add(wrapper)
         alignment = Pos.CENTER
     }
 

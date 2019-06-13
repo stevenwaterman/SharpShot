@@ -49,12 +49,6 @@ class ContainerInputLayer : View() {
             }
         }
 
-        addEventHandler(MouseEvent.MOUSE_DRAGGED){
-            if(it.button != MouseButton.SECONDARY){
-                it.consume()
-            }
-        }
-
         setOnMouseMoved {
             mouseX = it.x
             mouseY = it.y

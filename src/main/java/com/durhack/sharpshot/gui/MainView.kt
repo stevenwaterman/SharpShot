@@ -1,11 +1,9 @@
 package com.durhack.sharpshot.gui
 
-import com.durhack.sharpshot.gui.container.CenteredScrollPane
+import com.durhack.sharpshot.gui.controls.CenteredScrollPane
 import com.durhack.sharpshot.gui.container.menus.ContainerInputLayer
 import com.durhack.sharpshot.gui.controls.Output
 import com.durhack.sharpshot.gui.controls.Playback
-import com.durhack.sharpshot.gui.controls.SizeChangingWrapper
-import com.durhack.sharpshot.gui.controls.SizeModifier
 import javafx.event.Event
 import javafx.event.EventTarget
 import javafx.geometry.Orientation
@@ -17,18 +15,12 @@ class MainView: View(){
     private val inputLayer: ContainerInputLayer by inject()
     private val playback: Playback by inject()
     private val output: Output by inject()
-    private val size: SizeModifier by inject()
-    private val sizeChangingWrapper: SizeChangingWrapper by inject()
 
     override val root = borderpane {
-        center { add(sizeChangingWrapper) }
+        center { add(scrollPane) }
         bottom { add(playback) }
         right {
-            vbox(16.0) {
-                add(output)
-                separator(Orientation.HORIZONTAL)
-                add(size)
-            }
+            add(output)
         }
 
         addEventFilter(KeyEvent.KEY_PRESSED) {
