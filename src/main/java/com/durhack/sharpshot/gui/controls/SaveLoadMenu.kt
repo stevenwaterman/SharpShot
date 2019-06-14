@@ -18,18 +18,21 @@ class SaveLoadMenu: View(){
         hbox(4.0, Pos.CENTER) {
             enableWhen(container.runningProp.not())
             button("Load"){
+                isFocusTraversable = false
                 action {
                     val success = ContainerSaveLoad.load()
                     if(success) controller.view.render()
                 }
             }
             button("Save") {
+                isFocusTraversable = false
                 action {
                     ContainerSaveLoad.save()
                 }
             }
         }
         button("Clear") {
+            isFocusTraversable = false
             enableWhen(container.runningProp.not())
             action {
                 controller.clear()

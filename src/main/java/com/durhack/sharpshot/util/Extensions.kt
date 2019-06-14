@@ -34,4 +34,5 @@ fun <T: Comparable<T>> T.clamp(min: T, max: T): T {
 }
 
 operator fun Point2D.div(oth: Point2D): Point2D = Point2D(x / oth.x, y / oth.y)
+operator fun Point2D.times(oth: Number): Point2D = Point2D(x * oth.toDouble(), y * oth.toDouble())
 fun Point2D.clamp(min: Double, max: Double): Point2D = Point2D(x.clamp(min, max), y.clamp(min, max))

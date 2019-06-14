@@ -14,46 +14,46 @@ class ContainerStaticView() : View() {
     }
 
     fun render(){
-        renderer.render()
+        renderer.render(ContainerView.scale)
     }
 }
 
 class ContainerStaticRenderer() : Canvas() {
     private val gc = graphicsContext2D
 
-    fun render(){
+    fun render(scale: Int){
         clear()
-        updateWidth()
-        drawNodes()
-        drawGrid()
+        updateWidth(scale)
+        drawNodes(scale)
+        drawGrid(scale)
     }
 
-    private fun updateWidth() {
-        width = ContainerView.scaleProp.get() * container.width + 0.5
-        height = ContainerView.scaleProp.get() * container.height + 0.5
+    private fun updateWidth(scale: Int) {
+        width = scale * container.width + 0.5
+        height = scale * container.height + 0.5
     }
 
     private fun clear() {
         gc.clearRect(0.0, 0.0, width, height)
     }
 
-    private fun drawNodes(){
+    private fun drawNodes(scale: Int){
         container.nodes.forEach { (coord, node) ->
-            val x = coord.x * ContainerView.scaleProp.get()
-            val y = coord.y * ContainerView.scaleProp.get()
-            NodeRegistry.draw(node, gc, x + 0.5, y + 0.5, ContainerView.scale)
+            val x = coord.x * scale
+            val y = coord.y * scale
+            NodeRegistry.draw(node, gc, x + 0.5, y + 0.5, scale)
         }
     }
 
-    private fun drawGrid() {
+    private fun drawGrid(scale: Int) {
         gc.stroke = Color.GRAY
         gc.lineWidth = 1.0
 
-        (0..container.width).map { it * ContainerView.scaleProp.get() }.forEach {//TODO disable zooming when mouse button is down not just when dragging
+        (0..container.width).map { it * scale }.forEach {//TODO disable zooming when mouse button is down not just when dragging
             gc.strokeLine(it + 0.5, 0.0, it +0.5, height)
         }
 
-        (0..container.height).map { it * ContainerView.scaleProp.get() }.forEach {
+        (0..container.height).map { it * scale }.forEach {
             gc.strokeLine(0.0, it + 0.5, width, it + 0.5)
         }
     }

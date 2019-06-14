@@ -22,6 +22,7 @@ class Playback : View() {
             visibleWhen(animateProp)
         }
         slider(1, 5, orientation = Orientation.HORIZONTAL){
+            isFocusTraversable = false
             blockIncrement = 1.0
             majorTickUnit = 1.0
             isSnapToTicks = true
@@ -32,9 +33,11 @@ class Playback : View() {
             bind(speedSettingProp)
         }
         checkbox("Animate", animateProp){
+            isFocusTraversable = false
             enableWhen(controller.idleProp)
         }
         button("Step") {
+            isFocusTraversable = false
             enableWhen(controller.idleProp)
             action {
                 runLater {
@@ -50,6 +53,7 @@ class Playback : View() {
             }
         }
         button("Reset") {
+            isFocusTraversable = false
             enableWhen(controller.idleProp)
             action {
                 runLater {
@@ -59,6 +63,7 @@ class Playback : View() {
         }
         stackpane {
             button("Play") {
+                isFocusTraversable = false
                 visibleWhen(controller.playingProp.not())
                 enableWhen(controller.idleProp)
                 action {
@@ -70,6 +75,7 @@ class Playback : View() {
                 }
             }
             button("Stop"){
+                isFocusTraversable = false
                 visibleWhen(controller.playingProp)
                 enableWhen(controller.stoppingProp.not())
                 action {
@@ -80,6 +86,7 @@ class Playback : View() {
             }
         }
         button("Fast-Forward") {
+            isFocusTraversable = false
             enableWhen(controller.idleProp)
             action {
                 runLater {
@@ -95,6 +102,7 @@ class Playback : View() {
 
         val inputsProp = SimpleStringProperty("")
         button("Start Test") {
+            isFocusTraversable = false
             action {
                 val inputString = inputsProp.get()
                 val inputs = inputString.split(" ").filter { it.isNotBlank() }.map { it.toBigInteger() }
