@@ -9,11 +9,11 @@ import com.durhack.sharpshot.core.state.tick.*
 import com.durhack.sharpshot.util.IdiotProgrammerException
 import com.durhack.sharpshot.util.filterType
 import com.durhack.sharpshot.util.pairDuplicates
-import javafx.beans.property.SimpleIntegerProperty
+import javafx.beans.property.*
 import tornadofx.*
 import java.math.BigInteger
 
-class Container(initWidth: Int, initHeight: Int){
+class Container(initWidth: Int, initHeight: Int) {
     val widthProp = SimpleIntegerProperty(initWidth)
     var width by widthProp
 
@@ -23,25 +23,31 @@ class Container(initWidth: Int, initHeight: Int){
     val nodes = mutableMapOf<Coordinate, AbstractNode>()
     val bullets = mutableListOf<Bullet>()
 
-    fun clearBullets() {
-        bullets.clear()
-    }
+    private val runningPropInternal = SimpleBooleanProperty(false)
+    val runningProp = ReadOnlyBooleanWrapper.booleanExpression(runningPropInternal)
+    var running by runningPropInternal
+        private set
 
-    fun clearNodes() {
+    fun clear() {
         nodes.clear()
+        bullets.clear()
+        running = false
     }
 
-    fun resetNodes() {
+    fun reset() {
         nodes.values.forEach(AbstractNode::reset)
+        bullets.clear()
+        running = false
     }
 
-    fun initialise(input: List<BigInteger?>) {
+    fun start(input: List<BigInteger?>) {
         val inputNodes = nodes.filterType<Coordinate, AbstractInputNode>()
         inputNodes.forEach { (coord, node) ->
             val (dir, value) = node.initialise(input) ?: return@forEach
             val bullet = createBulletFromNode(coord, dir, value)
             bullets.add(bullet)
         }
+        running = true
     }
 
     private fun createBulletFromNode(coordinate: Coordinate, relativeDirection: Direction, value: BigInteger?): Bullet {
@@ -62,7 +68,7 @@ class Container(initWidth: Int, initHeight: Int){
      * all bullets -> check
      */
     fun tick(): TickReport {
-        val halted = tryHalt()
+        var halted = tryHalt()
         processBullets()
         val movements = bulletMovement()
         val collisionReport = collide(movements)
@@ -70,17 +76,15 @@ class Container(initWidth: Int, initHeight: Int){
         moveBullets()
 
         val outputs = readOutputs()
+        halted = halted || bullets.isEmpty()
+        if (halted) reset()
         return TickReport(collisionReport, outputs, halted)
     }
 
-    private fun tryHalt(): Boolean {
-        val halt = bullets
-                .mapNotNull { nodes[it.coordinate] }
-                .filterIsInstance<HaltNode>()
-                .any()
-        if (halt) bullets.clear()
-        return halt
-    }
+    private fun tryHalt() = bullets
+            .mapNotNull { nodes[it.coordinate] }
+            .filterIsInstance<HaltNode>()
+            .any()
 
     /**
      * Generate the list of movements
@@ -128,7 +132,7 @@ class Container(initWidth: Int, initHeight: Int){
      */
     private fun finalCollisions(movements: Set<BulletMovement>) = baseCollide(movements, ::FinalCheck)
 
-    private fun baseCollide(movements: Set<BulletMovement>, checker: (BulletMovement) -> Checker): List<Collision>{
+    private fun baseCollide(movements: Set<BulletMovement>, checker: (BulletMovement) -> Checker): List<Collision> {
         val checkers = movements.map(checker)
         val pairs = checkers.pairDuplicates()
         val collisions = pairs.map { (a, b) ->
@@ -179,8 +183,7 @@ class Container(initWidth: Int, initHeight: Int){
     fun isInside(coord: Coordinate) = coord.x in (0 until width) && coord.y in (0 until height)
 
     fun setTo(oth: Container) {
-        clearBullets()
-        clearNodes()
+        clear()
         nodes.putAll(oth.nodes)
         width = oth.width
         height = oth.height

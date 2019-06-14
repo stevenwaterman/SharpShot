@@ -22,7 +22,7 @@ object ContainerSaveLoad {
 
     /**
      * If path is null, a file chooser will pop up
-     * If title is null, a text initialise will pop up
+     * If title is null, a text start will pop up
      * If title is blank (empty space only), no title will be added
      */
     fun save(containerView: ContainerView): Boolean {
