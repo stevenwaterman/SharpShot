@@ -2,19 +2,14 @@ package com.durhack.sharpshot.gui.controls
 
 import com.durhack.sharpshot.gui.container.ContainerController
 import com.durhack.sharpshot.gui.util.ReadOnlyTextArea
-import com.durhack.sharpshot.gui.util.ui
 import javafx.beans.InvalidationListener
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.geometry.Pos
-import javafx.scene.control.Control
-import javafx.scene.control.Skin
-import javafx.scene.control.skin.TextAreaSkin
-import javafx.scene.layout.Background
 import javafx.scene.layout.Priority
 import javafx.scene.text.Font
+import javafx.scene.text.TextAlignment
 import tornadofx.*
-import javafx.scene.layout.Region
 
 
 class Output : View() {
@@ -30,6 +25,7 @@ class Output : View() {
         label {
             text = "Out"
             alignment = Pos.TOP_CENTER
+            textAlignment = TextAlignment.CENTER
             font = Font(18.0)
         }
         add(text)

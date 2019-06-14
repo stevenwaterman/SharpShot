@@ -38,7 +38,7 @@ class InNodeEntry() : RegistryEntry<InNode>(
                       x: Double,
                       y: Double,
                       scale: Int) {
-        Draw.triangle(gc, node.direction, x, y, scale, Color.YELLOW)
+        Draw.triangle(gc, node.direction, x, y, scale, Color.GOLD)
         val text = when(node.index) {
             null -> "E"
             else -> "IN${node.index}"

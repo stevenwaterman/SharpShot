@@ -18,7 +18,7 @@ class StackNodeEntry() : RegistryEntry<StackNode>(
                       x: Double,
                       y: Double,
                       scale: Int) {
-        Draw.triangle(gc, node.direction, x, y, scale, Color.YELLOW)
+        Draw.triangle(gc, node.direction, x, y, scale, Color.LIMEGREEN)
         Draw.text(gc, "S${node.stackSize}", x, y, scale)
     }
 }

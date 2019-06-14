@@ -18,7 +18,7 @@ class RandomNodeEntry() : RegistryEntry<RandomNode>(
                       x: Double,
                       y: Double,
                       scale: Int) {
-        Draw.triangle(gc, node.direction, x, y, scale, Color.GREEN)
+        Draw.triangle(gc, node.direction, x, y, scale, Color.OLIVEDRAB)
         Draw.text(gc, "?", x, y, scale)
     }
 }

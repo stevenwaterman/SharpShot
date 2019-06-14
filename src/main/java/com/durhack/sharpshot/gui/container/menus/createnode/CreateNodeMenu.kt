@@ -2,10 +2,10 @@ package com.durhack.sharpshot.gui.container.menus.createnode
 
 import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Coordinate
-import com.durhack.sharpshot.gui.controls.ContainerScrollPane
 import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.gui.container.menus.ContainerInputLayer
 import com.durhack.sharpshot.gui.container.menus.createnode.nodeforms.AbstractNodeForm
+import com.durhack.sharpshot.gui.controls.ContainerScrollPane
 import com.durhack.sharpshot.gui.util.addClickHandler
 import com.durhack.sharpshot.registry.RegistryEntry
 import javafx.geometry.Insets
@@ -15,28 +15,15 @@ import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
-import javafx.scene.layout.Background
-import javafx.scene.layout.BackgroundFill
-import javafx.scene.layout.Border
-import javafx.scene.layout.BorderStroke
-import javafx.scene.layout.BorderStrokeStyle
-import javafx.scene.layout.BorderWidths
-import javafx.scene.layout.CornerRadii
+import javafx.scene.layout.*
 import javafx.scene.paint.Color
-import tornadofx.Fragment
-import tornadofx.hbox
-import tornadofx.hide
-import tornadofx.paddingAll
-import tornadofx.pane
-import tornadofx.plus
-import tornadofx.show
-import tornadofx.stackpane
+import tornadofx.*
 
 class CreateNodeMenu(private val onNodeCreated: (Coordinate, AbstractNode?) -> Unit) : Fragment() {
     val padding = 12.0
     private val borderWidth = 2.0
     private val allBorder = Border(BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths(borderWidth)))
-    private val allBackground = Background(BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY))
+    private val allBackground = Background(BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY))
 
     private val inputLayer: ContainerInputLayer by inject()
     private lateinit var coordinate: Coordinate

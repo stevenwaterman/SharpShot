@@ -18,6 +18,6 @@ class SplitterNodeEntry() : RegistryEntry<SplitterNode>(
                       x: Double,
                       y: Double,
                       scale: Int) {
-        Draw.diamond(gc, node.direction, x, y, scale, Color.YELLOW)
+        Draw.diamond(gc, node.direction, x, y, scale, Color.SEAGREEN)
     }
 }

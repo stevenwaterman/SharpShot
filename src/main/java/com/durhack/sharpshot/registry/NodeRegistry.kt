@@ -26,20 +26,20 @@ object NodeRegistry {
     val entries = listOf(
             inNodeEntry,
             listNodeEntry,
-            stackNodeEntry,
+            voidNodeEntry,
+            haltNodeEntry,
             splitterNodeEntry,
+            stackNodeEntry,
+            constantNodeEntry,
+            randomNodeEntry,
             branchNodeEntry,
             ifPositiveNodeEntry,
             ifZeroNodeEntry,
             ifNullNodeEntry,
             addNodeEntry,
-            divNodeEntry,
-            multNodeEntry,
             subNodeEntry,
-            constantNodeEntry,
-            randomNodeEntry,
-            voidNodeEntry,
-            haltNodeEntry
+            multNodeEntry,
+            divNodeEntry
                         )
 
     private val mapping: Map<String, RegistryEntry<out AbstractNode>> =

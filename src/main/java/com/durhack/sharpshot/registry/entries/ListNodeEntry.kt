@@ -18,7 +18,7 @@ class ListNodeEntry() : RegistryEntry<ListNode>(
                       x: Double,
                       y: Double,
                       scale: Int) {
-        Draw.triangle(gc, node.direction, x, y, scale, Color.YELLOW)
+        Draw.triangle(gc, node.direction, x, y, scale, Color.GOLD)
         Draw.text(gc, "LST", x, y, scale)
     }
 }

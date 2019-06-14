@@ -18,7 +18,7 @@ class HaltNodeEntry() : RegistryEntry<HaltNode>(
                       x: Double,
                       y: Double,
                       scale: Int) {
-        Draw.circle(gc, x, y, scale, Color.RED)
+        Draw.circle(gc, x, y, scale, Color.CRIMSON)
         Draw.text(gc, "H", x, y, scale, Color.WHITE)
     }
 }
