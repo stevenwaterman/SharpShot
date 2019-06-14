@@ -1,183 +1,47 @@
 package com.durhack.sharpshot.gui
 
-import com.durhack.sharpshot.gui.container.ContainerView
-import com.durhack.sharpshot.logic.Container
-import com.durhack.sharpshot.serialisation.ContainerSaveLoad
-import com.durhack.sharpshot.util.asBigInteger
-import javafx.beans.InvalidationListener
-import javafx.beans.property.SimpleBooleanProperty
-import javafx.geometry.Pos
-import javafx.scene.control.Alert
-import javafx.scene.control.ButtonType
+import com.durhack.sharpshot.gui.container.menus.ContainerInputLayer
+import com.durhack.sharpshot.gui.controls.*
+import javafx.event.Event
+import javafx.event.EventTarget
+import javafx.scene.input.KeyEvent
 import tornadofx.*
-import java.math.BigInteger
 
-class MainView : View("Sharpshot") {
-    private val controlBar: ControlBar by inject()
-    private val nodeCreator: NodeCreator by inject()
-    private val outputPane: OutputPane by inject()
-    private val containerScrollPane = CenteredScrollPane()
-
-    private val running = SimpleBooleanProperty(false)
-
-    private lateinit var updateOutput: InvalidationListener
-
-    init {
-        controlBar.running.bind(running)
-    }
-
-    private var containerView: ContainerView? = null
-        set(value) {
-            field = value
-
-            containerScrollPane.setContent(value?.root)
-            controlBar.containerSet.set(value != null)
-        }
-
-    private fun setContainer(container: Container) {
-        val newView = ContainerView(container, controlBar.tickRateProp, nodeCreator::createNode)
-        running.bind(newView.running)
-
-        outputPane.container = container
-
-        containerView = newView
-    }
-
-    fun newContainer(width: Int, height: Int) {
-        val container = Container(width, height)
-        setContainer(container)
-    }
+class MainView: View(){
+    private val scrollPane: ContainerScrollPane by inject()
+    private val inputLayer: ContainerInputLayer by inject()
+    private val playback: Playback by inject()
+    private val output: Output by inject()
+    private val info: ContainerInfo by inject()
+    private val saveLoadMenu: SaveLoadMenu by inject()
 
     override val root = borderpane {
-        center = borderpane {
-            paddingAll = 8
-            center = containerScrollPane.root
-
-            left = vbox(16, Pos.CENTER) {
-                enableWhen(controlBar.containerSet.and(running.not()))
-                button("+") {
-                    action {
-                        containerView?.addColumnLeft()
-                    }
-                }
-                button("-") {
-                    action {
-                        containerView?.removeColumnLeft()
-                    }
-                }
-            }
-
-            right = vbox(16, Pos.CENTER) {
-                enableWhen(controlBar.containerSet.and(running.not()))
-                button("+") {
-                    action {
-                        containerView?.addColumnRight()
-                    }
-                }
-                button("-") {
-                    action {
-                        containerView?.removeColumnRight()
-                    }
-                }
-            }
-
-            top = hbox(16, Pos.CENTER) {
-                enableWhen(controlBar.containerSet.and(running.not()))
-                button("+") {
-                    action {
-                        containerView?.addRowTop()
-                    }
-                }
-                button("-") {
-                    action {
-                        containerView?.removeRowTop()
-                    }
-                }
-            }
-
-            bottom = hbox(16, Pos.CENTER) {
-                enableWhen(controlBar.containerSet.and(running.not()))
-                button("+") {
-                    action {
-                        containerView?.addRowBottom()
-                    }
-                }
-                button("-") {
-                    action {
-                        containerView?.removeRowBottom()
-                    }
-                }
+        center { add(scrollPane) }
+        bottom { add(playback) }
+        right {
+            vbox(4.0) {
+                paddingAll = 4.0
+                add(output)
+                separator()
+                add(info)
+                separator()
+                add(saveLoadMenu)
             }
         }
-        left = nodeCreator.root
-        right = vbox(16, Pos.CENTER) {
-            paddingAll = 16
-            add(outputPane.root)
-            add(controlBar.root)
+
+        addEventFilter(KeyEvent.KEY_PRESSED) {
+            if (it.target == scrollPane.root) {
+                redirect(it)
+            }
         }
     }
 
-    fun start() {
-        val container = containerView ?: return //Exit if container is null
-
-        val integers = parseInputs()
-        if (integers != null) {
-            container.start(integers)
-            container.animate()
-        }
-    }
-
-    fun reset() {
-        containerView?.reset()
-    }
-
-    fun loadContainer() {
-        val container = ContainerSaveLoad.load() ?: return
-        setContainer(container)
-    }
-
-    fun saveContainer() {
-        val container = containerView?.container ?: return
-        ContainerSaveLoad.save(container)
-    }
-
-    fun clear() {
-        containerView?.clearAll()
-    }
-
-    private fun parseInputs(): List<BigInteger?>? {
-        val inputString = controlBar.input.get()
-        val unknownWords = mutableListOf<String>()
-        val numberRegex = Regex("[-0-9]+")
-        val integers = inputString.split(",").asSequence().map(String::trim).map { word ->
-            when {
-                word.isBlank() -> null
-                word.matches(numberRegex) -> BigInteger(word)
-                word.length == 1 -> word.first().asBigInteger()
-                else -> {
-                    unknownWords.add(word)
-                    null
-                }
-            }
-        }.toList()
-
-        if (unknownWords.isEmpty()) {
-            return integers
-        }
-
-        alert(
-                type = Alert.AlertType.ERROR,
-                buttons = *arrayOf(ButtonType.OK),
-                header = "Cannot parse inputs",
-                content = listOf(
-                        "Inputs must be integers or single ASCII characters",
-                        "The following inputs could not be understood",
-                        unknownWords.joinToString()).joinToString(System.lineSeparator()))
-        return null
-    }
-
-    fun skipToEnd() {
-        val containerView = containerView ?: return
-        containerView.skipToEnd()
+    private fun redirect(event: KeyEvent){
+        event.consume()
+        val newEvent = event.withTarget(inputLayer.root)
+        Event.fireEvent(inputLayer.root, newEvent)
     }
 }
+
+fun KeyEvent.withTarget(target: EventTarget): KeyEvent =
+        KeyEvent(source, target, eventType, character, text, code, isShiftDown, isControlDown, isAltDown, isMetaDown)

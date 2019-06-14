@@ -1,35 +1,31 @@
 package com.durhack.sharpshot.serialisation
 
-import com.sun.imageio.plugins.png.PNGMetadata
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.IIOImage
 import javax.imageio.ImageIO
 import javax.imageio.ImageTypeSpecifier
+import javax.imageio.metadata.IIOMetadataFormatImpl
 import javax.imageio.metadata.IIOMetadataNode
 
 class Png {
     companion object {
-        fun write(path: String, image: BufferedImage, txtValue: String) {
-            val writer = ImageIO.getImageWritersByFormatName("png").next()
-
-            val writeParam = writer.defaultWriteParam
-            val typeSpecifier = ImageTypeSpecifier.createFromBufferedImageType(BufferedImage.TYPE_INT_RGB)
-
-            //adding metadata
-            val metadata = writer.getDefaultImageMetadata(typeSpecifier, writeParam)
-
-            val textEntry = IIOMetadataNode("tEXtEntry")
+        fun write(path: String, image: BufferedImage, metadataString: String) {
+            val textEntry = IIOMetadataNode("TextEntry")
             textEntry.setAttribute("keyword", "comment")
-            textEntry.setAttribute("value", txtValue)
+            textEntry.setAttribute("value", metadataString)
 
-            val text = IIOMetadataNode("tEXt")
+            val text = IIOMetadataNode("Text")
             text.appendChild(textEntry)
 
-            val root = IIOMetadataNode("javax_imageio_png_1.0")
+            val root = IIOMetadataNode(IIOMetadataFormatImpl.standardMetadataFormatName)
             root.appendChild(text)
 
-            metadata.mergeTree("javax_imageio_png_1.0", root)
+            val writer = ImageIO.getImageWritersByFormatName("png").next()
+            val writeParam = writer.defaultWriteParam
+            val typeSpecifier = ImageTypeSpecifier.createFromBufferedImageType(BufferedImage.TYPE_INT_RGB)
+            val metadata = writer.getDefaultImageMetadata(typeSpecifier, writeParam)
+            metadata.mergeTree(IIOMetadataFormatImpl.standardMetadataFormatName, root)
 
             //writing the data
             val file = File(path)
@@ -49,10 +45,9 @@ class Png {
 
                 // read metadata of first image
                 val metadata = imageReader.getImageMetadata(0)
+                val root = metadata.getAsTree(IIOMetadataFormatImpl.standardMetadataFormatName) as IIOMetadataNode
 
-                //this cast helps getting the contents
-                val pngmeta = metadata as PNGMetadata
-                val childNodes = pngmeta.standardTextNode.childNodes
+                val childNodes = root.getElementsByTagName("TextEntry")
 
                 return (0..childNodes.length)
                         .map(childNodes::item)

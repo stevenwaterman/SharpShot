@@ -1,22 +1,23 @@
 package com.durhack.sharpshot.gui.util
 
 import javafx.application.Platform
-import javafx.scene.control.TextInputDialog
-import javafx.scene.layout.*
-import javafx.scene.paint.Color
-import java.math.BigInteger
-import java.util.*
-
-fun getNumberInput(header: String, content: String = "", start: BigInteger? = null): Optional<String> {
-    val dialog = TextInputDialog(start?.toString() ?: "")
-    dialog.title = "New Node"
-    dialog.headerText = header
-    dialog.contentText = content
-
-    return dialog.showAndWait()
-}
-
-fun createBorder(color: Color) =
-        Border(BorderStroke(color, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT))
+import javafx.scene.Node
+import javafx.scene.input.MouseEvent
 
 fun ui(function: () -> Unit) = Platform.runLater(function)
+
+fun Node.addClickHandler(func: (MouseEvent) -> Unit){
+    addEventHandler(MouseEvent.MOUSE_CLICKED){event ->
+        if (event.isStillSincePress){
+            func(event)
+        }
+    }
+}
+
+fun Node.addClickFilter(func: (MouseEvent) -> Unit){
+    addEventFilter(MouseEvent.MOUSE_CLICKED){event ->
+        if (event.isStillSincePress){
+            func(event)
+        }
+    }
+}
