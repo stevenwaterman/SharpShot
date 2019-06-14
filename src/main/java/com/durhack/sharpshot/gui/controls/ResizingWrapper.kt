@@ -122,6 +122,7 @@ class ResizingWrapper : View() {
     private val containerInputLayer: ContainerInputLayer by inject()
 
     override val root = gridpane {
+        enableWhen(container.runningProp.not())
         paddingAll = paddingAmnt
         add(topArrow.root, 0, 0)
         add(bottomArrow.root, 2, 2)
