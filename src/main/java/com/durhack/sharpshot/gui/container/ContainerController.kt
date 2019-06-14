@@ -80,12 +80,12 @@ class ContainerController : Controller() {
 
     fun simulate(ticks: Int) {
         simulating = true
-        repeat(ticks){
+        for(i in (1..ticks)){
             val report = container.tick()
             this.ticks++
             out.addAll(report.outputs)
 
-            if(report.halted) return@repeat
+            if(report.halted) break
         }
 
         view.render()

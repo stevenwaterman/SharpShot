@@ -107,7 +107,7 @@ class Container(initWidth: Int, initHeight: Int) {
         val swapRemove = swapCollisions.map(Collision::a) + swapCollisions.map(Collision::b)
         remaining.removeAll(swapRemove)
 
-        val finalCollisions = finalCollisions(movements)
+        val finalCollisions = finalCollisions(remaining)
 
         val finalRemove = finalCollisions.map(Collision::a) + finalCollisions.map(
                 Collision::b)

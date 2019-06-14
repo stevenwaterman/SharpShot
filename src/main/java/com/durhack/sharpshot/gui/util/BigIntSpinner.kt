@@ -59,7 +59,7 @@ private class BigIntValueFactory(private val onIncrementalChange: (BigInteger?) 
 }
 
 private class IntegerFilter: UnaryOperator<TextFormatter.Change?> {
-    private val regex = "-?([1-9][0-9]*)?".toRegex()
+    private val regex = "-?([0-9]+)?".toRegex()
 
     override fun apply(change: TextFormatter.Change?): TextFormatter.Change? {
         change ?: return null

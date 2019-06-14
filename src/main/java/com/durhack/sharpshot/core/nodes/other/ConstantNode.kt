@@ -10,7 +10,7 @@ class ConstantNode(var value: BigInteger?, direction: Direction) : AbstractNode(
      * so the start bullet is destroyed
      */
     override fun process(relativeDirection: Direction, value: BigInteger?) =
-            mutableMapOf(relativeDirection to value, Direction.UP to value)
+            mutableMapOf(relativeDirection to value, Direction.UP to this.value)
 
     override fun reset() {}
 
