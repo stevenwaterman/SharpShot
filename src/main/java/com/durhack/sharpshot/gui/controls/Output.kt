@@ -1,44 +1,38 @@
 package com.durhack.sharpshot.gui.controls
 
 import com.durhack.sharpshot.gui.container.ContainerController
+import com.durhack.sharpshot.gui.util.ReadOnlyTextArea
+import com.durhack.sharpshot.gui.util.ui
 import javafx.beans.InvalidationListener
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
 import javafx.geometry.Pos
-import javafx.scene.control.ScrollPane
+import javafx.scene.control.Control
+import javafx.scene.control.Skin
+import javafx.scene.control.skin.TextAreaSkin
+import javafx.scene.layout.Background
 import javafx.scene.layout.Priority
 import javafx.scene.text.Font
 import tornadofx.*
+import javafx.scene.layout.Region
+
 
 class Output : View() {
     private val controller: ContainerController by inject()
     private val outputObservable = OutputStringObservable(controller)
+    private val text = ReadOnlyTextArea(outputObservable)
 
-    override val root = vbox(spacing = 8.0){
+    override val root = vbox(spacing = 12.0) {
         prefWidth = 100.0
         alignment = Pos.TOP_CENTER
         vgrow = Priority.ALWAYS
-        hgrow = Priority.ALWAYS
 
         label {
             text = "Out"
             alignment = Pos.TOP_CENTER
             font = Font(18.0)
         }
-        spacer {
-            prefHeight = 20.0
-        }
-        scrollpane {
-            isFitToHeight = true
-            isFitToWidth = true
-            hbarPolicy = ScrollPane.ScrollBarPolicy.NEVER
-            vbarPolicy = ScrollPane.ScrollBarPolicy.AS_NEEDED
-            label {
-                bind(outputObservable)
-                alignment = Pos.TOP_CENTER
-                isFocusTraversable = false
-            }
-        }
+        add(text)
     }
 }
 

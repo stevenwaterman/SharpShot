@@ -2,7 +2,7 @@ package com.durhack.sharpshot.gui.container.menus.createnode
 
 import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Coordinate
-import com.durhack.sharpshot.gui.controls.CenteredScrollPane
+import com.durhack.sharpshot.gui.controls.ContainerScrollPane
 import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.gui.container.menus.ContainerInputLayer
 import com.durhack.sharpshot.gui.container.menus.createnode.nodeforms.AbstractNodeForm
@@ -121,7 +121,7 @@ class CreateNodeMenu(private val onNodeCreated: (Coordinate, AbstractNode?) -> U
         return Point2D(-xOffset, -yOffset)
     }
 
-    private val scrollPane: CenteredScrollPane by inject()
+    private val scrollPane: ContainerScrollPane by inject()
     private fun clampLocation(location: Point2D): Point2D {
         var parentLocation = location
         var parent: Node = root.parent

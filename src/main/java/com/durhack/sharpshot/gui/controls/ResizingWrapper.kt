@@ -5,6 +5,7 @@ import com.durhack.sharpshot.core.control.decreaseSize
 import com.durhack.sharpshot.core.control.increaseSize
 import com.durhack.sharpshot.core.state.Direction
 import com.durhack.sharpshot.gui.container.ContainerView
+import com.durhack.sharpshot.gui.container.menus.ContainerInputLayer
 import com.durhack.sharpshot.gui.shapes.Draw
 import com.durhack.sharpshot.util.container
 import javafx.beans.binding.IntegerExpression
@@ -118,12 +119,14 @@ class ResizingWrapper : View() {
     private val topArrow = DraggableCorner(Direction.UP, Direction.LEFT)
     private val bottomArrow = DraggableCorner(Direction.DOWN, Direction.RIGHT)
     private val containerView: ContainerView by inject()
+    private val containerInputLayer: ContainerInputLayer by inject()
 
     override val root = gridpane {
         paddingAll = paddingAmnt
         add(topArrow.root, 0, 0)
-        add(containerView.root, 1, 1)
         add(bottomArrow.root, 2, 2)
+        add(containerView.root, 1, 1)
+        add(containerInputLayer.root, 1, 1)
 
         maxWidthProperty().bind(topArrow.root.maxWidthProperty() + containerView.root.maxWidthProperty() + bottomArrow.root.maxWidthProperty() + paddingAmnt)
         maxHeightProperty().bind(topArrow.root.maxHeightProperty() + containerView.root.maxHeightProperty() + bottomArrow.root.maxHeightProperty() + paddingAmnt)

@@ -27,12 +27,10 @@ class ContainerView : View() {
 
     private val nodeLayer: ContainerStaticView by inject()
     private val bulletLayer = pane {}
-    private val containerInputLayer: ContainerInputLayer by inject()
 
     override val root = stackpane {
         add(nodeLayer)
         add(bulletLayer)
-        add(containerInputLayer)
         background = Background(BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY))
     }
 

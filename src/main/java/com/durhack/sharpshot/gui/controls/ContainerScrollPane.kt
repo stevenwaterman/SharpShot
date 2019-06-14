@@ -12,7 +12,7 @@ import tornadofx.*
 import java.lang.Math.pow
 import kotlin.math.roundToInt
 
-class CenteredScrollPane : View() {
+class ContainerScrollPane : View() {
     private val containerView: ContainerView by inject()
     private val wrapper: ResizingWrapper by inject()
     private val zoomPerStep: Double = 1.05
@@ -47,6 +47,7 @@ class CenteredScrollPane : View() {
     private val containerSize: Point2D get() = Point2D(containerView.width, containerView.height)
     private val rootSize: Point2D get() = Point2D(root.width, root.height)
 
+    //TODO this adjustment isn't right
     private fun zoom(mouseX: Double, mouseY: Double, textDeltaY: Double) {
         val sceneMouseLocation = Point2D(mouseX, mouseY)
         val containerMouseLocation = containerView.root.sceneToLocal(sceneMouseLocation)
