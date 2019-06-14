@@ -14,26 +14,30 @@ class ContainerStaticView() : View() {
     }
 
     fun render(){
-        renderer.clear()
-        renderer.updateWidth()
-        renderer.drawNodes()
-        renderer.drawGrid()
+        renderer.render()
     }
 }
 
 class ContainerStaticRenderer() : Canvas() {
     private val gc = graphicsContext2D
 
-    fun updateWidth() {
+    fun render(){
+        clear()
+        updateWidth()
+        drawNodes()
+        drawGrid()
+    }
+
+    private fun updateWidth() {
         width = ContainerView.scaleProp.get() * container.width + 0.5
         height = ContainerView.scaleProp.get() * container.height + 0.5
     }
 
-    fun clear() {
+    private fun clear() {
         gc.clearRect(0.0, 0.0, width, height)
     }
 
-    fun drawNodes(){
+    private fun drawNodes(){
         container.nodes.forEach { (coord, node) ->
             val x = coord.x * ContainerView.scaleProp.get()
             val y = coord.y * ContainerView.scaleProp.get()
@@ -41,7 +45,7 @@ class ContainerStaticRenderer() : Canvas() {
         }
     }
 
-    fun drawGrid() {
+    private fun drawGrid() {
         gc.stroke = Color.GRAY
         gc.lineWidth = 1.0
 

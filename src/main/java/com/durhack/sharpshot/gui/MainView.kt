@@ -1,23 +1,19 @@
 package com.durhack.sharpshot.gui
 
-import com.durhack.sharpshot.gui.controls.ContainerScrollPane
 import com.durhack.sharpshot.gui.container.menus.ContainerInputLayer
-import com.durhack.sharpshot.gui.controls.ContainerInfo
-import com.durhack.sharpshot.gui.controls.Output
-import com.durhack.sharpshot.gui.controls.Playback
+import com.durhack.sharpshot.gui.controls.*
 import javafx.event.Event
 import javafx.event.EventTarget
 import javafx.scene.input.KeyEvent
 import tornadofx.*
 
-
-//TODO add all controls
 class MainView: View(){
     private val scrollPane: ContainerScrollPane by inject()
     private val inputLayer: ContainerInputLayer by inject()
     private val playback: Playback by inject()
     private val output: Output by inject()
     private val info: ContainerInfo by inject()
+    private val saveLoadMenu: SaveLoadMenu by inject()
 
     override val root = borderpane {
         center { add(scrollPane) }
@@ -28,6 +24,8 @@ class MainView: View(){
                 add(output)
                 separator()
                 add(info)
+                separator()
+                add(saveLoadMenu)
             }
         }
 

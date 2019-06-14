@@ -3,6 +3,7 @@ package com.durhack.sharpshot.serialisation
 import com.durhack.sharpshot.core.state.Container
 import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.registry.NodeRegistry
+import com.durhack.sharpshot.util.container
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -32,7 +33,7 @@ internal object Serialiser {
 
         val width = json["width"].asInt
         val height = json["height"].asInt
-        val container = Container(width, height)
+        val newContainer = Container(width, height)
 
         val nodesJson = json["nodes"].asJsonArray
         nodesJson.forEach { jsonElement ->
@@ -42,8 +43,8 @@ internal object Serialiser {
 
             val coordinate = Coordinate.fromJson(coordinateJson)
             val node = NodeRegistry.create(nodeJson)
-            container.nodes[coordinate] = node
+            newContainer.nodes[coordinate] = node
         }
-        return container
+        return newContainer
     }
 }

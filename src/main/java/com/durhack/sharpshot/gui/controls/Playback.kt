@@ -3,9 +3,12 @@ package com.durhack.sharpshot.gui.controls
 import com.durhack.sharpshot.gui.container.ContainerController
 import com.durhack.sharpshot.util.container
 import javafx.beans.property.*
+import javafx.event.Event
 import javafx.geometry.Orientation
 import javafx.geometry.Pos
+import javafx.scene.input.ContextMenuEvent
 import tornadofx.*
+import java.math.BigInteger
 
 class Playback : View() {
     private val controller: ContainerController by inject()
@@ -14,7 +17,7 @@ class Playback : View() {
         visibleWhen(container.runningProp)
 
         val animateProp = SimpleBooleanProperty(true)
-        val speedSettingProp = SimpleIntegerProperty(1)
+        val speedSettingProp = SimpleIntegerProperty(3)
         label("Speed") {
             visibleWhen(animateProp)
         }
@@ -100,9 +103,16 @@ class Playback : View() {
         }
         textfield(inputsProp) {
             promptText = "Space-separated inputs"
-
-            val regex = "(-?\\d+\\s?)*".toRegex()
-            filterInput { (it.text ?: return@filterInput false).matches(regex) }
+            addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume)
+            val digits = "0123456789"
+            filterInput { change ->
+                val oldInputs = inputsProp.get()
+                return@filterInput when {
+                    change.text == "-" -> oldInputs.isBlank() || oldInputs.last() == ' '
+                    change.text == " " -> oldInputs.isNotEmpty() && oldInputs.last() in digits
+                    else -> change.text.all { it in digits }
+                }
+            }
         }
     }
 
