@@ -49,7 +49,7 @@ class ContainerStaticRenderer() : Canvas() {
         gc.stroke = Color.GRAY
         gc.lineWidth = 1.0
 
-        (0..container.width).map { it * scale }.forEach {//TODO disable zooming when mouse button is down not just when dragging
+        (0..container.width).map { it * scale }.forEach {
             gc.strokeLine(it + 0.5, 0.0, it +0.5, height)
         }
 

@@ -125,7 +125,7 @@ class CreateNodeMenu(private val onNodeCreated: (Coordinate, AbstractNode?) -> U
     private fun clampLocation(location: Point2D): Point2D {
         var parentLocation = location
         var parent: Node = root.parent
-        //TODO is there not a better way to do this?
+        //TODO is there not a better way to do this? - or at least make it into a helper function
         while(parent != scrollPane.root){
             parentLocation = parent.localToParent(parentLocation)
             parent = parent.parent
