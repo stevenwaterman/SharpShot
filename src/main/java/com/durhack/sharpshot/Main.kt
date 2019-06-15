@@ -7,5 +7,17 @@ fun main(args: Array<String>) {
     launch<MainApp>()
     //TODO allow selecting and transforming areas
     //TODO add levels
+    //TODO maths, lists, computation
     //TODO add costs
+    //TODO add leaderboard - with cryptography
+    //TODO fix colours
+    //TODO add title - tornadofx specific
 }
+
+/*
+LEVEL ideas
+Maths
+    Add
+    Exponent
+
+ */
