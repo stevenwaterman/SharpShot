@@ -18,7 +18,7 @@ class AddNodeEntry() : RegistryEntry<AddNode>(
                       x: Double,
                       y: Double,
                       scale: Int) {
-        Draw.triangle(gc, node.direction, x, y, scale, Color.ORANGE)
+        Draw.triangle(gc, node.direction, x, y, scale, Color.PLUM)
         Draw.text(gc, "+", x, y, scale)
     }
 }
