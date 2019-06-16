@@ -34,6 +34,7 @@ class ContainerStaticRenderer() : Canvas() {
     }
 
     private fun clear() {
+        gc.
         gc.clearRect(0.0, 0.0, width, height)
     }
 

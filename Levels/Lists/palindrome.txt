@@ -1,0 +1,15 @@
+PALINDROME
+
+Difficulty: 4/10
+
+Description:
+If the input is a palindrome (same backwards as forwards) output 1
+Otherwise output 0
+
+Examples:
+| 1
+0 | 1
+0 1 | 0
+15 12 15 | 1
+7 4 4 7 | 1
+7 9 0 1 | 0

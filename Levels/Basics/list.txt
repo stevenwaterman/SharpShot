@@ -1,0 +1,12 @@
+LIST
+
+Difficulty: 1/10
+
+Description:
+Output all the numbers that are inputted, in the order they appear in the input
+
+Examples:
+E | E
+1 | 1
+2 3 | 2 3
+-1 5 -12 6 8 9 234 7 | -1 5 -12 6 8 9 234 7

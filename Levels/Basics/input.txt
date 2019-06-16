@@ -1,0 +1,13 @@
+INPUT
+
+Difficulty: 1/10
+
+Description:
+Given 1 input, output it
+
+Examples:
+0 | 0
+1 | 1
+2 | 2
+-1 | -1
+-500 | -500

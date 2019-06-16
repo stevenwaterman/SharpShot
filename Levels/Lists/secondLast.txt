@@ -1,0 +1,10 @@
+SECOND-LAST
+
+Difficulty: 3/10
+
+Description:
+Output the second-last input
+
+Examples:
+1 2 3 4 5 6 | 5
+985 3 -23 6 | -23

@@ -1,0 +1,11 @@
+DEDUPLICATE
+
+Difficulty: 4/10
+
+Description:
+Remove duplicates from the list and output the deduplicated list
+
+Examples:
+1 5 1 6 | 1 5 6
+1 4 3 7 3 7 | 1 4 3 7
+1 2 3 | 1 2 3

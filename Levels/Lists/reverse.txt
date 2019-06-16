@@ -1,0 +1,12 @@
+REVERSE
+
+Difficulty: 3/10
+
+Description:
+Output the elements in the input but in reverse order
+
+Examples:
+|
+1 | 1
+1 2 | 2 1
+-1 5 6 8 | 8 6 5 -1

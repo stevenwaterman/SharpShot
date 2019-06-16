@@ -1,0 +1,11 @@
+DEDUPLICATE-CONSECUTIVE
+
+Difficulty: 5/10
+
+Description:
+Remove consecutive duplicates from the list
+
+Examples:
+1 1 2 2 3 3 3 4 | 1 2 3 4
+|
+1 | 1

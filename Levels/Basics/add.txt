@@ -1,0 +1,12 @@
+ADD
+
+Difficulty: 1/10
+
+Description:
+Given two inputs, output their sum
+
+Examples:
+1 2 | 3
+-1 -5 | -6
+-3 6 | 3
+0 8 | 8
