@@ -5,12 +5,14 @@ import com.durhack.sharpshot.util.KTimer
 import com.durhack.sharpshot.util.container
 import javafx.beans.binding.BooleanExpression
 import javafx.beans.binding.IntegerExpression
-import javafx.beans.property.*
+import javafx.beans.property.ReadOnlyBooleanWrapper
+import javafx.beans.property.ReadOnlyIntegerWrapper
+import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.SimpleIntegerProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import tornadofx.*
 import java.math.BigInteger
-import java.util.*
 
 class ContainerController : Controller() {
     val view: ContainerView by inject()
@@ -57,6 +59,7 @@ class ContainerController : Controller() {
     fun quickTick() {
         val report = container.tick()
         view.render()
+
         ui {
             ticks++
             out.addAll(report.outputs)
@@ -72,24 +75,32 @@ class ContainerController : Controller() {
             onFinish()
             animating = false
         }
+
         ui {
             out.addAll(report.outputs)
             ticks++
         }
     }
 
-    fun simulate(ticks: Int) {
+    fun simulate(simulationTicks: Int) {
         simulating = true
-        for(i in (1..ticks)){
-            val report = container.tick()
-            this.ticks++
-            out.addAll(report.outputs)
+        runAsync {
+            val innerOut = mutableListOf<BigInteger?>()
+            var innerTicks = 0
+            for(i in (1..simulationTicks)){
+                val report = container.tick()
+                innerTicks++
+                innerOut.addAll(report.outputs)
+                if(report.halted) break
+            }
 
-            if(report.halted) break
+            view.render()
+            ui{
+                ticks += innerTicks
+                out.addAll(innerOut)
+            }
+            simulating = false
         }
-
-        view.render()
-        simulating = false
     }
 
     fun reset() {

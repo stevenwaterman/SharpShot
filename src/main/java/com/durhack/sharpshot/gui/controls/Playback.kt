@@ -2,13 +2,14 @@ package com.durhack.sharpshot.gui.controls
 
 import com.durhack.sharpshot.gui.container.ContainerController
 import com.durhack.sharpshot.util.container
-import javafx.beans.property.*
+import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.SimpleIntegerProperty
+import javafx.beans.property.SimpleStringProperty
 import javafx.event.Event
 import javafx.geometry.Orientation
 import javafx.geometry.Pos
 import javafx.scene.input.ContextMenuEvent
 import tornadofx.*
-import java.math.BigInteger
 
 class Playback : View() {
     private val controller: ContainerController by inject()
@@ -40,7 +41,7 @@ class Playback : View() {
             isFocusTraversable = false
             enableWhen(controller.idleProp)
             action {
-                runLater {
+
                     if(animateProp.get()){
                         val speedSetting = speedSettingProp.get()
                         val lengthMs = 1000/(speedSetting * speedSetting * speedSetting)
@@ -49,29 +50,29 @@ class Playback : View() {
                     else{
                         controller.quickTick()
                     }
-                }
+
             }
         }
         button("Reset") {
             isFocusTraversable = false
             enableWhen(controller.idleProp)
             action {
-                runLater {
+
                     controller.reset()
-                }
+
             }
         }
         stackpane {
             button("Play") {
                 isFocusTraversable = false
-                visibleWhen(controller.playingProp.not())
-                enableWhen(controller.idleProp)
+                hiddenWhen(controller.playingProp)
+                enableWhen(controller.idleProp.and(animateProp))
                 action {
-                    runLater {
+
                         val speedSetting = speedSettingProp.get()
                         val lengthMs = 1000/(speedSetting * speedSetting * speedSetting)
                         controller.play(lengthMs.toLong())
-                    }
+
                 }
             }
             button("Stop"){
@@ -79,9 +80,7 @@ class Playback : View() {
                 visibleWhen(controller.playingProp)
                 enableWhen(controller.stoppingProp.not())
                 action {
-                    runLater {
                         controller.stopPlaying()
-                    }
                 }
             }
         }
@@ -89,9 +88,7 @@ class Playback : View() {
             isFocusTraversable = false
             enableWhen(controller.idleProp)
             action {
-                runLater {
-                    controller.simulate(1000*1000)
-                }
+                controller.simulate(10*1000)
             }
         }
     }

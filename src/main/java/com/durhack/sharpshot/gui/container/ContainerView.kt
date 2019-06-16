@@ -2,7 +2,6 @@ package com.durhack.sharpshot.gui.container
 
 import com.durhack.sharpshot.core.control.CollisionReport
 import com.durhack.sharpshot.core.state.tick.BulletMovement
-import com.durhack.sharpshot.gui.container.menus.ContainerInputLayer
 import com.durhack.sharpshot.gui.graphics.BulletGraphic
 import com.durhack.sharpshot.gui.util.ui
 import com.durhack.sharpshot.util.MinMaxIntProperty
@@ -43,13 +42,6 @@ class ContainerView : View() {
     }
 
     fun render() {
-        root.minWidth = width
-        root.maxWidth = width
-        root.minHeight = height
-        root.maxHeight = height
-
-        nodeLayer.render()
-
         val bullets = mutableListOf<Node>()
         container.bullets.forEach {bullet ->
             val graphic = BulletGraphic(bullet = bullet, scale = scale)
@@ -57,6 +49,11 @@ class ContainerView : View() {
         }
 
         ui {
+            root.minWidth = width
+            root.maxWidth = width
+            root.minHeight = height
+            root.maxHeight = height
+            nodeLayer.render()
             bulletLayer.clear()
             bulletLayer.children += bullets
         }
