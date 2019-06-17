@@ -2,7 +2,6 @@ package com.durhack.sharpshot.registry.entries
 
 import com.durhack.sharpshot.core.nodes.other.ConstantNode
 import com.durhack.sharpshot.core.state.Direction
-import com.durhack.sharpshot.gui.container.menus.createnode.nodeforms.ConstantNodeForm
 import com.durhack.sharpshot.gui.shapes.Draw
 import com.durhack.sharpshot.registry.RegistryEntry
 import com.google.gson.JsonObject
@@ -33,8 +32,6 @@ class ConstantNodeEntry() : RegistryEntry<ConstantNode>(
         json.addProperty("value", node.value?.toString() ?: "null")
         return json
     }
-
-    override fun getNodeForm(close: () -> Unit, success: (ConstantNode) -> Unit) = ConstantNodeForm(close, success)
 
     override fun draw(node: ConstantNode,
                       gc: GraphicsContext,

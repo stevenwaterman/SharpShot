@@ -4,10 +4,9 @@ import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.gui.container.menus.ContainerInputLayer
-import com.durhack.sharpshot.gui.container.menus.createnode.nodeforms.AbstractNodeForm
+import com.durhack.sharpshot.gui.container.menus.createnode.nodebuttons.AbstractNodeForm
 import com.durhack.sharpshot.gui.controls.ContainerScrollPane
 import com.durhack.sharpshot.gui.util.addClickHandler
-import com.durhack.sharpshot.registry.RegistryEntry
 import javafx.geometry.Insets
 import javafx.geometry.Point2D
 import javafx.scene.Node
@@ -20,7 +19,7 @@ import javafx.scene.paint.Color
 import tornadofx.*
 
 class CreateNodeMenu(private val onNodeCreated: (Coordinate, AbstractNode?) -> Unit) : Fragment() {
-    val padding = 12.0
+    private val padding = 12.0
     private val borderWidth = 2.0
     private val allBorder = Border(BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths(borderWidth)))
     private val allBackground = Background(BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY))
@@ -29,7 +28,14 @@ class CreateNodeMenu(private val onNodeCreated: (Coordinate, AbstractNode?) -> U
     private lateinit var coordinate: Coordinate
 
     private val info = NodeInfo()
-    private val selector = SelectNodeType({chosen(it)}, {info.show(it)})
+    private val selector = SelectNodeType(
+            { info.show(it) },
+            { showForm(it) },
+            {
+                onNodeCreated(coordinate, it)
+                hideAll()
+            }
+                                         )
     private val chooser = hbox(8.0) {
         add(selector)
         add(info)
@@ -67,25 +73,6 @@ class CreateNodeMenu(private val onNodeCreated: (Coordinate, AbstractNode?) -> U
 
     init {
         ContainerView.scaleProp.addListener { _ -> hideAll() }
-    }
-
-    private fun chosen(entry: RegistryEntry<out AbstractNode>?) {
-        hideAll()
-        entry ?: return
-
-        val form = entry.getNodeForm(
-                close = { formPane.hide() },
-                success = { node ->
-                    onNodeCreated(coordinate, node)
-                    hideAll()
-                })
-
-        if (form == null) {
-            onNodeCreated(coordinate, entry.createNode())
-        }
-        else {
-            showForm(form)
-        }
     }
 
     fun show(coordinate: Coordinate, click: Point2D) {
@@ -151,10 +138,14 @@ class CreateNodeMenu(private val onNodeCreated: (Coordinate, AbstractNode?) -> U
         selector.root.requestFocus()
     }
 
-    private fun showForm(form: AbstractNodeForm<*>){
+    private var form: AbstractNodeForm? = null
+
+    private fun showForm(form: AbstractNodeForm) {
         formPane.children.clear()
         formPane.children.add(form.root)
         formPane.show()
+
+        this.form = form
 
         chooser.hide()
         root.show()
@@ -165,5 +156,6 @@ class CreateNodeMenu(private val onNodeCreated: (Coordinate, AbstractNode?) -> U
         root.hide()
         info.reset()
         inputLayer.root.requestFocus()
+        form?.onHide()
     }
 }

@@ -6,7 +6,7 @@ import com.google.gson.JsonObject
 import javafx.scene.canvas.GraphicsContext
 
 object NodeRegistry {
-    val inNodeEntry = InNodeEntry()
+    val inputNodeEntry = InNodeEntry()
     val listNodeEntry = ListNodeEntry()
     val stackNodeEntry = StackNodeEntry()
     val splitterNodeEntry = SplitterNodeEntry()
@@ -24,7 +24,7 @@ object NodeRegistry {
     val subNodeEntry = SubNodeEntry()
 
     val entries = listOf(
-            inNodeEntry,
+            inputNodeEntry,
             listNodeEntry,
             voidNodeEntry,
             haltNodeEntry,

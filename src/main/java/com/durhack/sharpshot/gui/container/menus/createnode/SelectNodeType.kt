@@ -1,95 +1,67 @@
 package com.durhack.sharpshot.gui.container.menus.createnode
 
 import com.durhack.sharpshot.core.nodes.AbstractNode
-import com.durhack.sharpshot.gui.util.addClickHandler
-import com.durhack.sharpshot.registry.NodeRegistry
-import com.durhack.sharpshot.registry.RegistryEntry
-import javafx.geometry.Insets
-import javafx.scene.input.KeyCode
+import com.durhack.sharpshot.gui.container.menus.createnode.nodebuttons.*
 import javafx.scene.input.KeyEvent
-import javafx.scene.input.MouseButton
-import javafx.scene.input.MouseEvent
-import javafx.scene.layout.Background
-import javafx.scene.layout.BackgroundFill
-import javafx.scene.layout.CornerRadii
-import javafx.scene.layout.Pane
-import javafx.scene.paint.Color
 import tornadofx.*
 
-class SelectNodeType(click: (RegistryEntry<out AbstractNode>) -> Unit,
-                     hover: (RegistryEntry<out AbstractNode>) -> Unit) : Fragment() {
+class SelectNodeType(onHover: (AbstractNodeButton) -> Unit,
+                     showForm: (AbstractNodeForm) -> Unit,
+                     nodeCreated: (AbstractNode) -> Unit) : Fragment() {
     private val perRow = 4
-    private val scale = 24
     private val gap = 2.0
     private val outerPadding = 4.0
 
     private val keys = listOf(
-            KeyCode.DIGIT1,
-            KeyCode.DIGIT2,
-            KeyCode.DIGIT3,
-            KeyCode.DIGIT4,
-            KeyCode.Q,
-            KeyCode.W,
-            KeyCode.E,
-            KeyCode.R,
-            KeyCode.A,
-            KeyCode.S,
-            KeyCode.D,
-            KeyCode.F,
-            KeyCode.Z,
-            KeyCode.X,
-            KeyCode.C,
-            KeyCode.V
+            "1",
+            "2",
+            "3",
+            "4",
+            "q",
+            "w",
+            "e",
+            "r",
+            "a",
+            "s",
+            "d",
+            "f",
+            "z",
+            "x",
+            "c",
+            "v"
                              )
+
+    private val buttons = listOf(
+            InputNodeButton(onHover, showForm, nodeCreated),
+            ListNodeButton(onHover, showForm, nodeCreated),
+            ConstantNodeButton(onHover, showForm, nodeCreated),
+            StackNodeButton(onHover, showForm, nodeCreated),
+
+            BranchNodeButton(onHover, showForm, nodeCreated),
+            SplitterNodeButton(onHover, showForm, nodeCreated),
+            VoidNodeButton(onHover, showForm, nodeCreated),
+            HaltNodeButton(onHover, showForm, nodeCreated),
+
+            ConditionalNodeButton(onHover, showForm, nodeCreated),
+            MathNodeButton(onHover, showForm, nodeCreated)
+                                )
 
     override val root = gridpane {
         hgap = gap
         vgap = gap
         paddingAll = outerPadding
 
-        NodeRegistry.entries.zip(keys).forEachIndexed { index, (entry, key) ->
+        buttons.zip(keys).forEachIndexed { index, (button, key) ->
             val column = index % perRow
             val row = index / perRow
 
-            val button = NodeButton(entry, scale, { hover(entry) }, { click(entry) })
             add(button.root, column, row)
-            addEventHandler(KeyEvent.KEY_PRESSED) { event ->
-                if (event.code == key) {
-                    click(entry)
-                    event.consume()
+            addEventHandler(KeyEvent.KEY_TYPED) {
+                if (it.character == key) {
+                    it.consume()
+                    button.clicked()
                 }
             }
         }
-    }
-}
-
-private class NodeButton<T : AbstractNode>(private val entry: RegistryEntry<T>,
-                                   scale: Int,
-                                   onHover: (RegistryEntry<T>) -> Unit,
-                                   onClick: (RegistryEntry<T>) -> Unit) : Fragment() {
-    override val root = stackpane {
-        add(entry.getGraphic(scale))
-        add(ShadeOnHover())
-
-        addEventHandler(MouseEvent.MOUSE_ENTERED) { _ -> onHover(entry) }
-
-        addClickHandler { event ->
-            if (event.button == MouseButton.PRIMARY) {
-                onClick(entry)
-                event.consume()
-            }
-        }
-    }
-}
-
-private class ShadeOnHover : Pane() {
-    companion object {
-        private val hoverColor = Color.color(0.1, 0.1, 0.2, 0.2)
-        private val hoverBackground = Background(BackgroundFill(hoverColor, CornerRadii.EMPTY, Insets.EMPTY))
-    }
-
-    init {
-        addEventHandler(MouseEvent.MOUSE_ENTERED) { _ -> background = hoverBackground }
-        addEventHandler(MouseEvent.MOUSE_EXITED) { _ -> background = Background.EMPTY }
     }
 }

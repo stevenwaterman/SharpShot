@@ -18,6 +18,6 @@ class BranchNodeEntry() : RegistryEntry<BranchNode>(
                       x: Double,
                       y: Double,
                       scale: Int) {
-        Draw.triangle(gc, node.direction, x, y, scale, Color.LIGHTSKYBLUE)
+        Draw.triangle(gc, node.direction, x, y, scale, Color.BLACK)
     }
 }

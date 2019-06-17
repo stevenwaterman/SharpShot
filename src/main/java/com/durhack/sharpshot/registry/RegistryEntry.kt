@@ -2,7 +2,6 @@ package com.durhack.sharpshot.registry
 
 import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Direction
-import com.durhack.sharpshot.gui.container.menus.createnode.nodeforms.AbstractNodeForm
 import com.google.gson.JsonObject
 import javafx.scene.canvas.Canvas
 import javafx.scene.canvas.GraphicsContext
@@ -57,8 +56,6 @@ abstract class RegistryEntry<T : AbstractNode>(val example: T, val name: String,
     }
 
     override fun toString() = "RegistryEntry(name='$name')"
-
-    open fun getNodeForm(close: () -> Unit, success: (T) -> Unit): AbstractNodeForm<T>? = null
 
     fun createNode(): T{
         return example::class.java.getConstructor(Direction::class.java).newInstance(Direction.UP)
