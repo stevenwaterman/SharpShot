@@ -9,6 +9,7 @@ object NodeRegistry {
     val inputNodeEntry = InNodeEntry()
     val listNodeEntry = ListNodeEntry()
     val stackNodeEntry = StackNodeEntry()
+    val memoryNodeEntry = MemoryNodeEntry()
     val splitterNodeEntry = SplitterNodeEntry()
     val constantNodeEntry = ConstantNodeEntry()
     val randomNodeEntry = RandomNodeEntry()
@@ -30,6 +31,7 @@ object NodeRegistry {
             haltNodeEntry,
             splitterNodeEntry,
             stackNodeEntry,
+            memoryNodeEntry,
             constantNodeEntry,
             randomNodeEntry,
             branchNodeEntry,

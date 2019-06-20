@@ -63,13 +63,9 @@ class InputNodeForm(nodeCreated: (AbstractNode) -> Unit) :
 
             button("Accept") {
                 action { acceptNormal() }
-                tooltip("The input with index specified in the text field. The first input is index 1 (Q)")
-                isFocusTraversable = false
             }
             button("Empty") {
                 action { acceptEmpty() }
-                tooltip("Fire empty bullets (W)")
-                isFocusTraversable = false
             }
         }
     }

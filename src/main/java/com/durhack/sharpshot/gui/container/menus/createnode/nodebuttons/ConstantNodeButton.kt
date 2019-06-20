@@ -68,18 +68,12 @@ class ConstantNodeForm(nodeCreated: (AbstractNode) -> Unit) :
 
             button("Accept") {
                 action { acceptNormal() }
-                tooltip("Output the value in the text field (Q)")
-                isFocusTraversable = false
             }
             button("Empty") {
                 action { acceptEmpty() }
-                tooltip("Output empty bullets (W)")
-                isFocusTraversable = false
             }
             button("Random") {
                 action { acceptRandom() }
-                tooltip("Output random values up to the value of the incoming bullet (E)")
-                isFocusTraversable = false
             }
         }
     }

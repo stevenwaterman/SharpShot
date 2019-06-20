@@ -29,7 +29,7 @@ abstract class AbstractNodeButton(
                 nodeCreated: (AbstractNode) -> Unit) :
             this(registryEntry.name,
                  registryEntry.description,
-                 {registryEntry.getGraphic(scale)},
+                 {registryEntry.getGraphic(it)},
                  onHover,
                  showForm,
                  nodeCreated)

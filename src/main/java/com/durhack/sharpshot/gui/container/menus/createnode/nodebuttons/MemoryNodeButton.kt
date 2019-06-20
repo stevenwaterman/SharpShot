@@ -1,9 +1,8 @@
 package com.durhack.sharpshot.gui.container.menus.createnode.nodebuttons
 
 import com.durhack.sharpshot.core.nodes.AbstractNode
-import com.durhack.sharpshot.core.nodes.routing.conditional.IfNullNode
-import com.durhack.sharpshot.core.nodes.routing.conditional.IfPositiveNode
-import com.durhack.sharpshot.core.nodes.routing.conditional.IfZeroNode
+import com.durhack.sharpshot.core.nodes.memory.MemoryNode
+import com.durhack.sharpshot.core.nodes.memory.StackNode
 import com.durhack.sharpshot.core.state.Direction
 import com.durhack.sharpshot.gui.shapes.Draw
 import javafx.geometry.Pos
@@ -14,32 +13,25 @@ import javafx.scene.paint.Color
 import javafx.scene.text.Font
 import tornadofx.*
 
-class ConditionalNodeButton(
+class MemoryNodeButton(
         onHover: (AbstractNodeButton) -> Unit,
         showForm: (AbstractNodeForm) -> Unit,
         nodeCreated: (AbstractNode) -> Unit) :
-        AbstractNodeButton(
-                "Conditional Node",
-                "Redirects bullets when certain conditions are met",
-                graphicCreator,
-                onHover,
-                showForm,
-                nodeCreated
-                          ) {
+        AbstractNodeButton("Memory Node", "Stores values", graphicCreator, onHover, showForm, nodeCreated) {
 
     companion object {
         private val graphicCreator: (Int) -> Canvas = { scale ->
             Canvas(scale.toDouble(), scale.toDouble()).apply {
-                Draw.triangle(graphicsContext2D, Direction.UP, 0.0, 0.0, scale, Color.LIGHTSKYBLUE)
+                Draw.triangle(graphicsContext2D, Direction.UP, 0.0, 0.0, scale, Color.CRIMSON)
             }
         }
     }
 
-    override val nodeForm = ConditionalNodeForm(nodeCreated)
+    override val nodeForm = MemoryNodeForm(nodeCreated)
     override fun createNode() = null
 }
 
-class ConditionalNodeForm(nodeCreated: (AbstractNode) -> Unit) :
+class MemoryNodeForm(nodeCreated: (AbstractNode) -> Unit) :
         AbstractNodeForm(nodeCreated) {
 
     override fun focus() {}
@@ -54,49 +46,37 @@ class ConditionalNodeForm(nodeCreated: (AbstractNode) -> Unit) :
             when {
                 event.code == KeyCode.Q -> {
                     event.consume()
-                    acceptZero()
+                    acceptMemory()
                 }
                 event.code == KeyCode.W -> {
                     event.consume()
-                    acceptPositive()
-                }
-                event.code == KeyCode.E -> {
-                    event.consume()
-                    acceptEmpty()
+                    acceptStack()
                 }
             }
         }
 
-        label("When should bullets be redirected?") {
+        label("Select Memory Type") {
             font = Font(18.0)
         }
         hbox(4.0) {
             alignment = Pos.CENTER
 
-            button("Equal to Zero") {
-                action { acceptZero() }
+            button("Single").apply {
+                action { acceptMemory() }
             }
-            button("Over Zero") {
-                action { acceptPositive() }
-            }
-            button("Empty") {
-                action { acceptEmpty() }
+            button("Stack"){
+                action { acceptStack() }
             }
         }
     }
 
-    private fun acceptZero() {
-        val node = IfZeroNode(Direction.UP)
+    private fun acceptMemory() {
+        val node = MemoryNode(Direction.UP)
         accept(node)
     }
 
-    private fun acceptPositive() {
-        val node = IfPositiveNode(Direction.UP)
-        accept(node)
-    }
-
-    private fun acceptEmpty() {
-        val node = IfNullNode(Direction.UP)
+    private fun acceptStack() {
+        val node = StackNode(Direction.UP)
         accept(node)
     }
 

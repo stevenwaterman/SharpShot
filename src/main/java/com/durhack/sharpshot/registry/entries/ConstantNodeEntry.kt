@@ -39,10 +39,7 @@ class ConstantNodeEntry() : RegistryEntry<ConstantNode>(
                       y: Double,
                       scale: Int) {
         Draw.triangle(gc, node.direction, x, y, scale, Color.YELLOWGREEN)
-        val text = when(node.value) {
-            null -> "E"
-            else -> node.value.toString()
-        }
+        val text = node.value?.toString() ?: "E"
         Draw.text(gc, text, x, y, scale)
     }
 }

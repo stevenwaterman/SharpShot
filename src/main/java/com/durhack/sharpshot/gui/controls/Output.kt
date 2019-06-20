@@ -61,5 +61,5 @@ class OutputStringObservable(private val containerController: ContainerControlle
         containerController.outputs.addListener(listener)
     }
 
-    override fun getValue() = containerController.outputs.joinToString(System.lineSeparator())
+    override fun getValue() = containerController.outputs.map { it ?: "E" }.joinToString(System.lineSeparator())
 }

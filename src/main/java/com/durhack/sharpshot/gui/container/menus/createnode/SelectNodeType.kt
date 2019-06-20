@@ -35,7 +35,7 @@ class SelectNodeType(onHover: (AbstractNodeButton) -> Unit,
             InputNodeButton(onHover, showForm, nodeCreated),
             ListNodeButton(onHover, showForm, nodeCreated),
             ConstantNodeButton(onHover, showForm, nodeCreated),
-            StackNodeButton(onHover, showForm, nodeCreated),
+            MemoryNodeButton(onHover, showForm, nodeCreated),
 
             BranchNodeButton(onHover, showForm, nodeCreated),
             SplitterNodeButton(onHover, showForm, nodeCreated),

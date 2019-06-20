@@ -80,23 +80,15 @@ class MathNodeForm(nodeCreated: (AbstractNode) -> Unit) :
 
             button("Add").apply {
                 action { acceptPlus() }
-                tooltip("Adds two inputs (Q)")
-                isFocusTraversable = false
             }
             button("Subtract"){
                 action { acceptMinus() }
-                tooltip("Subtracts the second input from the first input (W)")
-                isFocusTraversable = false
             }
             button("Multiply") {
                 action { acceptTimes() }
-                tooltip("Multiplies two inputs (E)")
-                isFocusTraversable = false
             }
             button("Divide") {
                 action { acceptDivide() }
-                tooltip("Divides the first input by the second (integer division) (R)")
-                isFocusTraversable = false
             }
         }
     }
