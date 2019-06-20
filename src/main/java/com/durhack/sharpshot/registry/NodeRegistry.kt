@@ -23,6 +23,8 @@ object NodeRegistry {
     val divNodeEntry = DivNodeEntry()
     val multNodeEntry = MultNodeEntry()
     val subNodeEntry = SubNodeEntry()
+    val rotateNodeEntry = RotateNodeEntry()
+    val rotateAntiNodeEntry = RotateAntiNodeEntry()
 
     val entries = listOf(
             inputNodeEntry,
@@ -41,7 +43,9 @@ object NodeRegistry {
             addNodeEntry,
             subNodeEntry,
             multNodeEntry,
-            divNodeEntry
+            divNodeEntry,
+            rotateNodeEntry,
+            rotateAntiNodeEntry
                         )
 
     private val mapping: Map<String, RegistryEntry<out AbstractNode>> =

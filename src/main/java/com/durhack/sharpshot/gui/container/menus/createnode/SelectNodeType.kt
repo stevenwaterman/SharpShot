@@ -35,15 +35,16 @@ class SelectNodeType(onHover: (AbstractNodeButton) -> Unit,
             InputNodeButton(onHover, showForm, nodeCreated),
             ListNodeButton(onHover, showForm, nodeCreated),
             ConstantNodeButton(onHover, showForm, nodeCreated),
-            MemoryNodeButton(onHover, showForm, nodeCreated),
+            HaltNodeButton(onHover, showForm, nodeCreated),
 
             BranchNodeButton(onHover, showForm, nodeCreated),
             SplitterNodeButton(onHover, showForm, nodeCreated),
             VoidNodeButton(onHover, showForm, nodeCreated),
-            HaltNodeButton(onHover, showForm, nodeCreated),
+            RotateNodeButton(onHover, showForm, nodeCreated),
 
             ConditionalNodeButton(onHover, showForm, nodeCreated),
-            MathNodeButton(onHover, showForm, nodeCreated)
+            MathNodeButton(onHover, showForm, nodeCreated),
+            MemoryNodeButton(onHover, showForm, nodeCreated)
                                 )
 
     override val root = gridpane {
