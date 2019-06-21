@@ -35,7 +35,7 @@ abstract class AbstractNodeButton(
                  nodeCreated)
 
     companion object {
-        const val scale = 24
+        const val scale = 28
     }
 
     abstract val nodeForm: AbstractNodeForm?
