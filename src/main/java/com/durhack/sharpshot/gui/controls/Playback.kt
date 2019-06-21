@@ -97,14 +97,6 @@ class Playback : View() {
         visibleWhen(container.runningProp.not())
 
         val inputsProp = SimpleStringProperty("")
-        button("Start Test") {
-            isFocusTraversable = false
-            action {
-                val inputString = inputsProp.get()
-                val inputs = inputString.split(" ").filter { it.isNotBlank() }.map { it.toBigInteger() }
-                controller.start(inputs)
-            }
-        }
         textfield(inputsProp) {
             promptText = "Space-separated inputs"
             addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume)
@@ -116,6 +108,14 @@ class Playback : View() {
                     change.text == " " -> oldInputs.isNotEmpty() && oldInputs.last() in digits
                     else -> change.text.all { it in digits }
                 }
+            }
+        }
+        button("Start Test") {
+            isFocusTraversable = false
+            action {
+                val inputString = inputsProp.get()
+                val inputs = inputString.split(" ").filter { it.isNotBlank() }.map { it.toBigInteger() }
+                controller.start(inputs)
             }
         }
     }
