@@ -56,7 +56,7 @@ class NodeInfo: Fragment(){
     }
 
     fun reset() {
-        graphicPane.clear()
+        graphicPane.children.clear()
         nodeName.text = ""
         description.text = ""
     }

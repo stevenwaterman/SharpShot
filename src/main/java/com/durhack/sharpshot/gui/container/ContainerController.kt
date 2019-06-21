@@ -1,40 +1,37 @@
 package com.durhack.sharpshot.gui.container
 
+import com.durhack.sharpshot.gui.util.ObservableOutput
 import com.durhack.sharpshot.gui.util.ui
 import com.durhack.sharpshot.util.KTimer
 import com.durhack.sharpshot.util.container
 import javafx.beans.binding.BooleanExpression
-import javafx.beans.binding.IntegerExpression
 import javafx.beans.property.ReadOnlyBooleanWrapper
-import javafx.beans.property.ReadOnlyIntegerWrapper
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleIntegerProperty
-import javafx.collections.FXCollections
-import javafx.collections.ObservableList
 import tornadofx.*
 import java.math.BigInteger
 
 class ContainerController : Controller() {
     val view: ContainerView by inject()
 
-    private val playTimer: KTimer = KTimer("Play timer")
     private val timer: KTimer = KTimer("Post-Animation Render Timer")
-    private val out: ObservableList<BigInteger?> = FXCollections.observableArrayList()
-    val outputs = FXCollections.unmodifiableObservableList(out)
 
-    private val tickPropInternal = SimpleIntegerProperty(0)
-    val tickProp: IntegerExpression = ReadOnlyIntegerWrapper.integerExpression(tickPropInternal)
-    var ticks by tickPropInternal
+    private val innerOutputProp = ObservableOutput()
+    val outputStringProp = innerOutputProp.stringObservable.ui()
+
+    private val innerTickProp = SimpleIntegerProperty(0)
+    val tickProp = innerTickProp.ui()
+    var ticks by innerTickProp
         private set
 
-    private val animatingPropInternal = SimpleBooleanProperty(false)
-    val animatingProp: BooleanExpression = ReadOnlyBooleanWrapper.booleanExpression(animatingPropInternal)
-    var animating by animatingPropInternal
+    private val innerAnimatingProp = SimpleBooleanProperty(false)
+    val animatingProp = innerAnimatingProp.ui()
+    var animating by innerAnimatingProp
         private set
 
-    private val playingPropInternal = SimpleBooleanProperty(false)
-    val playingProp: BooleanExpression = ReadOnlyBooleanWrapper.booleanExpression(playingPropInternal)
-    var playing by playingPropInternal
+    private val innerPlayingProp = SimpleBooleanProperty(false)
+    val playingProp = innerPlayingProp.ui()
+    var playing by innerPlayingProp
         private set
 
     private val stoppingPropInternal = SimpleBooleanProperty(false)
@@ -47,10 +44,11 @@ class ContainerController : Controller() {
     var simulating by simulatingPropInternal
         private set
 
-    val idleProp: BooleanExpression = animatingProp.not().and(playingProp.not()).and(simulatingProp.not())
+    val idleProp = animatingProp.booleanBinding(playingProp, simulatingProp) {!animating && !playing && !simulating}.ui()
+    val idle by idleProp
 
     fun start(input: List<BigInteger?>) {
-        out.clear()
+        innerOutputProp.clear()
         ticks = 0
         container.start(input)
         view.render()
@@ -60,10 +58,8 @@ class ContainerController : Controller() {
         val report = container.tick()
         view.render()
 
-        ui {
-            ticks++
-            out.addAll(report.outputs)
-        }
+        ticks++
+        innerOutputProp.addAll(report.outputs)
     }
 
     fun animatedTick(lengthMs: Long, onFinish: () -> Unit = {}) {
@@ -76,10 +72,8 @@ class ContainerController : Controller() {
             animating = false
         }
 
-        ui {
-            out.addAll(report.outputs)
-            ticks++
-        }
+        innerOutputProp.addAll(report.outputs)
+        ticks++
     }
 
     fun simulate(simulationTicks: Int) {
@@ -95,10 +89,8 @@ class ContainerController : Controller() {
             }
 
             view.render()
-            ui{
                 ticks += innerTicks
-                out.addAll(innerOut)
-            }
+                innerOutputProp.addAll(innerOut)
             simulating = false
         }
     }
@@ -110,7 +102,7 @@ class ContainerController : Controller() {
 
     fun clear() {
         container.clear()
-        out.clear()
+        innerOutputProp.clear()
         ticks = 0
         view.render()
     }

@@ -2,6 +2,7 @@ package com.durhack.sharpshot.gui.container.menus.createnode.nodebuttons
 
 import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.gui.util.addClickHandler
+import com.durhack.sharpshot.gui.util.ui
 import com.durhack.sharpshot.registry.RegistryEntry
 import javafx.geometry.Insets
 import javafx.scene.Node
@@ -76,8 +77,8 @@ private class ShadeOnHover : Pane() {
     }
 
     init {
-        addEventHandler(MouseEvent.MOUSE_ENTERED) { _ -> background = hoverBackground }
-        addEventHandler(MouseEvent.MOUSE_EXITED) { _ -> background = Background.EMPTY }
+        addEventHandler(MouseEvent.MOUSE_ENTERED) { _ -> ui{background = hoverBackground }}
+        addEventHandler(MouseEvent.MOUSE_EXITED) { _ -> ui{background = Background.EMPTY }}
     }
 }
 

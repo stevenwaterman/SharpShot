@@ -1,6 +1,7 @@
 package com.durhack.sharpshot.gui.controls
 
 import com.durhack.sharpshot.gui.container.ContainerController
+import com.durhack.sharpshot.gui.util.not
 import com.durhack.sharpshot.util.container
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleIntegerProperty
@@ -45,7 +46,7 @@ class Playback : View() {
                     if(animateProp.get()){
                         val speedSetting = speedSettingProp.get()
                         val lengthMs = getPlaybackMs(speedSetting)
-                        controller.animatedTick(lengthMs.toLong())
+                        controller.animatedTick(lengthMs)
                     }
                     else{
                         controller.quickTick()
@@ -66,13 +67,11 @@ class Playback : View() {
             button("Play") {
                 isFocusTraversable = false
                 hiddenWhen(controller.playingProp)
-                enableWhen(controller.idleProp.and(animateProp))
+                enableWhen(animateProp.booleanBinding(controller.idleProp){animateProp.get() && controller.idle})
                 action {
-
                         val speedSetting = speedSettingProp.get()
                         val lengthMs = getPlaybackMs(speedSetting)
-                        controller.play(lengthMs.toLong())
-
+                        controller.play(lengthMs)
                 }
             }
             button("Stop"){

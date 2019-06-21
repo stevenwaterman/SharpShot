@@ -56,7 +56,7 @@ class ContainerInputLayer : View() {
     }
 
     private fun getCoord(x: Double, y: Double): Coordinate? {
-        val scale = ContainerView.scaleProp.get()
+        val scale = ContainerView.innerScaleProp.get()
         val xClicked = (x / scale).toInt().clamp(0, container.width - 1)
         val yClicked = (y / scale).toInt().clamp(0, container.height - 1)
 

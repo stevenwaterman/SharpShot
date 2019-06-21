@@ -10,8 +10,10 @@ fun main(args: Array<String>) {
     //TODO maths, lists, computation
     //TODO add costs
     //TODO add leaderboard - with cryptography
-    //TODO fix colours
     //TODO add title - tornadofx specific
+    //TODO add title
+    //TODO center output
+    //TODO add copy-paste into inputsAA
 }
 
 /*

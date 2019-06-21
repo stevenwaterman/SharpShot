@@ -72,7 +72,7 @@ class CreateNodeMenu(private val onNodeCreated: (Coordinate, AbstractNode?) -> U
     }
 
     init {
-        ContainerView.scaleProp.addListener { _ -> hideAll() }
+        ContainerView.innerScaleProp.addListener { _ -> hideAll() }
     }
 
     fun show(coordinate: Coordinate, click: Point2D) {

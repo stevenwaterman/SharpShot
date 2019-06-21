@@ -1,10 +1,9 @@
-package com.durhack.sharpshot.gui.controls
+package com.durhack.sharpshot.gui.container
 
 import com.durhack.sharpshot.core.control.canDecreaseSize
 import com.durhack.sharpshot.core.control.decreaseSize
 import com.durhack.sharpshot.core.control.increaseSize
 import com.durhack.sharpshot.core.state.Direction
-import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.gui.container.menus.ContainerInputLayer
 import com.durhack.sharpshot.gui.shapes.Draw
 import com.durhack.sharpshot.util.container
@@ -89,15 +88,15 @@ private class DraggableCorner(val vertical: Direction, val horizontal: Direction
     override val root = hbox {
         canvas(25.0, 25.0) {
             Draw.rightAngleTriangle(graphicsContext2D, vertical, 0.0, 0.0, 20, Color.BLACK)
-            makeDraggable(ContainerView.scaleProp.divide(2)) { direction ->
+            makeDraggable(ContainerView.innerScaleProp.divide(2)) { direction ->
                 if (direction == vertical || direction == horizontal) {
-                    container.increaseSize(direction)
-                    containerView.render()
+                        container.increaseSize(direction)
+                        containerView.render()
                     true
                 } else {
                     if (container.canDecreaseSize(direction)) {
-                        container.decreaseSize(direction)
-                        containerView.render()
+                            container.decreaseSize(direction)
+                            containerView.render()
                         true
                     } else {
                         false
@@ -122,7 +121,7 @@ class ResizingWrapper : View() {
     private val containerInputLayer: ContainerInputLayer by inject()
 
     override val root = gridpane {
-        enableWhen(container.runningProp.not())
+        enableWhen(container.runningProp.booleanBinding{ it?.not() ?: true })
         paddingAll = paddingAmnt
         add(topArrow.root, 0, 0)
         add(bottomArrow.root, 2, 2)
