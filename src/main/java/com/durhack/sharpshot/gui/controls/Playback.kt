@@ -18,7 +18,7 @@ class Playback : View() {
         visibleWhen(container.runningProp)
 
         val animateProp = SimpleBooleanProperty(true)
-        val speedSettingProp = SimpleIntegerProperty(3)
+        val speedSettingProp = SimpleIntegerProperty(2)
         label("Speed") {
             visibleWhen(animateProp)
         }
@@ -44,7 +44,7 @@ class Playback : View() {
 
                     if(animateProp.get()){
                         val speedSetting = speedSettingProp.get()
-                        val lengthMs = 1000/(speedSetting * speedSetting * speedSetting)
+                        val lengthMs = getPlaybackMs(speedSetting)
                         controller.animatedTick(lengthMs.toLong())
                     }
                     else{
@@ -70,7 +70,7 @@ class Playback : View() {
                 action {
 
                         val speedSetting = speedSettingProp.get()
-                        val lengthMs = 1000/(speedSetting * speedSetting * speedSetting)
+                        val lengthMs = getPlaybackMs(speedSetting)
                         controller.play(lengthMs.toLong())
 
                 }
@@ -124,5 +124,16 @@ class Playback : View() {
     override val root = stackpane {
         add(runningLayer)
         add(stoppedLayer)
+    }
+
+    private fun getPlaybackMs(speedSetting: Int): Long{
+        return when(speedSetting){
+            1 -> 2000L
+            2 -> 500L
+            3 -> 250L
+            4 -> 50L
+            5 -> 10L
+            else -> throw IllegalArgumentException("Invalid speed setting")
+        }
     }
 }
