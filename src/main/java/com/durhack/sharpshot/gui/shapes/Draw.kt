@@ -108,7 +108,11 @@ object Draw {
             Point2D(1.0, 1.0)
                                                     ))
 
-    fun rotate(gc: GraphicsContext, direction: Direction, x: Double, y: Double, scale: Int, color: Color) {
+    fun rotate(gc: GraphicsContext,
+               x: Double,
+               y: Double,
+               scale: Int,
+               color: Color) {
         gc.stroke = color
         gc.lineWidth = scale / 20.0
         gc.fill = color
@@ -124,7 +128,11 @@ object Draw {
         gc.strokeOval(x + halfArrowScale, y + halfArrowScale, offsetForFar, offsetForFar)
     }
 
-    fun rotateAnti(gc: GraphicsContext, direction: Direction, x: Double, y: Double, scale: Int, color: Color) {
+    fun rotateAnti(gc: GraphicsContext,
+                   x: Double,
+                   y: Double,
+                   scale: Int,
+                   color: Color) {
         gc.stroke = color
         gc.lineWidth = scale / 20.0
         gc.fill = color

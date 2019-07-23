@@ -13,7 +13,7 @@ class RotateNodeEntry : RegistryEntry<RotateNode>(
         "When a bullet enters, it turns 90 degrees clockwise"
                                                  ) {
     override fun draw(node: RotateNode, gc: GraphicsContext, x: Double, y: Double, scale: Int) {
-        Draw.rotate(gc, node.direction, x, y, scale, Color.BLACK)
+        Draw.rotate(gc, x, y, scale, Color.BLACK)
         Draw.text(gc, "C", x, y, scale, Color.BLACK)
     }
 }
