@@ -38,7 +38,7 @@ class Playback : View() {
             isFocusTraversable = false
             enableWhen(controller.idleProp)
         }
-        button("Step") {
+        button("Tick") {
             isFocusTraversable = false
             enableWhen(controller.idleProp)
             action {
