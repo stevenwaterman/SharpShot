@@ -1,7 +1,7 @@
-package com.durhack.sharpshot.gui.container.menus.createnode
+package com.durhack.sharpshot.gui.container.input.createnode
 
 import com.durhack.sharpshot.core.nodes.AbstractNode
-import com.durhack.sharpshot.gui.container.menus.createnode.nodebuttons.*
+import com.durhack.sharpshot.gui.container.input.createnode.nodebuttons.*
 import javafx.scene.input.KeyEvent
 import tornadofx.*
 

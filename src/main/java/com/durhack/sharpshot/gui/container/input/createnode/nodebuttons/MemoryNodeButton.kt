@@ -1,39 +1,37 @@
-package com.durhack.sharpshot.gui.container.menus.createnode.nodebuttons
+package com.durhack.sharpshot.gui.container.input.createnode.nodebuttons
 
 import com.durhack.sharpshot.core.nodes.AbstractNode
-import com.durhack.sharpshot.core.nodes.routing.RotateAntiNode
-import com.durhack.sharpshot.core.nodes.routing.RotateNode
+import com.durhack.sharpshot.core.nodes.memory.MemoryNode
+import com.durhack.sharpshot.core.nodes.memory.StackNode
 import com.durhack.sharpshot.core.state.Direction
-import com.durhack.sharpshot.registry.NodeRegistry
+import com.durhack.sharpshot.gui.shapes.Draw
 import javafx.geometry.Pos
 import javafx.scene.canvas.Canvas
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
+import javafx.scene.paint.Color
 import javafx.scene.text.Font
 import tornadofx.*
 
-class RotateNodeButton(
+class MemoryNodeButton(
         onHover: (AbstractNodeButton) -> Unit,
         showForm: (AbstractNodeForm) -> Unit,
         nodeCreated: (AbstractNode) -> Unit) :
-        AbstractNodeButton("Rotation Node",
-                           "Changes bullet direction dependent on incoming direction",
-                           graphicCreator,
-                           onHover,
-                           showForm,
-                           nodeCreated) {
+        AbstractNodeButton("Memory Node", "Stores values", graphicCreator, onHover, showForm, nodeCreated) {
 
     companion object {
         private val graphicCreator: (Int) -> Canvas = { scale ->
-            NodeRegistry.rotateNodeEntry.getGraphic(scale)
+            Canvas(scale.toDouble(), scale.toDouble()).apply {
+                Draw.triangle(graphicsContext2D, Direction.UP, 0.0, 0.0, scale, Color.CRIMSON)
+            }
         }
     }
 
-    override val nodeForm = RotateNodeForm(nodeCreated)
+    override val nodeForm = MemoryNodeForm(nodeCreated)
     override fun createNode() = null
 }
 
-class RotateNodeForm(nodeCreated: (AbstractNode) -> Unit) :
+class MemoryNodeForm(nodeCreated: (AbstractNode) -> Unit) :
         AbstractNodeForm(nodeCreated) {
 
     override fun focus() {}
@@ -48,37 +46,37 @@ class RotateNodeForm(nodeCreated: (AbstractNode) -> Unit) :
             when {
                 event.code == KeyCode.Q -> {
                     event.consume()
-                    acceptClockwise()
+                    acceptMemory()
                 }
                 event.code == KeyCode.W -> {
                     event.consume()
-                    acceptAnti()
+                    acceptStack()
                 }
             }
         }
 
-        label("Select rotation direction") {
+        label("Select Memory Type") {
             font = Font(18.0)
         }
         hbox(4.0) {
             alignment = Pos.CENTER
 
-            button("Clockwise").apply {
-                action { acceptClockwise() }
+            button("Single").apply {
+                action { acceptMemory() }
             }
-            button("Anticlockwise") {
-                action { acceptAnti() }
+            button("Stack") {
+                action { acceptStack() }
             }
         }
     }
 
-    private fun acceptClockwise() {
-        val node = RotateNode(Direction.UP)
+    private fun acceptMemory() {
+        val node = MemoryNode(Direction.UP)
         accept(node)
     }
 
-    private fun acceptAnti() {
-        val node = RotateAntiNode(Direction.UP)
+    private fun acceptStack() {
+        val node = StackNode(Direction.UP)
         accept(node)
     }
 

@@ -44,7 +44,7 @@ class Extract(allNodes: Map<Coordinate, AbstractNode>, low: Coordinate, high: Co
             val newY = width - coord.x - 1
             return@mapKeys Coordinate(newX, newY)
         }
-        newNodes.forEach { _, node -> node.direction = node.direction.clockwise }
+        newNodes.forEach { _, node -> node.clockwise() }
         nodes = newNodes
 
         val oldWidth = width

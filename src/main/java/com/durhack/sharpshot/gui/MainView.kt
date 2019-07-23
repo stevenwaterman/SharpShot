@@ -1,6 +1,6 @@
 package com.durhack.sharpshot.gui
 
-import com.durhack.sharpshot.gui.container.menus.ContainerInputLayer
+import com.durhack.sharpshot.gui.container.input.ContainerInputLayer
 import com.durhack.sharpshot.gui.controls.*
 import javafx.event.Event
 import javafx.event.EventTarget

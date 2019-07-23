@@ -12,6 +12,14 @@ abstract class AbstractNode(var direction: Direction) {
         return process(relDir, bullet.value)
     }
 
+    fun clockwise() {
+        direction = direction.clockwise
+    }
+
+    fun anticlockwise() {
+        direction = direction.antiClockwise
+    }
+
     protected abstract fun process(relativeDirection: Direction, value: BigInteger?): Map<Direction, BigInteger?>
     abstract fun reset()
 

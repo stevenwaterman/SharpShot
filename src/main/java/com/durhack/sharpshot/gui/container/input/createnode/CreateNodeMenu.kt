@@ -1,12 +1,12 @@
-package com.durhack.sharpshot.gui.container.menus.createnode
+package com.durhack.sharpshot.gui.container.input.createnode
 
 import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.gui.container.ContainerView
-import com.durhack.sharpshot.gui.container.menus.ContainerInputLayer
-import com.durhack.sharpshot.gui.container.menus.createnode.nodebuttons.AbstractNodeForm
+import com.durhack.sharpshot.gui.container.input.createnode.nodebuttons.AbstractNodeForm
 import com.durhack.sharpshot.gui.controls.ContainerScrollPane
 import com.durhack.sharpshot.gui.util.addClickHandler
+import com.durhack.sharpshot.util.container
 import javafx.geometry.Insets
 import javafx.geometry.Point2D
 import javafx.scene.Node
@@ -18,7 +18,7 @@ import javafx.scene.layout.*
 import javafx.scene.paint.Color
 import tornadofx.*
 
-class CreateNodeMenu(private val onNodeCreated: (Coordinate, AbstractNode?) -> Unit) : Fragment() {
+class CreateNodeMenu : View() {
     private val padding = 12.0
     private val borderWidth = 2.0
     private val allBorder = Border(BorderStroke(Color.BLACK,
@@ -26,16 +26,14 @@ class CreateNodeMenu(private val onNodeCreated: (Coordinate, AbstractNode?) -> U
                                                 CornerRadii.EMPTY,
                                                 BorderWidths(borderWidth)))
     private val allBackground = Background(BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY))
-
-    private val inputLayer: ContainerInputLayer by inject()
+    private val containerView: ContainerView by inject()
     private lateinit var coordinate: Coordinate
-
     private val info = NodeInfo()
     private val selector = SelectNodeType(
             { info.show(it) },
             { showForm(it) },
             {
-                onNodeCreated(coordinate, it)
+                addNode(coordinate, it)
                 hideAll()
             }
                                          )
@@ -163,7 +161,14 @@ class CreateNodeMenu(private val onNodeCreated: (Coordinate, AbstractNode?) -> U
     private fun hideAll() {
         root.hide()
         info.reset()
-        inputLayer.root.requestFocus()
+        //TODO i probably just broke keyboard shortcuts
+        //inputLayer.root.requestFocus()
         form?.onHide()
+    }
+
+    private fun addNode(coordinate: Coordinate, node: AbstractNode?) {
+        node ?: return
+        container.nodes[coordinate] = node
+        containerView.render()
     }
 }

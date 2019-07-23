@@ -1,16 +1,16 @@
-package com.durhack.sharpshot.gui.container.menus.createnode.nodebuttons
+package com.durhack.sharpshot.gui.container.input.createnode.nodebuttons
 
 import com.durhack.sharpshot.core.nodes.AbstractNode
-import com.durhack.sharpshot.core.nodes.other.HaltNode
+import com.durhack.sharpshot.core.nodes.routing.SplitterNode
 import com.durhack.sharpshot.core.state.Direction
 import com.durhack.sharpshot.registry.NodeRegistry
 
-class HaltNodeButton(
+class SplitterNodeButton(
         onHover: (AbstractNodeButton) -> Unit,
         showForm: (AbstractNodeForm) -> Unit,
         nodeCreated: (AbstractNode) -> Unit) :
-        AbstractNodeButton(NodeRegistry.haltNodeEntry, onHover, showForm, nodeCreated) {
+        AbstractNodeButton(NodeRegistry.splitterNodeEntry, onHover, showForm, nodeCreated) {
 
     override val nodeForm = null
-    override fun createNode() = HaltNode(Direction.UP)
+    override fun createNode() = SplitterNode(Direction.UP)
 }

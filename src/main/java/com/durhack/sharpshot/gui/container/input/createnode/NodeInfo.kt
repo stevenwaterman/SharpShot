@@ -1,6 +1,6 @@
-package com.durhack.sharpshot.gui.container.menus.createnode
+package com.durhack.sharpshot.gui.container.input.createnode
 
-import com.durhack.sharpshot.gui.container.menus.createnode.nodebuttons.AbstractNodeButton
+import com.durhack.sharpshot.gui.container.input.createnode.nodebuttons.AbstractNodeButton
 import javafx.geometry.Pos
 import javafx.scene.control.Label
 import javafx.scene.layout.Background

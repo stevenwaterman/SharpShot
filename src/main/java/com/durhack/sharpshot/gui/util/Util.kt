@@ -1,10 +1,13 @@
 package com.durhack.sharpshot.gui.util
 
+import com.durhack.sharpshot.core.state.Coordinate
+import com.durhack.sharpshot.gui.container.ContainerView
 import javafx.application.Platform
 import javafx.beans.InvalidationListener
 import javafx.beans.value.ObservableValue
 import javafx.beans.value.ObservableValueBase
 import javafx.collections.ObservableList
+import javafx.geometry.Point2D
 import javafx.scene.Node
 import javafx.scene.input.MouseEvent
 import tornadofx.*
@@ -52,3 +55,11 @@ class ObservableUIValue<T>(private val underlying: ObservableValue<T>) : Observa
 }
 
 fun ObservableValue<Boolean>.not() = booleanBinding { it?.not() ?: true }
+
+private val containerView: ContainerView = find(ContainerView::class)
+
+val MouseEvent.position: Point2D
+    get() = Point2D(x, y)
+
+val MouseEvent.coord: Coordinate?
+    get() = containerView.getCoord(x, y)

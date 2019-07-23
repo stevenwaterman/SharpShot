@@ -4,7 +4,7 @@ import com.durhack.sharpshot.core.control.canDecreaseSize
 import com.durhack.sharpshot.core.control.decreaseSize
 import com.durhack.sharpshot.core.control.increaseSize
 import com.durhack.sharpshot.core.state.Direction
-import com.durhack.sharpshot.gui.container.menus.ContainerInputLayer
+import com.durhack.sharpshot.gui.container.input.ContainerInputLayer
 import com.durhack.sharpshot.gui.shapes.Draw
 import com.durhack.sharpshot.util.container
 import javafx.beans.binding.IntegerExpression

@@ -1,10 +1,12 @@
 package com.durhack.sharpshot.gui.container
 
 import com.durhack.sharpshot.core.control.CollisionReport
+import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.core.state.tick.BulletMovement
 import com.durhack.sharpshot.gui.graphics.BulletGraphic
 import com.durhack.sharpshot.gui.util.ui
 import com.durhack.sharpshot.util.MinMaxIntProperty
+import com.durhack.sharpshot.util.clamp
 import com.durhack.sharpshot.util.container
 import javafx.animation.Interpolator
 import javafx.animation.Transition
@@ -106,5 +108,19 @@ class ContainerView : View() {
         transition.interpolator = Interpolator.LINEAR
         transition.isAutoReverse = false
         return transition
+    }
+
+    fun getCoord(x: Double, y: Double): Coordinate? {
+        val scale = ContainerView.innerScaleProp.get()
+        val xClicked = (x / scale).toInt().clamp(0, container.width - 1)
+        val yClicked = (y / scale).toInt().clamp(0, container.height - 1)
+
+        val coord = Coordinate(xClicked, yClicked)
+        if (coord.exists) {
+            return coord
+        }
+        else {
+            return null
+        }
     }
 }
