@@ -1,13 +1,14 @@
-# sharpshot
+# SharpShot
 
-An esoteric visual programming language developed by Steven Lowes, James Chalk, and Ivan Donat Pupovac.
-Name is a reference to C# and shot, as in bullets being shot.
-Put Nodes on a two-dimensional grid to represent constants, branching and conditionals, whereas integers being shot and moved around are the arguments.
+A ZachLike puzzle game based on an underlying esoteric visual programming language.
+SharpShot v0.1 was created for Durhack 2018 by Steven Waterman, James Chalk, and Ivan Donat Pupovac.
 
-Node types include IO, Arithmetic, Branching, Conditionals, Stacks/Lists and Random
+**Nodes** are placed on the 2D grid known as a **Board**.
+They and perform functions on **Bullets** which carry data around the board.
+When bullets collide, they annhilate each other.
+
+Read the dev blog at [StevenWaterman.uk](http://www.stevenwaterman.uk/tags/#SharpShot)
 
 # Images
-
-![Empty](img/empty.png)
-![Exponentiation program in action](img/running.png)
-![Exponentiation program in complete](img/complete.png)
+Given an arbitrary number of inputs, this board multiplies all inputs except the first by the first input. It is optimised for speed, and takes 1 tick per input by splitting the inputs into 4 parallel streams, performing the multiplication, then recombining the streams in order.
+![Multiplier program running](img/running.png)
