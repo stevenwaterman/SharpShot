@@ -14,6 +14,8 @@ class Output : View() {
     private val text = ReadOnlyTextArea(controller.outputStringProp)
 
     override val root = vbox(spacing = 12.0) {
+        id = "Output"
+
         prefWidth = 100.0
         alignment = Pos.TOP_CENTER
         vgrow = Priority.ALWAYS

@@ -32,6 +32,7 @@ class ContainerScrollPane : View() {
 
 
     override val root = scrollpane {
+        id = "Container Scroll Pane"
         vbarPolicy = ScrollPane.ScrollBarPolicy.NEVER
         hbarPolicy = ScrollPane.ScrollBarPolicy.NEVER
         isPannable = true

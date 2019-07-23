@@ -91,6 +91,8 @@ private class DraggableCorner(val vertical: Direction, val horizontal: Direction
     private val containerView: ContainerView by inject()
 
     override val root = hbox {
+        id = "Draggable Corner"
+
         canvas(25.0, 25.0) {
             Draw.rightAngleTriangle(graphicsContext2D, vertical, 0.0, 0.0, 20, Color.BLACK)
             makeDraggable(ContainerView.innerScaleProp.divide(2)) { direction ->
@@ -128,6 +130,8 @@ class ResizingWrapper : View() {
     private val containerInputLayer: ContainerInputLayer by inject()
 
     override val root = gridpane {
+        id = "Resizing Wrapper"
+
         enableWhen(container.runningProp.booleanBinding { it?.not() ?: true })
         paddingAll = paddingAmnt
         add(topArrow.root, 0, 0)

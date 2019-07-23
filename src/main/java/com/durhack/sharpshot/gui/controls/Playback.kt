@@ -16,6 +16,8 @@ class Playback : View() {
     private val controller: ContainerController by inject()
 
     private val runningLayer = hbox(8.0, Pos.CENTER) {
+        id = "Running Layer"
+
         visibleWhen(container.runningProp)
 
         val animateProp = SimpleBooleanProperty(true)
@@ -93,6 +95,8 @@ class Playback : View() {
     }
 
     private val stoppedLayer = hbox(8.0, Pos.CENTER) {
+        id = "Stopped Layer"
+
         alignment = Pos.CENTER
         visibleWhen(container.runningProp.not())
 
@@ -121,6 +125,8 @@ class Playback : View() {
     }
 
     override val root = stackpane {
+        id = "Playback"
+
         add(runningLayer)
         add(stoppedLayer)
     }

@@ -10,6 +10,8 @@ class ContainerStaticView : View() {
     private val renderer = ContainerStaticRenderer()
 
     override val root = pane {
+        id = "Container Static View"
+
         add(renderer)
     }
 

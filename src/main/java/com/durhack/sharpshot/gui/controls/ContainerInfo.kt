@@ -12,6 +12,8 @@ class ContainerInfo : View() {
     private val controller: ContainerController by inject()
 
     override val root = vbox(8.0, Pos.CENTER) {
+        id = "Container Info"
+
         label("Info") {
             font = Font(18.0)
         }

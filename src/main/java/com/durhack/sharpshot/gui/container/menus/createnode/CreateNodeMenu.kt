@@ -40,13 +40,18 @@ class CreateNodeMenu(private val onNodeCreated: (Coordinate, AbstractNode?) -> U
             }
                                          )
     private val chooser = hbox(8.0) {
+        id = "Node Chooser"
         add(selector)
         add(info)
     }
 
-    private val formPane = pane()
+    private val formPane = pane {
+        id = "Node Form Pane"
+    }
 
     override val root = stackpane {
+        id = "Create Node Menu"
+
         paddingAll = this@CreateNodeMenu.padding
         border = allBorder
         background = allBackground

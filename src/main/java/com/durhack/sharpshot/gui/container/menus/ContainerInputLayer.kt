@@ -23,6 +23,8 @@ class ContainerInputLayer : View() {
     private val mouseCoord: Coordinate? get() = getCoord(mouseX, mouseY)
 
     override val root = pane {
+        id = "Container Input Layer"
+
         add(nodeCreator)
 
         addClickHandler {

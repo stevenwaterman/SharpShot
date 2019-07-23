@@ -16,6 +16,8 @@ class MainView : View() {
     private val saveLoadMenu: SaveLoadMenu by inject()
 
     override val root = borderpane {
+        id = "Main View"
+
         center { add(scrollPane) }
         bottom { add(playback) }
         right {
