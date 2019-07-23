@@ -1,0 +1,12 @@
+LAST
+
+Difficulty: 2/10
+
+Description:
+Output the last input
+You don't need to worry about when the input list is empty
+
+Examples:
+5 | 5 
+1 2 3 4 | 4
+6 4 8 9 4 2 -3 | -3

@@ -1,0 +1,11 @@
+SUBTRACT
+
+Difficulty: 1/10
+
+Description:
+Given two inputs, output the first input minus the second
+
+Examples:
+1 2 | -1
+9 4 | 5
+0 6 | -6
