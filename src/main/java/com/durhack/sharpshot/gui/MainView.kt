@@ -7,7 +7,7 @@ import javafx.event.EventTarget
 import javafx.scene.input.KeyEvent
 import tornadofx.*
 
-class MainView: View(){
+class MainView : View() {
     private val scrollPane: ContainerScrollPane by inject()
     private val inputLayer: ContainerInputLayer by inject()
     private val playback: Playback by inject()
@@ -36,7 +36,7 @@ class MainView: View(){
         }
     }
 
-    private fun redirect(event: KeyEvent){
+    private fun redirect(event: KeyEvent) {
         event.consume()
         val newEvent = event.withTarget(inputLayer.root)
         Event.fireEvent(inputLayer.root, newEvent)

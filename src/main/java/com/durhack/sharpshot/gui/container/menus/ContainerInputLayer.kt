@@ -26,16 +26,16 @@ class ContainerInputLayer : View() {
         add(nodeCreator)
 
         addClickHandler {
-            if (it.button == MouseButton.PRIMARY){
+            if (it.button == MouseButton.PRIMARY) {
                 clicked(it.x, it.y)
             }
-            else if(it.button == MouseButton.SECONDARY){
+            else if (it.button == MouseButton.SECONDARY) {
                 deleteClicked(it.x, it.y)
             }
             it.consume()
         }
 
-        addEventHandler(KeyEvent.KEY_PRESSED){
+        addEventHandler(KeyEvent.KEY_PRESSED) {
             when {
                 it.code == KeyCode.Q -> rotateHoveredACW()
                 it.code == KeyCode.E -> rotateHoveredCW()
@@ -43,8 +43,8 @@ class ContainerInputLayer : View() {
             }
         }
 
-        addEventHandler(MouseEvent.MOUSE_PRESSED){
-            if(it.button != MouseButton.SECONDARY){
+        addEventHandler(MouseEvent.MOUSE_PRESSED) {
+            if (it.button != MouseButton.SECONDARY) {
                 it.consume()
             }
         }
@@ -56,15 +56,15 @@ class ContainerInputLayer : View() {
     }
 
     private fun getCoord(x: Double, y: Double): Coordinate? {
-        val scale = ContainerView.scaleProp.get()
+        val scale = ContainerView.innerScaleProp.get()
         val xClicked = (x / scale).toInt().clamp(0, container.width - 1)
         val yClicked = (y / scale).toInt().clamp(0, container.height - 1)
 
         val coord = Coordinate(xClicked, yClicked)
-        if(coord.exists){
+        if (coord.exists) {
             return coord
         }
-        else{
+        else {
             return null
         }
     }
@@ -101,7 +101,7 @@ class ContainerInputLayer : View() {
         if (node == null) {
             nodeCreator.show(coord, Point2D(x, y))
         }
-        else{
+        else {
             node.direction = node.direction.clockwise
             containerView.render()
         }

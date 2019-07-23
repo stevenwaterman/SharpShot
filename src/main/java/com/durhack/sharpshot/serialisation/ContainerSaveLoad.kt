@@ -1,9 +1,6 @@
 package com.durhack.sharpshot.serialisation
 
-import com.durhack.sharpshot.core.state.Container
 import com.durhack.sharpshot.gui.container.ContainerStaticRenderer
-import com.durhack.sharpshot.gui.container.ContainerStaticView
-import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.util.container
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Scene
@@ -12,12 +9,8 @@ import javafx.scene.SnapshotParameters
 import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import javafx.stage.FileChooser
-import tornadofx.FileChooserMode
-import tornadofx.add
-import tornadofx.chooseFile
-import tornadofx.runAsync
+import tornadofx.*
 import java.io.File
-import javax.imageio.ImageIO
 
 object ContainerSaveLoad {
     private val snapshotParams = SnapshotParameters().run {
@@ -34,9 +27,9 @@ object ContainerSaveLoad {
     fun save(): Boolean {
         val file =
                 chooseFile("Save Location",
-                        listOf(FileChooser.ExtensionFilter("Png Images", "*.png")).toTypedArray(),
-                        FileChooserMode.Save
-                ) {
+                           listOf(FileChooser.ExtensionFilter("Png Images", "*.png")).toTypedArray(),
+                           FileChooserMode.Save
+                          ) {
                     initialDirectory = File(System.getProperty("user.dir"))
                     initialFileName = "export"
                 }.firstOrNull() ?: return false
@@ -60,8 +53,8 @@ object ContainerSaveLoad {
 
     fun load(): Boolean {
         val file = chooseFile("Select Image",
-                listOf(FileChooser.ExtensionFilter("Png Images", "*.png")).toTypedArray(),
-                FileChooserMode.Single)
+                              listOf(FileChooser.ExtensionFilter("Png Images", "*.png")).toTypedArray(),
+                              FileChooserMode.Single)
         {
             initialDirectory = File(System.getProperty("user.dir"))
         }.firstOrNull() ?: return false

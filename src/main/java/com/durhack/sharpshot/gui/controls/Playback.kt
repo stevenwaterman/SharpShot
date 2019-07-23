@@ -1,6 +1,7 @@
 package com.durhack.sharpshot.gui.controls
 
 import com.durhack.sharpshot.gui.container.ContainerController
+import com.durhack.sharpshot.gui.util.not
 import com.durhack.sharpshot.util.container
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleIntegerProperty
@@ -18,11 +19,11 @@ class Playback : View() {
         visibleWhen(container.runningProp)
 
         val animateProp = SimpleBooleanProperty(true)
-        val speedSettingProp = SimpleIntegerProperty(3)
+        val speedSettingProp = SimpleIntegerProperty(2)
         label("Speed") {
             visibleWhen(animateProp)
         }
-        slider(1, 5, orientation = Orientation.HORIZONTAL){
+        slider(1, 5, orientation = Orientation.HORIZONTAL) {
             isFocusTraversable = false
             blockIncrement = 1.0
             majorTickUnit = 1.0
@@ -33,7 +34,7 @@ class Playback : View() {
             enableWhen(controller.idleProp)
             bind(speedSettingProp)
         }
-        checkbox("Animate", animateProp){
+        checkbox("Animate", animateProp) {
             isFocusTraversable = false
             enableWhen(controller.idleProp)
         }
@@ -42,14 +43,14 @@ class Playback : View() {
             enableWhen(controller.idleProp)
             action {
 
-                    if(animateProp.get()){
-                        val speedSetting = speedSettingProp.get()
-                        val lengthMs = 1000/(speedSetting * speedSetting * speedSetting)
-                        controller.animatedTick(lengthMs.toLong())
-                    }
-                    else{
-                        controller.quickTick()
-                    }
+                if (animateProp.get()) {
+                    val speedSetting = speedSettingProp.get()
+                    val lengthMs = getPlaybackMs(speedSetting)
+                    controller.animatedTick(lengthMs)
+                }
+                else {
+                    controller.quickTick()
+                }
 
             }
         }
@@ -58,7 +59,7 @@ class Playback : View() {
             enableWhen(controller.idleProp)
             action {
 
-                    controller.reset()
+                controller.reset()
 
             }
         }
@@ -66,21 +67,19 @@ class Playback : View() {
             button("Play") {
                 isFocusTraversable = false
                 hiddenWhen(controller.playingProp)
-                enableWhen(controller.idleProp.and(animateProp))
+                enableWhen(animateProp.booleanBinding(controller.idleProp) { animateProp.get() && controller.idle })
                 action {
-
-                        val speedSetting = speedSettingProp.get()
-                        val lengthMs = 1000/(speedSetting * speedSetting * speedSetting)
-                        controller.play(lengthMs.toLong())
-
+                    val speedSetting = speedSettingProp.get()
+                    val lengthMs = getPlaybackMs(speedSetting)
+                    controller.play(lengthMs)
                 }
             }
-            button("Stop"){
+            button("Stop") {
                 isFocusTraversable = false
                 visibleWhen(controller.playingProp)
                 enableWhen(controller.stoppingProp.not())
                 action {
-                        controller.stopPlaying()
+                    controller.stopPlaying()
                 }
             }
         }
@@ -88,7 +87,7 @@ class Playback : View() {
             isFocusTraversable = false
             enableWhen(controller.idleProp)
             action {
-                controller.simulate(10*1000)
+                controller.simulate(10 * 1000)
             }
         }
     }
@@ -98,14 +97,6 @@ class Playback : View() {
         visibleWhen(container.runningProp.not())
 
         val inputsProp = SimpleStringProperty("")
-        button("Start Test") {
-            isFocusTraversable = false
-            action {
-                val inputString = inputsProp.get()
-                val inputs = inputString.split(" ").filter { it.isNotBlank() }.map { it.toBigInteger() }
-                controller.start(inputs)
-            }
-        }
         textfield(inputsProp) {
             promptText = "Space-separated inputs"
             addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume)
@@ -119,10 +110,29 @@ class Playback : View() {
                 }
             }
         }
+        button("Start Test") {
+            isFocusTraversable = false
+            action {
+                val inputString = inputsProp.get()
+                val inputs = inputString.split(" ").filter { it.isNotBlank() }.map { it.toBigInteger() }
+                controller.start(inputs)
+            }
+        }
     }
 
     override val root = stackpane {
         add(runningLayer)
         add(stoppedLayer)
+    }
+
+    private fun getPlaybackMs(speedSetting: Int): Long {
+        return when (speedSetting) {
+            1 -> 2000L
+            2 -> 500L
+            3 -> 250L
+            4 -> 50L
+            5 -> 10L
+            else -> throw IllegalArgumentException("Invalid speed setting")
+        }
     }
 }

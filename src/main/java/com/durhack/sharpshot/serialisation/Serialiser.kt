@@ -3,7 +3,6 @@ package com.durhack.sharpshot.serialisation
 import com.durhack.sharpshot.core.state.Container
 import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.registry.NodeRegistry
-import com.durhack.sharpshot.util.container
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject

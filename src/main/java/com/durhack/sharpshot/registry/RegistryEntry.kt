@@ -2,7 +2,6 @@ package com.durhack.sharpshot.registry
 
 import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Direction
-import com.durhack.sharpshot.gui.container.menus.createnode.nodeforms.AbstractNodeForm
 import com.google.gson.JsonObject
 import javafx.scene.canvas.Canvas
 import javafx.scene.canvas.GraphicsContext
@@ -14,7 +13,7 @@ abstract class RegistryEntry<T : AbstractNode>(val example: T, val name: String,
     @Suppress("UNCHECKED_CAST")
     fun unsafeCast(node: AbstractNode): T = node as T
 
-    fun unsafeToJson(node: AbstractNode): JsonObject{
+    fun unsafeToJson(node: AbstractNode): JsonObject {
         val castNode = unsafeCast(node)
         return toJson(castNode)
     }
@@ -26,7 +25,7 @@ abstract class RegistryEntry<T : AbstractNode>(val example: T, val name: String,
         return json
     }
 
-    open fun create(json: JsonObject): T{
+    open fun create(json: JsonObject): T {
         val quarters = json["direction"].asInt
         val direction = Direction.ofQuarters(quarters)
 
@@ -40,7 +39,7 @@ abstract class RegistryEntry<T : AbstractNode>(val example: T, val name: String,
                    gc: GraphicsContext,
                    x: Double,
                    y: Double,
-                   scale: Int){
+                   scale: Int) {
         draw(unsafeCast(node), gc, x, y, scale)
     }
 
@@ -50,17 +49,13 @@ abstract class RegistryEntry<T : AbstractNode>(val example: T, val name: String,
                       y: Double,
                       scale: Int)
 
-    fun getGraphic(scale: Int) = Canvas().apply {
-        width = scale.toDouble()
-        height = scale.toDouble()
+    fun getGraphic(scale: Int) = Canvas(scale.toDouble(), scale.toDouble()).apply {
         draw(example, graphicsContext2D, 0.0, 0.0, scale)
     }
 
     override fun toString() = "RegistryEntry(name='$name')"
 
-    open fun getNodeForm(close: () -> Unit, success: (T) -> Unit): AbstractNodeForm<T>? = null
-
-    fun createNode(): T{
+    fun createNode(): T {
         return example::class.java.getConstructor(Direction::class.java).newInstance(Direction.UP)
     }
 }

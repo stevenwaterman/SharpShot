@@ -6,9 +6,10 @@ import com.google.gson.JsonObject
 import javafx.scene.canvas.GraphicsContext
 
 object NodeRegistry {
-    val inNodeEntry = InNodeEntry()
+    val inputNodeEntry = InNodeEntry()
     val listNodeEntry = ListNodeEntry()
     val stackNodeEntry = StackNodeEntry()
+    val memoryNodeEntry = MemoryNodeEntry()
     val splitterNodeEntry = SplitterNodeEntry()
     val constantNodeEntry = ConstantNodeEntry()
     val randomNodeEntry = RandomNodeEntry()
@@ -22,14 +23,18 @@ object NodeRegistry {
     val divNodeEntry = DivNodeEntry()
     val multNodeEntry = MultNodeEntry()
     val subNodeEntry = SubNodeEntry()
+    val rotateNodeEntry = RotateNodeEntry()
+    val rotateAntiNodeEntry = RotateAntiNodeEntry()
+    val singleUseBranchNodeEntry = SingleUseBranchNodeEntry()
 
     val entries = listOf(
-            inNodeEntry,
+            inputNodeEntry,
             listNodeEntry,
             voidNodeEntry,
             haltNodeEntry,
             splitterNodeEntry,
             stackNodeEntry,
+            memoryNodeEntry,
             constantNodeEntry,
             randomNodeEntry,
             branchNodeEntry,
@@ -39,7 +44,10 @@ object NodeRegistry {
             addNodeEntry,
             subNodeEntry,
             multNodeEntry,
-            divNodeEntry
+            divNodeEntry,
+            rotateNodeEntry,
+            rotateAntiNodeEntry,
+            singleUseBranchNodeEntry
                         )
 
     private val mapping: Map<String, RegistryEntry<out AbstractNode>> =

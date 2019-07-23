@@ -10,7 +10,7 @@ import javafx.scene.paint.Color
 class ListNodeEntry() : RegistryEntry<ListNode>(
         ListNode(Direction.UP),
         "List",
-        "Every time a bullet comes in, outputs the next value in the list of inputs"
+        "Every time a bullet comes in, outputProp the next value in the list of inputs"
                                                ) {
 
     override fun draw(node: ListNode,

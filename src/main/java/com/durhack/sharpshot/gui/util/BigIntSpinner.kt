@@ -33,7 +33,7 @@ class BigIntSpinner(startValue: BigInteger? = null, onIncrementalChange: (BigInt
 private class BigIntValueFactory(private val onIncrementalChange: (BigInteger?) -> Unit) : SpinnerValueFactory<BigInteger>() {
     override fun increment(steps: Int) {
         if (value == null) {
-            if(steps != 0){
+            if (steps != 0) {
                 value = BigInteger.ZERO + steps.toBigInteger()
             }
         }
@@ -47,10 +47,10 @@ private class BigIntValueFactory(private val onIncrementalChange: (BigInteger?) 
         val captured = value
         if (captured != null) {
             val newVal = captured - steps.toBigInteger()
-            if(newVal < BigInteger.ONE){
+            if (newVal < BigInteger.ONE) {
                 value = BigInteger.ONE
             }
-            else{
+            else {
                 value = newVal
             }
         }
@@ -58,7 +58,7 @@ private class BigIntValueFactory(private val onIncrementalChange: (BigInteger?) 
     }
 }
 
-private class IntegerFilter: UnaryOperator<TextFormatter.Change?> {
+private class IntegerFilter : UnaryOperator<TextFormatter.Change?> {
     private val regex = "-?([0-9]+)?".toRegex()
 
     override fun apply(change: TextFormatter.Change?): TextFormatter.Change? {
@@ -67,14 +67,14 @@ private class IntegerFilter: UnaryOperator<TextFormatter.Change?> {
     }
 }
 
-private class BigIntStringConverter: StringConverter<BigInteger?>(){
+private class BigIntStringConverter : StringConverter<BigInteger?>() {
     override fun toString(int: BigInteger?) = int?.toString() ?: ""
-    override fun fromString(string: String?) = try{
+    override fun fromString(string: String?) = try {
         BigInteger(string)
     }
-    catch (ex: NumberFormatException){
+    catch (ex: NumberFormatException) {
         null
     }
 }
 
-private class IntTextFormatter: TextFormatter<BigInteger?>(BigIntStringConverter(), null, IntegerFilter())
+private class IntTextFormatter : TextFormatter<BigInteger?>(BigIntStringConverter(), null, IntegerFilter())

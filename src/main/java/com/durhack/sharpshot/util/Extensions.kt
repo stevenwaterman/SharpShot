@@ -25,10 +25,10 @@ fun <T> Iterable<T>.pairDuplicates(): List<Pair<T, T>> {
     return pairs
 }
 
-fun <T: Comparable<T>> T.clamp(min: T, max: T): T {
+fun <T : Comparable<T>> T.clamp(min: T? = null, max: T? = null): T {
     return when {
-        this < min -> min
-        this > max -> max
+        min != null && this < min -> min
+        max != null && this > max -> max
         else -> this
     }
 }

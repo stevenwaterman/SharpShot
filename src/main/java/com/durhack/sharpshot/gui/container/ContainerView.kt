@@ -19,9 +19,10 @@ import javafx.util.Duration
 import tornadofx.*
 
 class ContainerView : View() {
-    companion object{
-        val scaleProp = MinMaxIntProperty(10, 50, 500)
-        var scale by scaleProp
+    companion object {
+        val innerScaleProp = MinMaxIntProperty(10, 50, 500)
+        val scaleProp = innerScaleProp.ui()
+        var scale by innerScaleProp
     }
 
     private val nodeLayer: ContainerStaticView by inject()
@@ -38,12 +39,12 @@ class ContainerView : View() {
 
     init {
         render()
-        scaleProp.onChange { render() }
+        innerScaleProp.onChange { render() }
     }
 
     fun render() {
         val bullets = mutableListOf<Node>()
-        container.bullets.forEach {bullet ->
+        container.bullets.forEach { bullet ->
             val graphic = BulletGraphic(bullet = bullet, scale = scale)
             bullets.add(graphic)
         }

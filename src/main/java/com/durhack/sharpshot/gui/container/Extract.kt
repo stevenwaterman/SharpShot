@@ -28,7 +28,7 @@ class Extract(allNodes: Map<Coordinate, AbstractNode>, low: Coordinate, high: Co
         nodes = newNodes
     }
 
-    fun mirrorVertical(){
+    fun mirrorVertical() {
         val newNodes =
                 nodes.mapKeys { (coord, _) ->
                     val newY = height - coord.x - 1
@@ -38,13 +38,13 @@ class Extract(allNodes: Map<Coordinate, AbstractNode>, low: Coordinate, high: Co
         nodes = newNodes
     }
 
-    fun rotateClockwise(){
-        val newNodes = nodes.mapKeys {(coord, _) ->
+    fun rotateClockwise() {
+        val newNodes = nodes.mapKeys { (coord, _) ->
             val newX = height - coord.y - 1
             val newY = width - coord.x - 1
             return@mapKeys Coordinate(newX, newY)
         }
-        newNodes.forEach { _, node -> node.direction = node.direction.clockwise}
+        newNodes.forEach { _, node -> node.direction = node.direction.clockwise }
         nodes = newNodes
 
         val oldWidth = width
@@ -53,7 +53,7 @@ class Extract(allNodes: Map<Coordinate, AbstractNode>, low: Coordinate, high: Co
         height = oldWidth
     }
 
-    fun trim(){
+    fun trim() {
         val minX = nodes.keys.map(Coordinate::x).min()!!
         val minY = nodes.keys.map(Coordinate::y).min()!!
         val minCoord = Coordinate(minX, minY)

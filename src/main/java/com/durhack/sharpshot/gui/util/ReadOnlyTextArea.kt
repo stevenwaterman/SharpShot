@@ -1,18 +1,13 @@
 package com.durhack.sharpshot.gui.util
 
-import javafx.beans.property.StringProperty
-import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
-import javafx.event.EventTarget
 import javafx.geometry.Pos
-import javafx.scene.Parent
-import javafx.scene.control.*
+import javafx.scene.control.ScrollPane
 import javafx.scene.layout.Background
 import javafx.scene.layout.Priority
-import javafx.scene.layout.Region
 import tornadofx.*
 
-class ReadOnlyTextArea(property: ObservableValue<String>): Fragment(){
+class ReadOnlyTextArea(property: ObservableValue<String>) : Fragment() {
     private val inner = vbox {
         alignment = Pos.CENTER
         vgrow = Priority.ALWAYS
@@ -33,6 +28,6 @@ class ReadOnlyTextArea(property: ObservableValue<String>): Fragment(){
 
         add(inner)
 
-        inner.heightProperty().onChange { ui{vvalue = vmax} }
+        inner.heightProperty().ui().onChange { vvalue = vmax }
     }
 }

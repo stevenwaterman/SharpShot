@@ -7,11 +7,11 @@ import com.durhack.sharpshot.registry.RegistryEntry
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.paint.Color
 
-class IfZeroNodeEntry() : RegistryEntry<IfZeroNode>(
+class IfZeroNodeEntry : RegistryEntry<IfZeroNode>(
         IfZeroNode(Direction.UP),
         "If Zero",
         "Redirects all zeros"
-                                                       ) {
+                                                 ) {
 
     override fun draw(node: IfZeroNode,
                       gc: GraphicsContext,

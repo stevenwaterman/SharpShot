@@ -1,7 +1,7 @@
 package com.durhack.sharpshot.gui.controls
 
 import com.durhack.sharpshot.gui.container.ContainerView
-import com.durhack.sharpshot.gui.util.ui
+import com.durhack.sharpshot.gui.container.ResizingWrapper
 import com.durhack.sharpshot.util.*
 import javafx.geometry.Point2D
 import javafx.geometry.Pos
@@ -26,7 +26,7 @@ class ContainerScrollPane : View() {
         alignment = Pos.CENTER
 
         addEventHandler(MouseEvent.ANY) {
-            if(it.button != MouseButton.SECONDARY) it.consume()
+            if (it.button != MouseButton.SECONDARY) it.consume()
         }
     }
 

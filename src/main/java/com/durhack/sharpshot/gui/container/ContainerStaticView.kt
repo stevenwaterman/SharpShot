@@ -6,22 +6,22 @@ import javafx.scene.canvas.Canvas
 import javafx.scene.paint.Color
 import tornadofx.*
 
-class ContainerStaticView() : View() {
+class ContainerStaticView : View() {
     private val renderer = ContainerStaticRenderer()
 
     override val root = pane {
         add(renderer)
     }
 
-    fun render(){
+    fun render() {
         renderer.render(ContainerView.scale)
     }
 }
 
-class ContainerStaticRenderer() : Canvas() {
+class ContainerStaticRenderer : Canvas() {
     private val gc = graphicsContext2D
 
-    fun render(scale: Int){
+    fun render(scale: Int) {
         clear()
         updateWidth(scale)
         drawNodes(scale)
@@ -37,7 +37,7 @@ class ContainerStaticRenderer() : Canvas() {
         gc.clearRect(0.0, 0.0, width, height)
     }
 
-    private fun drawNodes(scale: Int){
+    private fun drawNodes(scale: Int) {
         container.nodes.forEach { (coord, node) ->
             val x = coord.x * scale
             val y = coord.y * scale
@@ -50,7 +50,7 @@ class ContainerStaticRenderer() : Canvas() {
         gc.lineWidth = 1.0
 
         (0..container.width).map { it * scale }.forEach {
-            gc.strokeLine(it + 0.5, 0.0, it +0.5, height)
+            gc.strokeLine(it + 0.5, 0.0, it + 0.5, height)
         }
 
         (0..container.height).map { it * scale }.forEach {

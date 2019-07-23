@@ -60,7 +60,7 @@ class Coordinate(val x: Int, val y: Int) {
 
     override fun toString() = "Coordinate(x=$x, y=$y)"
 
-    val exists get()  = container.isInside(this)
+    val exists get() = container.isInside(this)
 
     companion object {
         fun fromJson(json: JsonObject): Coordinate {

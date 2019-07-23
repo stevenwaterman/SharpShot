@@ -74,7 +74,7 @@ object Draw {
             Point2D(0.375, 0.75),
             Point2D(0.375, 0.25),
             Point2D(0.25, 0.25)
-                                              ))
+                                                    ))
 
     fun doubleArrow(gc: GraphicsContext, direction: Direction, x: Double, y: Double, scale: Int, color: Color) {
         doubleArrow.draw(gc, direction, x, y, scale, color)
@@ -84,7 +84,7 @@ object Draw {
             Point2D(0.0, 0.0),
             Point2D(1.0, 0.0),
             Point2D(0.0, 1.0)
-    ))
+                                                           ))
 
     fun rightAngleTriangle(gc: GraphicsContext, direction: Direction, x: Double, y: Double, scale: Int, color: Color) {
         rightAngleTriangle.draw(gc, direction, x, y, scale, color)
@@ -96,10 +96,48 @@ object Draw {
             Point2D(1.0, 1.0),
             Point2D(0.0, 1.0),
             Point2D(0.0, 0.5)
-                                                           ))
+                                               ))
 
     fun bullet(gc: GraphicsContext, direction: Direction, x: Double, y: Double, scale: Int, color: Color) {
         bullet.draw(gc, direction, x, y, scale, color)
+    }
+
+    private val simpleArrow = DrawablePolygon(listOf(
+            Point2D(0.0, 1.0),
+            Point2D(0.5, 0.0),
+            Point2D(1.0, 1.0)
+                                                    ))
+
+    fun rotate(gc: GraphicsContext, direction: Direction, x: Double, y: Double, scale: Int, color: Color) {
+        gc.stroke = color
+        gc.lineWidth = scale / 20.0
+        gc.fill = color
+
+        val arrowScale = scale / 4
+        val offsetForFar = scale - arrowScale.toDouble()
+        val offsetForMiddle = (offsetForFar) / 2.0
+        simpleArrow.draw(gc, Direction.RIGHT, x + offsetForMiddle, y, arrowScale, color)
+        simpleArrow.draw(gc, Direction.DOWN, x + offsetForFar, y + offsetForMiddle, arrowScale, color)
+        simpleArrow.draw(gc, Direction.LEFT, x + offsetForMiddle, y + offsetForFar, arrowScale, color)
+        simpleArrow.draw(gc, Direction.UP, x, y + offsetForMiddle, arrowScale, color)
+        val halfArrowScale = arrowScale / 2.0
+        gc.strokeOval(x + halfArrowScale, y + halfArrowScale, offsetForFar, offsetForFar)
+    }
+
+    fun rotateAnti(gc: GraphicsContext, direction: Direction, x: Double, y: Double, scale: Int, color: Color) {
+        gc.stroke = color
+        gc.lineWidth = scale / 20.0
+        gc.fill = color
+
+        val arrowScale = scale / 4
+        val offsetForFar = scale - arrowScale.toDouble()
+        val offsetForMiddle = (offsetForFar) / 2.0
+        simpleArrow.draw(gc, Direction.LEFT, x + offsetForMiddle, y, arrowScale, color)
+        simpleArrow.draw(gc, Direction.UP, x + offsetForFar, y + offsetForMiddle, arrowScale, color)
+        simpleArrow.draw(gc, Direction.RIGHT, x + offsetForMiddle, y + offsetForFar, arrowScale, color)
+        simpleArrow.draw(gc, Direction.DOWN, x, y + offsetForMiddle, arrowScale, color)
+        val halfArrowScale = arrowScale / 2.0
+        gc.strokeOval(x + halfArrowScale, y + halfArrowScale, offsetForFar, offsetForFar)
     }
 
     fun text(gc: GraphicsContext, text: String, x: Double, y: Double, scale: Int, color: Color = Color.BLACK) {

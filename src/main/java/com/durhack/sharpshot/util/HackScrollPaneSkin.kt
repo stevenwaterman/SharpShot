@@ -4,7 +4,7 @@ import javafx.beans.value.ChangeListener
 import javafx.geometry.Bounds
 import javafx.scene.control.ScrollPane
 import javafx.scene.control.skin.ScrollPaneSkin
-import tornadofx.onChange
+import tornadofx.*
 
 /**
  * Basically, the scroll pane skin keeps adding a TransparencyListener that we don't want because it breaks our zooming.
@@ -17,7 +17,7 @@ class HackScrollPaneSkin(scrollPane: ScrollPane) : ScrollPaneSkin(scrollPane) {
         boundsChangeListenerField.isAccessible = true
         @Suppress("UNCHECKED_CAST") //KILL ME
         val bcl = boundsChangeListenerField.get(this) as ChangeListener<in Bounds>
-        skinnable.contentProperty().onChange {scrollNode ->
+        skinnable.contentProperty().onChange { scrollNode ->
             scrollNode ?: return@onChange
             scrollNode.layoutBoundsProperty().removeListener(bcl)
             scrollNode.layoutBoundsProperty().addListener { _ ->

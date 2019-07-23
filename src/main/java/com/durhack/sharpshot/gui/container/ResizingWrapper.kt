@@ -1,10 +1,9 @@
-package com.durhack.sharpshot.gui.controls
+package com.durhack.sharpshot.gui.container
 
 import com.durhack.sharpshot.core.control.canDecreaseSize
 import com.durhack.sharpshot.core.control.decreaseSize
 import com.durhack.sharpshot.core.control.increaseSize
 import com.durhack.sharpshot.core.state.Direction
-import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.gui.container.menus.ContainerInputLayer
 import com.durhack.sharpshot.gui.shapes.Draw
 import com.durhack.sharpshot.util.container
@@ -17,7 +16,8 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.paint.Color
 import tornadofx.*
 
-fun Node.makeDraggable(amountPerClick: Int, onDragged: (Direction) -> Boolean) = makeDraggable(SimpleIntegerProperty(amountPerClick), onDragged)
+fun Node.makeDraggable(amountPerClick: Int, onDragged: (Direction) -> Boolean) = makeDraggable(SimpleIntegerProperty(
+        amountPerClick), onDragged)
 
 fun Node.makeDraggable(amountPerClickProperty: IntegerExpression, onDragged: (Direction) -> Boolean) {
 
@@ -46,7 +46,8 @@ fun Node.makeDraggable(amountPerClickProperty: IntegerExpression, onDragged: (Di
                 val change = Point2D(amountPerClick, 0.0)
                 newDelta -= change
                 consumedAmount += change
-            } else {
+            }
+            else {
                 break
             }
         }
@@ -56,7 +57,8 @@ fun Node.makeDraggable(amountPerClickProperty: IntegerExpression, onDragged: (Di
                 val change = Point2D(amountPerClick, 0.0)
                 newDelta += change
                 consumedAmount -= change
-            } else {
+            }
+            else {
                 break
             }
         }
@@ -66,7 +68,8 @@ fun Node.makeDraggable(amountPerClickProperty: IntegerExpression, onDragged: (Di
                 val change = Point2D(0.0, amountPerClick)
                 newDelta -= change
                 consumedAmount += change
-            } else {
+            }
+            else {
                 break
             }
         }
@@ -76,7 +79,8 @@ fun Node.makeDraggable(amountPerClickProperty: IntegerExpression, onDragged: (Di
                 val change = Point2D(0.0, amountPerClick)
                 newDelta += change
                 consumedAmount -= change
-            } else {
+            }
+            else {
                 break
             }
         }
@@ -89,17 +93,19 @@ private class DraggableCorner(val vertical: Direction, val horizontal: Direction
     override val root = hbox {
         canvas(25.0, 25.0) {
             Draw.rightAngleTriangle(graphicsContext2D, vertical, 0.0, 0.0, 20, Color.BLACK)
-            makeDraggable(ContainerView.scaleProp.divide(2)) { direction ->
+            makeDraggable(ContainerView.innerScaleProp.divide(2)) { direction ->
                 if (direction == vertical || direction == horizontal) {
                     container.increaseSize(direction)
                     containerView.render()
                     true
-                } else {
+                }
+                else {
                     if (container.canDecreaseSize(direction)) {
                         container.decreaseSize(direction)
                         containerView.render()
                         true
-                    } else {
+                    }
+                    else {
                         false
                     }
                 }
@@ -122,7 +128,7 @@ class ResizingWrapper : View() {
     private val containerInputLayer: ContainerInputLayer by inject()
 
     override val root = gridpane {
-        enableWhen(container.runningProp.not())
+        enableWhen(container.runningProp.booleanBinding { it?.not() ?: true })
         paddingAll = paddingAmnt
         add(topArrow.root, 0, 0)
         add(bottomArrow.root, 2, 2)
