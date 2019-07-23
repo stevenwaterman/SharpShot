@@ -1,10 +1,10 @@
 package com.durhack.sharpshot.gui.controls
 
 import com.durhack.sharpshot.gui.container.ContainerController
+import com.durhack.sharpshot.gui.util.not
 import com.durhack.sharpshot.serialisation.ContainerSaveLoad
 import com.durhack.sharpshot.util.container
 import javafx.geometry.Pos
-import javafx.scene.Parent
 import javafx.scene.text.Font
 import tornadofx.*
 

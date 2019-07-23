@@ -6,27 +6,31 @@ import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.nodes.input.AbstractInputNode
 import com.durhack.sharpshot.core.nodes.other.HaltNode
 import com.durhack.sharpshot.core.state.tick.*
+import com.durhack.sharpshot.gui.util.ui
 import com.durhack.sharpshot.util.IdiotProgrammerException
 import com.durhack.sharpshot.util.filterType
 import com.durhack.sharpshot.util.pairDuplicates
-import javafx.beans.property.*
+import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.SimpleIntegerProperty
 import tornadofx.*
 import java.math.BigInteger
 
 class Container(initWidth: Int, initHeight: Int) {
-    val widthProp = SimpleIntegerProperty(initWidth)
-    var width by widthProp
+    private val innerWidthProp = SimpleIntegerProperty(initWidth)
+    val widthProp = innerWidthProp.ui()
+    var width by innerWidthProp
 
-    val heightProp = SimpleIntegerProperty(initHeight)
-    var height: Int by heightProp
+    private val innerHeightProp = SimpleIntegerProperty(initHeight)
+    val heightProp = innerHeightProp.ui()
+    var height: Int by innerHeightProp
+
+    private val innerRunningProp = SimpleBooleanProperty(false)
+    val runningProp = innerRunningProp.ui()
+    var running by innerRunningProp
+        private set
 
     val nodes = mutableMapOf<Coordinate, AbstractNode>()
     val bullets = mutableListOf<Bullet>()
-
-    private val runningPropInternal = SimpleBooleanProperty(false)
-    val runningProp = ReadOnlyBooleanWrapper.booleanExpression(runningPropInternal)
-    var running by runningPropInternal
-        private set
 
     fun clear() {
         nodes.clear()

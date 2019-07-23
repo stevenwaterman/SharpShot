@@ -3,7 +3,7 @@ package com.durhack.sharpshot.core.nodes.input
 import com.durhack.sharpshot.core.state.Direction
 import java.math.BigInteger
 
-class InNode(val index: Int?, direction: Direction) : AbstractInputNode(direction) {
+class InputNode(val index: Int?, direction: Direction) : AbstractInputNode(direction) {
     private var input: BigInteger? = null
 
     override fun initialise(inputs: List<BigInteger?>): Pair<Direction, BigInteger?>? {

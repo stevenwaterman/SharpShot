@@ -10,14 +10,4 @@ fun main(args: Array<String>) {
     //TODO maths, lists, computation
     //TODO add costs
     //TODO add leaderboard - with cryptography
-    //TODO fix colours
-    //TODO add title - tornadofx specific
 }
-
-/*
-LEVEL ideas
-Maths
-    Add
-    Exponent
-
- */

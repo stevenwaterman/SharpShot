@@ -1,20 +1,19 @@
 package com.durhack.sharpshot.registry.entries
 
-import com.durhack.sharpshot.core.nodes.input.InNode
+import com.durhack.sharpshot.core.nodes.input.InputNode
 import com.durhack.sharpshot.core.state.Direction
-import com.durhack.sharpshot.gui.container.menus.createnode.nodeforms.InNodeForm
 import com.durhack.sharpshot.gui.shapes.Draw
 import com.durhack.sharpshot.registry.RegistryEntry
 import com.google.gson.JsonObject
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.paint.Color
 
-class InNodeEntry() : RegistryEntry<InNode>(
-        InNode(1, Direction.UP),
+class InNodeEntry() : RegistryEntry<InputNode>(
+        InputNode(1, Direction.UP),
         "Input",
         "Provides Input at program start and every time a bullet passes through"
-                                           ) {
-    override fun create(json: JsonObject): InNode {
+                                              ) {
+    override fun create(json: JsonObject): InputNode {
         val indexString = json["index"].asString
         val index = when (indexString) {
             "null" -> null
@@ -24,16 +23,16 @@ class InNodeEntry() : RegistryEntry<InNode>(
         val rotation = json["direction"].asInt
         val direction = Direction.ofQuarters(rotation)
 
-        return InNode(index, direction)
+        return InputNode(index, direction)
     }
 
-    override fun toJson(node: InNode): JsonObject {
+    override fun toJson(node: InputNode): JsonObject {
         val json = super.toJson(node).asJsonObject
         json.addProperty("index", node.index?.toString() ?: "null")
         return json
     }
 
-    override fun draw(node: InNode,
+    override fun draw(node: InputNode,
                       gc: GraphicsContext,
                       x: Double,
                       y: Double,
@@ -45,6 +44,4 @@ class InNodeEntry() : RegistryEntry<InNode>(
         }
         Draw.text(gc, text, x, y, scale)
     }
-
-    override fun getNodeForm(close: () -> Unit, success: (InNode) -> Unit) = InNodeForm(close, success)
 }
