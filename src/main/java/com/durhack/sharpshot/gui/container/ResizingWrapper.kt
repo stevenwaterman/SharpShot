@@ -4,88 +4,14 @@ import com.durhack.sharpshot.core.control.canDecreaseSize
 import com.durhack.sharpshot.core.control.decreaseSize
 import com.durhack.sharpshot.core.control.increaseSize
 import com.durhack.sharpshot.core.state.Direction
-import com.durhack.sharpshot.gui.container.input.ContainerInputLayer
+import com.durhack.sharpshot.gui.container.input.layers.ContainerInputLayer
 import com.durhack.sharpshot.gui.shapes.Draw
+import com.durhack.sharpshot.gui.util.makeDraggable
 import com.durhack.sharpshot.util.container
-import javafx.beans.binding.IntegerExpression
-import javafx.beans.property.SimpleIntegerProperty
-import javafx.geometry.Point2D
-import javafx.scene.Node
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.paint.Color
 import tornadofx.*
-
-fun Node.makeDraggable(amountPerClick: Int, onDragged: (Direction) -> Boolean) = makeDraggable(SimpleIntegerProperty(
-        amountPerClick), onDragged)
-
-fun Node.makeDraggable(amountPerClickProperty: IntegerExpression, onDragged: (Direction) -> Boolean) {
-
-    var dragStart: Point2D? = null
-    var consumedAmount: Point2D = Point2D.ZERO
-
-    setOnMousePressed {
-        if (it.button != MouseButton.PRIMARY) return@setOnMousePressed
-        it.consume()
-        dragStart = localToScreen(Point2D(it.x, it.y))
-        consumedAmount = Point2D.ZERO
-    }
-
-    setOnMouseDragged {
-        if (it.button != MouseButton.PRIMARY) return@setOnMouseDragged
-        it.consume()
-        val dragStartCapt = dragStart ?: return@setOnMouseDragged
-        val amountPerClick = amountPerClickProperty.get().toDouble()
-        val dragEnd = localToScreen(Point2D(it.x, it.y))
-        val delta = dragEnd - dragStartCapt
-        var newDelta = delta - consumedAmount
-
-        while (newDelta.x > amountPerClick) {
-            val clicked = onDragged(Direction.RIGHT)
-            if (clicked) {
-                val change = Point2D(amountPerClick, 0.0)
-                newDelta -= change
-                consumedAmount += change
-            }
-            else {
-                break
-            }
-        }
-        while (newDelta.x < -amountPerClick) {
-            val clicked = onDragged(Direction.LEFT)
-            if (clicked) {
-                val change = Point2D(amountPerClick, 0.0)
-                newDelta += change
-                consumedAmount -= change
-            }
-            else {
-                break
-            }
-        }
-        while (newDelta.y > amountPerClick) {
-            val clicked = onDragged(Direction.DOWN)
-            if (clicked) {
-                val change = Point2D(0.0, amountPerClick)
-                newDelta -= change
-                consumedAmount += change
-            }
-            else {
-                break
-            }
-        }
-        while (newDelta.y < -amountPerClick) {
-            val clicked = onDragged(Direction.UP)
-            if (clicked) {
-                val change = Point2D(0.0, amountPerClick)
-                newDelta += change
-                consumedAmount -= change
-            }
-            else {
-                break
-            }
-        }
-    }
-}
 
 private class DraggableCorner(val vertical: Direction, val horizontal: Direction) : Fragment() {
     private val containerView: ContainerView by inject()
