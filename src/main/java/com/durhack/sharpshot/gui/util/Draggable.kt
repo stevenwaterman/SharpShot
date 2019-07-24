@@ -8,10 +8,11 @@ import javafx.scene.Node
 import javafx.scene.input.MouseButton
 import tornadofx.*
 
-fun Node.makeDraggable(amountPerClick: Int, onDragged: (Direction) -> Boolean) = makeDraggable(SimpleIntegerProperty(
+fun Node.makeDraggable(amountPerClick: Int, onDragged: (Point2D, Point2D, Direction) -> Boolean) = makeDraggable(
+        SimpleIntegerProperty(
         amountPerClick), onDragged)
 
-fun Node.makeDraggable(amountPerClickProperty: IntegerExpression, onDragged: (Direction) -> Boolean) {
+fun Node.makeDraggable(amountPerClickProperty: IntegerExpression, onDragged: (Point2D, Point2D, Direction) -> Boolean) {
 
     var dragStart: Point2D? = null
     var consumedAmount: Point2D = Point2D.ZERO
@@ -33,7 +34,7 @@ fun Node.makeDraggable(amountPerClickProperty: IntegerExpression, onDragged: (Di
         var newDelta = delta - consumedAmount
 
         while (newDelta.x > amountPerClick) {
-            val clicked = onDragged(Direction.RIGHT)
+            val clicked = onDragged(dragStartCapt, dragEnd, Direction.RIGHT)
             if (clicked) {
                 val change = Point2D(amountPerClick, 0.0)
                 newDelta -= change
@@ -44,7 +45,7 @@ fun Node.makeDraggable(amountPerClickProperty: IntegerExpression, onDragged: (Di
             }
         }
         while (newDelta.x < -amountPerClick) {
-            val clicked = onDragged(Direction.LEFT)
+            val clicked = onDragged(dragStartCapt, dragEnd, Direction.LEFT)
             if (clicked) {
                 val change = Point2D(amountPerClick, 0.0)
                 newDelta += change
@@ -55,7 +56,7 @@ fun Node.makeDraggable(amountPerClickProperty: IntegerExpression, onDragged: (Di
             }
         }
         while (newDelta.y > amountPerClick) {
-            val clicked = onDragged(Direction.DOWN)
+            val clicked = onDragged(dragStartCapt, dragEnd, Direction.DOWN)
             if (clicked) {
                 val change = Point2D(0.0, amountPerClick)
                 newDelta -= change
@@ -66,7 +67,7 @@ fun Node.makeDraggable(amountPerClickProperty: IntegerExpression, onDragged: (Di
             }
         }
         while (newDelta.y < -amountPerClick) {
-            val clicked = onDragged(Direction.UP)
+            val clicked = onDragged(dragStartCapt, dragEnd, Direction.UP)
             if (clicked) {
                 val change = Point2D(0.0, amountPerClick)
                 newDelta += change

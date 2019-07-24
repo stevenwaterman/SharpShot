@@ -3,6 +3,7 @@ package com.durhack.sharpshot.gui.container
 import com.durhack.sharpshot.core.control.CollisionReport
 import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.core.state.tick.BulletMovement
+import com.durhack.sharpshot.gui.container.input.layers.SelectionLayer
 import com.durhack.sharpshot.gui.graphics.BulletGraphic
 import com.durhack.sharpshot.gui.util.ui
 import com.durhack.sharpshot.util.MinMaxIntProperty
@@ -12,6 +13,7 @@ import javafx.animation.Interpolator
 import javafx.animation.Transition
 import javafx.animation.TranslateTransition
 import javafx.geometry.Insets
+import javafx.geometry.Point2D
 import javafx.scene.Node
 import javafx.scene.layout.Background
 import javafx.scene.layout.BackgroundFill
@@ -22,11 +24,12 @@ import tornadofx.*
 
 class ContainerView : View() {
     companion object {
-        val innerScaleProp = MinMaxIntProperty(10, 50, 500)
+        val innerScaleProp: MinMaxIntProperty = MinMaxIntProperty(10, 50, 500)
         val scaleProp = innerScaleProp.ui()
         var scale by innerScaleProp
     }
 
+    private val selectionLayer: SelectionLayer by inject()
     private val nodeLayer: ContainerStaticView by inject()
     private val bulletLayer = pane {
         id = "Bullet Layer"
@@ -63,6 +66,8 @@ class ContainerView : View() {
             nodeLayer.render()
             bulletLayer.clear()
             bulletLayer.children += bullets
+
+            selectionLayer.render()
         }
     }
 
@@ -110,6 +115,8 @@ class ContainerView : View() {
         return transition
     }
 
+    fun getCoord(point: Point2D) = getCoord(point.x, point.y)
+
     fun getCoord(x: Double, y: Double): Coordinate? {
         val scale = ContainerView.innerScaleProp.get()
         val xClicked = (x / scale).toInt().clamp(0, container.width - 1)
@@ -122,5 +129,11 @@ class ContainerView : View() {
         else {
             return null
         }
+    }
+
+    fun getPoint(coord: Coordinate): Point2D {
+        val x = coord.x * scale
+        val y = coord.y * scale
+        return Point2D(x.toDouble(), y.toDouble())
     }
 }

@@ -21,7 +21,7 @@ private class DraggableCorner(val vertical: Direction, val horizontal: Direction
 
         canvas(25.0, 25.0) {
             Draw.rightAngleTriangle(graphicsContext2D, vertical, 0.0, 0.0, 20, Color.BLACK)
-            makeDraggable(ContainerView.innerScaleProp.divide(2)) { direction ->
+            makeDraggable(ContainerView.innerScaleProp.divide(2)) { _, _, direction ->
                 if (direction == vertical || direction == horizontal) {
                     container.increaseSize(direction)
                     containerView.render()

@@ -44,7 +44,7 @@ fun <T> ObservableList<T>.observableValue() = object : ObservableValueBase<List<
 
 fun <T> ObservableList<T>.ui() = observableValue().ui()
 
-class ObservableUIValue<T>(private val underlying: ObservableValue<T>) : ObservableValueBase<T>() {
+class ObservableUIValue<T>(val underlying: ObservableValue<T>) : ObservableValueBase<T>() {
     init {
         underlying.addListener(InvalidationListener {
             ui { fireValueChangedEvent() }
@@ -58,7 +58,7 @@ fun ObservableValue<Boolean>.not() = booleanBinding { it?.not() ?: true }
 
 private val containerView: ContainerView = find(ContainerView::class)
 
-val MouseEvent.position: Point2D
+val MouseEvent.point: Point2D
     get() = Point2D(x, y)
 
 val MouseEvent.coord: Coordinate?
