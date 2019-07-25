@@ -2,20 +2,20 @@ package com.durhack.sharpshot.gui.container
 
 import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Coordinate
+import com.durhack.sharpshot.gui.util.CoordinateRange2D
 
-class Extract(allNodes: Map<Coordinate, AbstractNode>, low: Coordinate, high: Coordinate) {
+class Extract(allNodes: Map<Coordinate, AbstractNode>, range: CoordinateRange2D) {
     var nodes: Map<Coordinate, AbstractNode> private set
     var width: Int private set
     var height: Int private set
 
     init {
         //Normalisation
-        nodes = allNodes.filterKeys { it.inside(low, high) }
-                .mapKeys { (coord, _) -> coord - low }
+        nodes = allNodes.filterKeys { it in range }
+                .mapKeys { (coord, _) -> coord - range.low }
 
-        val dif = high - low
-        width = dif.x
-        height = dif.y
+        width = range.width
+        height = range.height
     }
 
     fun mirrorHorizontal() {
@@ -44,7 +44,7 @@ class Extract(allNodes: Map<Coordinate, AbstractNode>, low: Coordinate, high: Co
             val newY = width - coord.x - 1
             return@mapKeys Coordinate(newX, newY)
         }
-        newNodes.forEach { _, node -> node.clockwise() }
+        newNodes.forEach { (_, node) -> node.clockwise() }
         nodes = newNodes
 
         val oldWidth = width

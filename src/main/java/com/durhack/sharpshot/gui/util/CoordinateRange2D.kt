@@ -1,3 +1,15 @@
 package com.durhack.sharpshot.gui.util
 
-data class CoordinateRange2D(val xRange: IntRange, val yRange: IntRange)
+import com.durhack.sharpshot.core.state.Coordinate
+
+data class CoordinateRange2D(val xRange: IntRange, val yRange: IntRange) {
+    operator fun contains(it: Coordinate): Boolean {
+        return it.x in xRange && it.y in yRange
+    }
+
+    val width = xRange.endInclusive - xRange.start
+    val height = yRange.endInclusive - yRange.start
+
+    val low = Coordinate(xRange.start, yRange.start)
+    val high = Coordinate(xRange.endInclusive, yRange.endInclusive)
+}

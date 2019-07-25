@@ -34,14 +34,6 @@ class Coordinate(val x: Int, val y: Int) {
         return Coordinate(newX, newY)
     }
 
-    fun inside(low: Coordinate, high: Coordinate): Boolean {
-        val xRange = low.x..high.x
-        val yRange = low.y..high.y
-        return x in xRange && y in yRange
-    }
-
-    fun outside(low: Coordinate, high: Coordinate) = !inside(low, high)
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || javaClass != other.javaClass) return false

@@ -1,93 +1,83 @@
 package com.durhack.sharpshot.core.control
 
-import com.durhack.sharpshot.core.state.Container
 import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.core.state.Direction
 import com.durhack.sharpshot.gui.container.Extract
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.set
+import com.durhack.sharpshot.gui.util.CoordinateRange2D
+import com.durhack.sharpshot.util.container
 
-fun Container.minCoord() = Coordinate(0, 0)
-fun Container.maxCoord() = Coordinate(width - 1, height - 1)
+object ContainerModifier {
+    private val fullRange: CoordinateRange2D
+        get() = CoordinateRange2D(0 until container.width,
+                                  0 until container.height)
+    private val minCoord = Coordinate(0, 0)
 
-/**
- * Increasing size RIGHT means adding a column on the rightmost edge
- */
-fun Container.increaseSize(direction: Direction) {
-    var extract: Extract? = null
-    if (direction.deltaX < 0 || direction.deltaY < 0) {
-        extract = cut()
-    }
-
-    if (direction.deltaX != 0) width++
-    if (direction.deltaY != 0) height++
-
-    if (extract != null) {
-        val placeLocation = minCoord() - direction
-        paste(extract, placeLocation)
-    }
-}
-
-fun Container.canDecreaseSize(direction: Direction) =
-        when (direction) {
-            Direction.UP -> nodes.keys.none { it.y == height - 1 } && height > 1
-            Direction.LEFT -> nodes.keys.none { it.x == width - 1 } && width > 1
-            Direction.DOWN -> nodes.keys.none { it.y == 0 } && height > 1
-            Direction.RIGHT -> nodes.keys.none { it.x == 0 } && width > 1
+    /**
+     * Increasing size RIGHT means adding a column on the rightmost edge
+     */
+    fun increaseSize(direction: Direction) {
+        var extract: Extract? = null
+        if (direction.deltaX < 0 || direction.deltaY < 0) {
+            extract = cut(fullRange)
         }
 
-/**
- * Decreasing size RIGHT means removing the leftmost column
- */
-fun Container.decreaseSize(direction: Direction) {
-    var extract: Extract? = null
-    if (direction.deltaX > 0 || direction.deltaY > 0) {
-        extract = cut()
+        if (direction.deltaX != 0) container.width++
+        if (direction.deltaY != 0) container.height++
+
+        if (extract != null) {
+            val placeLocation = minCoord - direction
+            paste(extract, placeLocation)
+        }
     }
 
-    if (direction.deltaX != 0) width--
-    if (direction.deltaY != 0) height--
+    fun canDecreaseSize(direction: Direction) =
+            when (direction) {
+                Direction.UP -> container.nodes.keys.none { it.y == container.height - 1 } && container.height > 1
+                Direction.LEFT -> container.nodes.keys.none { it.x == container.width - 1 } && container.width > 1
+                Direction.DOWN -> container.nodes.keys.none { it.y == 0 } && container.height > 1
+                Direction.RIGHT -> container.nodes.keys.none { it.x == 0 } && container.width > 1
+            }
 
-    if (extract != null) {
-        val placeLocation = minCoord() - direction
-        paste(extract, placeLocation)
+    /**
+     * Decreasing size RIGHT means removing the leftmost column
+     */
+    fun decreaseSize(direction: Direction) {
+        var extract: Extract? = null
+        if (direction.deltaX > 0 || direction.deltaY > 0) {
+            extract = cut(fullRange)
+        }
+
+        if (direction.deltaX != 0) container.width--
+        if (direction.deltaY != 0) container.height--
+
+        if (extract != null) {
+            val placeLocation = minCoord - direction
+            paste(extract, placeLocation)
+        }
     }
-}
 
-fun Container.copy(low: Coordinate, high: Coordinate) = Extract(nodes, low, high)
+    fun copy(range: CoordinateRange2D) = Extract(container.nodes, range)
 
-fun Container.clear(low: Coordinate, high: Coordinate) {
-    nodes.keys.removeAll { it.inside(low, high) }
-}
+    fun clear(range: CoordinateRange2D) {
+        container.nodes.keys.removeAll { range.contains(it) }
+    }
 
-fun Container.cut(low: Coordinate = minCoord(), high: Coordinate = maxCoord()): Extract {
-    val extract = copy(low, high)
-    clear(low, high)
-    return extract
-}
+    fun cut(range: CoordinateRange2D): Extract {
+        val extract = copy(range)
+        clear(range)
+        return extract
+    }
 
-fun Container.canPlace(extract: Extract, location: Coordinate): Boolean {
-    val extractNodes = extract.nodes.keys.map { it + location }.toSet()
-    val containerNodes = nodes.keys.toSet()
-    val overlap = extractNodes.intersect(containerNodes)
-    return overlap.isEmpty()
-}
+    fun canPlace(extract: Extract, location: Coordinate): Boolean {
+        val extractNodes = extract.nodes.keys.map { it + location }.toSet()
+        val containerNodes = container.nodes.keys.toSet()
+        val overlap = extractNodes.intersect(containerNodes)
+        return overlap.isEmpty()
+    }
 
-fun Container.paste(extract: Extract, location: Coordinate) {
-    val extractNodes = extract.nodes
-            .mapKeys { (relativeCoord, _) -> relativeCoord + location }
-    extractNodes.forEach { absCoord, node -> nodes[absCoord] = node }
-}
-
-private fun sortCoords(c1: Coordinate, c2: Coordinate): Pair<Coordinate, Coordinate> {
-    val lowX = Integer.min(c1.x, c2.x)
-    val lowY = Integer.min(c1.y, c2.y)
-    val low = Coordinate(lowX, lowY)
-
-    val highX = Integer.max(c1.x, c2.x)
-    val highY = Integer.max(c1.y, c2.y)
-    val high = Coordinate(highX, highY)
-
-    return low to high
+    fun paste(extract: Extract, location: Coordinate) {
+        val extractNodes = extract.nodes
+                .mapKeys { (relativeCoord, _) -> relativeCoord + location }
+        extractNodes.forEach { absCoord, node -> container.nodes[absCoord] = node }
+    }
 }

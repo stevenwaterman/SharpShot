@@ -4,7 +4,9 @@ import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.gui.util.CoordinateRange2D
 import com.durhack.sharpshot.gui.util.FractionalCoordinate
 import com.durhack.sharpshot.gui.util.addClickHandler
+import com.durhack.sharpshot.gui.util.ui
 import com.durhack.sharpshot.util.container
+import javafx.beans.property.SimpleObjectProperty
 import javafx.geometry.Insets
 import javafx.scene.input.MouseButton
 import javafx.scene.layout.*
@@ -14,14 +16,18 @@ import kotlin.math.*
 
 class SelectionMenu : View() {
     private val containerView: ContainerView by inject()
-    private var selected: CoordinateRange2D? = null
+
+    private val innerSelection = SimpleObjectProperty<CoordinateRange2D?>(null)
+    val selectionProp = innerSelection.ui()
+    var selection by innerSelection
+        private set
 
     init {
         container.widthProp.addListener { _ -> hide() }
         container.heightProp.addListener { _ -> hide() }
     }
 
-    override val root = pane {
+    override val root = borderpane {
         id = "Selection Menu"
 
         background = Background(BackgroundFill(Color(1.0, 0.0, 0.0, 0.2), CornerRadii.EMPTY, Insets.EMPTY))
@@ -48,7 +54,7 @@ class SelectionMenu : View() {
     }
 
     fun hide() {
-        selected = null
+        selection = null
         render()
     }
 
@@ -65,7 +71,7 @@ class SelectionMenu : View() {
         val validY = 0..container.height
         val clampY = yRange.intersect(validY)
 
-        selected = CoordinateRange2D(clampX, clampY)
+        selection = CoordinateRange2D(clampX, clampY)
         render()
     }
 
@@ -92,7 +98,7 @@ class SelectionMenu : View() {
     }
 
     fun render() {
-        val capt = selected
+        val capt = selection
         if (capt == null) {
             root.isVisible = false
         }

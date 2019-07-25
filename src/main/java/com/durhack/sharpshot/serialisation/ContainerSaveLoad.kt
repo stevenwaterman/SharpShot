@@ -40,7 +40,7 @@ object ContainerSaveLoad {
     private val pane = Pane().apply { add(renderer) }
     private val scene = Scene(pane, pane.width, pane.height, true, SceneAntialiasing.BALANCED)
     private fun saveToFile(file: File): Boolean {
-        renderer.render(24)
+        renderer.renderContainer(24)
         val tempImage = pane.snapshot(snapshotParams, null)
         val image = SwingFXUtils.fromFXImage(tempImage, null)
 
