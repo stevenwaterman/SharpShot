@@ -2,6 +2,7 @@ package com.durhack.sharpshot.gui.container.input.layers
 
 import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.gui.container.ContainerView
+import com.durhack.sharpshot.gui.container.input.selector.BoardSelector
 import com.durhack.sharpshot.gui.util.addClickHandler
 import com.durhack.sharpshot.gui.util.coord
 import com.durhack.sharpshot.util.container

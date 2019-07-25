@@ -3,7 +3,7 @@ package com.durhack.sharpshot.gui.container
 import com.durhack.sharpshot.core.control.CollisionReport
 import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.core.state.tick.BulletMovement
-import com.durhack.sharpshot.gui.container.input.layers.SelectionLayer
+import com.durhack.sharpshot.gui.container.input.selector.SelectionPositioner
 import com.durhack.sharpshot.gui.graphics.BulletGraphic
 import com.durhack.sharpshot.gui.util.ui
 import com.durhack.sharpshot.util.MinMaxIntProperty
@@ -29,7 +29,7 @@ class ContainerView : View() {
         var scale by innerScaleProp
     }
 
-    private val selectionLayer: SelectionLayer by inject()
+    private val selectionPositioner: SelectionPositioner by inject()
     private val nodeLayer: ContainerStaticView by inject()
     private val bulletLayer = pane {
         id = "Bullet Layer"
@@ -67,7 +67,7 @@ class ContainerView : View() {
             bulletLayer.clear()
             bulletLayer.children += bullets
 
-            selectionLayer.render()
+            selectionPositioner.render()
         }
     }
 

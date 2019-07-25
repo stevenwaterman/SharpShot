@@ -4,13 +4,13 @@ import com.durhack.sharpshot.core.state.Container
 import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.core.state.Direction
 import com.durhack.sharpshot.gui.container.Extract
-import com.durhack.sharpshot.gui.container.input.layers.SelectionLayer
+import com.durhack.sharpshot.gui.container.input.selector.SelectionPositioner
 import tornadofx.*
 
 fun Container.minCoord() = Coordinate(0, 0)
 fun Container.maxCoord() = Coordinate(width - 1, height - 1)
 
-private val selectionLayer: SelectionLayer = find(SelectionLayer::class)
+private val SELECTION_POSITIONER: SelectionPositioner = find(SelectionPositioner::class)
 
 /**
  * Increasing size RIGHT means adding a column on the rightmost edge
@@ -29,7 +29,7 @@ fun Container.increaseSize(direction: Direction) {
         paste(extract, placeLocation)
     }
 
-    selectionLayer.clear()
+    SELECTION_POSITIONER.clear()
 }
 
 fun Container.canDecreaseSize(direction: Direction) =
@@ -57,7 +57,7 @@ fun Container.decreaseSize(direction: Direction) {
         paste(extract, placeLocation)
     }
 
-    selectionLayer.clear()
+    SELECTION_POSITIONER.clear()
 }
 
 fun Container.copy(low: Coordinate, high: Coordinate) = Extract(nodes, low, high)
