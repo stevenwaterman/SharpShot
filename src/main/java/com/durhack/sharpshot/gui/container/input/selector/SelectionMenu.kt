@@ -2,6 +2,7 @@ package com.durhack.sharpshot.gui.container.input.selector
 
 import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.gui.container.ContainerView
+import com.durhack.sharpshot.gui.util.CoordinateRange2D
 import javafx.geometry.Insets
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.*
