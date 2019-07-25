@@ -15,7 +15,7 @@ class DragBox : View() {
     override val root = pane {
         isVisible = false
         background = Background.EMPTY
-        border = Border(BorderStroke(Color.BLACK, BorderStrokeStyle.DOTTED, CornerRadii.EMPTY, BorderWidths(1.0)))
+        border = Border(BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, CornerRadii.EMPTY, BorderWidths(2.0)))
     }
 
     fun hide() {

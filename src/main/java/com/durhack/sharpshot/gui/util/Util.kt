@@ -10,6 +10,7 @@ import javafx.collections.ObservableList
 import javafx.geometry.Point2D
 import javafx.scene.Node
 import javafx.scene.input.MouseEvent
+import javafx.scene.input.ScrollEvent
 import tornadofx.*
 
 fun ui(function: () -> Unit) = Platform.runLater(function)
@@ -57,6 +58,9 @@ class ObservableUIValue<T>(val underlying: ObservableValue<T>) : ObservableValue
 fun ObservableValue<Boolean>.not() = booleanBinding { it?.not() ?: true }
 
 private val containerView: ContainerView = find(ContainerView::class)
+
+val ScrollEvent.point: Point2D
+    get() = Point2D(x, y)
 
 val MouseEvent.point: Point2D
     get() = Point2D(x, y)

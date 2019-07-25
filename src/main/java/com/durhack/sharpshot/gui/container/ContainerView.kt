@@ -70,7 +70,7 @@ class ContainerView : View() {
             bulletLayer.children += bullets
 
             selectionPositioner.render()
-            dragBoxPositioner.render()
+            dragBoxPositioner.hide()
         }
     }
 
