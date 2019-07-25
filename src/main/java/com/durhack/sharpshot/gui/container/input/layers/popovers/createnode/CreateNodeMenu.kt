@@ -1,9 +1,9 @@
-package com.durhack.sharpshot.gui.container.input.createnode
+package com.durhack.sharpshot.gui.container.input.layers.popovers.createnode
 
 import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.gui.container.ContainerView
-import com.durhack.sharpshot.gui.container.input.createnode.nodebuttons.AbstractNodeForm
+import com.durhack.sharpshot.gui.container.input.layers.popovers.createnode.nodebuttons.AbstractNodeForm
 import com.durhack.sharpshot.gui.controls.ScrollZoomPane
 import com.durhack.sharpshot.gui.util.addClickHandler
 import com.durhack.sharpshot.util.container

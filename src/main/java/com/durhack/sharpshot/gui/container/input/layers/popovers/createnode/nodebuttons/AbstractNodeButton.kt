@@ -1,4 +1,4 @@
-package com.durhack.sharpshot.gui.container.input.createnode.nodebuttons
+package com.durhack.sharpshot.gui.container.input.layers.popovers.createnode.nodebuttons
 
 import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.gui.util.addClickHandler

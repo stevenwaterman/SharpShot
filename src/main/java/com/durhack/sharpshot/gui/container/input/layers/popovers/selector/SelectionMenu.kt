@@ -1,4 +1,4 @@
-package com.durhack.sharpshot.gui.container.input.selector
+package com.durhack.sharpshot.gui.container.input.layers.popovers.selector
 
 import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.gui.container.ContainerView

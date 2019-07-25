@@ -4,7 +4,7 @@ import com.durhack.sharpshot.core.state.Container
 import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.core.state.Direction
 import com.durhack.sharpshot.gui.container.Extract
-import com.durhack.sharpshot.gui.container.input.selector.SelectionPositioner
+import com.durhack.sharpshot.gui.container.input.layers.popovers.selector.SelectionPositioner
 import tornadofx.*
 
 fun Container.minCoord() = Coordinate(0, 0)

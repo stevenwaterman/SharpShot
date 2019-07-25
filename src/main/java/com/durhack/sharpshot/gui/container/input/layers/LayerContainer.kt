@@ -3,7 +3,7 @@ package com.durhack.sharpshot.gui.container.input.layers
 import com.durhack.sharpshot.core.state.Direction
 import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.gui.container.input.DraggableCorner
-import com.durhack.sharpshot.gui.container.input.selector.BoardSelector
+import com.durhack.sharpshot.gui.container.input.layers.popovers.selector.BoardSelector
 import com.durhack.sharpshot.util.container
 import tornadofx.*
 
