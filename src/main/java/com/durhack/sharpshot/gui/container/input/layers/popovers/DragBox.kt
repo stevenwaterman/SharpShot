@@ -13,6 +13,7 @@ class DragBox : View() {
     private val containerView: ContainerView by inject()
 
     override val root = pane {
+        id = "Drag Box"
         isVisible = false
         background = Background.EMPTY
         border = Border(BorderStroke(Color.BLACK, BorderStrokeStyle.DASHED, CornerRadii.EMPTY, BorderWidths(2.0)))
@@ -36,6 +37,8 @@ class DragBox : View() {
             root.isVisible = false
         }
         else {
+            root.isVisible = true
+
             val (startCoord, endPoint) = capt
             val startPoint = containerView.getPoint(startCoord)
 
@@ -53,7 +56,6 @@ class DragBox : View() {
             root.layoutY = yMin
             root.prefWidth = xRange
             root.prefHeight = yRange
-            root.isVisible = true
         }
     }
 

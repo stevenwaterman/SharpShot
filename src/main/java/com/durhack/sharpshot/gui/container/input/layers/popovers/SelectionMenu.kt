@@ -3,8 +3,10 @@ package com.durhack.sharpshot.gui.container.input.layers.popovers
 import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.gui.util.CoordinateRange2D
 import com.durhack.sharpshot.gui.util.FractionalCoordinate
+import com.durhack.sharpshot.gui.util.addClickHandler
+import com.durhack.sharpshot.util.container
 import javafx.geometry.Insets
-import javafx.scene.input.MouseEvent
+import javafx.scene.input.MouseButton
 import javafx.scene.layout.*
 import javafx.scene.paint.Color
 import tornadofx.*
@@ -14,16 +16,33 @@ class SelectionMenu : View() {
     private val containerView: ContainerView by inject()
     private var selected: CoordinateRange2D? = null
 
-    val isSelected: Boolean get() = selected != null
+    init {
+        container.widthProp.addListener { _ -> hide() }
+        container.heightProp.addListener { _ -> hide() }
+    }
 
-    override val root = stackpane {
+    override val root = pane {
         id = "Selection Menu"
 
         background = Background(BackgroundFill(Color(1.0, 0.0, 0.0, 0.2), CornerRadii.EMPTY, Insets.EMPTY))
         border = Border(BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths(3.0)))
 
-        addEventHandler(MouseEvent.ANY) {
-            println("hit")
+        addClickHandler {
+            if (it.button == MouseButton.PRIMARY) {
+                it.consume()
+            }
+            if (it.button == MouseButton.SECONDARY) {
+                hide()
+            }
+        }
+
+        setOnMouseDragged {
+            if (it.button == MouseButton.SECONDARY) {
+                it.consume()
+            }
+        }
+
+        setOnMousePressed {
             it.consume()
         }
     }
@@ -37,12 +56,16 @@ class SelectionMenu : View() {
         val startX = start.x
         val endX = end.x
         val xRange = intRange(startX, endX)
+        val validX = 0..container.width
+        val clampX = xRange.intersect(validX)
 
-        val endY = end.y
         val startY = start.y
+        val endY = end.y
         val yRange = intRange(startY, endY)
+        val validY = 0..container.height
+        val clampY = yRange.intersect(validY)
 
-        selected = CoordinateRange2D(xRange, yRange)
+        selected = CoordinateRange2D(clampX, clampY)
         render()
     }
 
@@ -56,12 +79,26 @@ class SelectionMenu : View() {
         return floor..ceil
     }
 
+    private fun IntRange.intersect(oth: IntRange): IntRange {
+        val min1 = first
+        val min2 = oth.first
+        val min = max(min1, min2)
+
+        val max1 = endInclusive
+        val max2 = oth.endInclusive
+        val max = min(max1, max2)
+
+        return min..max
+    }
+
     fun render() {
         val capt = selected
         if (capt == null) {
             root.isVisible = false
         }
         else {
+            root.isVisible = true
+
             val xRange = capt.xRange
             val xCoordMin = xRange.first
             val xCoordMax = xRange.endInclusive
@@ -85,10 +122,14 @@ class SelectionMenu : View() {
             root.layoutX = xMin
             root.layoutY = yMin
 
-            root.prefWidth = (xMax - xMin)
-            root.prefHeight = (yMax - yMin)
+            val width = xMax - xMin
+            val height = yMax - yMin
 
-            root.isVisible = true
+            //TODO this is a horrible hack but for some reason after you resize it to be the same size as the view popover layer, it never resizes during the layout passes so we have to manually set the size too. Before it breaks, the manual resize gets overriden by the automatic one, so we need to prefsize etc too.
+            root.resize(width, height)
+            root.setMinSize(width, height)
+            root.setPrefSize(width, height)
+            root.setMaxSize(width, height)
         }
     }
 }

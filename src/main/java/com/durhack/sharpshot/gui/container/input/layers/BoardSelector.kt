@@ -26,7 +26,7 @@ class BoardSelector : View() {
         vgrow = Priority.ALWAYS
 
         addClickHandler {
-            if (selectionMenu.isSelected && it.button == MouseButton.SECONDARY) {
+            if (it.button == MouseButton.SECONDARY) {
                 selectionMenu.hide()
             }
         }
@@ -59,7 +59,12 @@ class BoardSelector : View() {
         setOnMouseDragged {
             val start = dragStart ?: return@setOnMouseDragged
 
-            if (it.button == MouseButton.PRIMARY) {
+            /*
+            The isStillSincePress allows for a little bit of wiggle room when clicking before the drag kicks in
+            Called the "system hysteresis area"
+            Without this, small drags would result in both an area selection and a node creation menu popover
+             */
+            if (it.button == MouseButton.PRIMARY && !it.isStillSincePress) {
                 dragging = true
                 val point = it.point
                 dragEnd = containerView.getCoord(point)
