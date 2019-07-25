@@ -4,7 +4,7 @@ import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.gui.container.input.createnode.nodebuttons.AbstractNodeForm
-import com.durhack.sharpshot.gui.controls.ContainerScrollPane
+import com.durhack.sharpshot.gui.controls.ScrollZoomPane
 import com.durhack.sharpshot.gui.util.addClickHandler
 import com.durhack.sharpshot.util.container
 import javafx.geometry.Insets
@@ -101,12 +101,12 @@ class CreateNodeMenu : View() {
         return Point2D(-xOffset, -yOffset)
     }
 
-    private val scrollPane: ContainerScrollPane by inject()
+    private val scrollZoomPane: ScrollZoomPane by inject()
     private fun clampLocation(location: Point2D): Point2D {
         var parentLocation = location
         var parent: Node = root.parent
         //TODO is there not a better way to do this? - or at least make it into a helper function
-        while (parent != scrollPane.root) {
+        while (parent != scrollZoomPane.root) {
             parentLocation = parent.localToParent(parentLocation)
             parent = parent.parent
         }
@@ -115,7 +115,7 @@ class CreateNodeMenu : View() {
 
         val minX = scrollPaneLocation.x
         val maxX = minX + root.width
-        val maxAllowableX = scrollPane.root.width
+        val maxAllowableX = scrollZoomPane.root.width
 
         val xOffset = when {
             minX < 0 -> -minX
@@ -125,7 +125,7 @@ class CreateNodeMenu : View() {
 
         val minY = scrollPaneLocation.y
         val maxY = minY + root.height
-        val maxAllowableY = scrollPane.root.height
+        val maxAllowableY = scrollZoomPane.root.height
 
         val yOffset = when {
             minY < 0 -> -minY

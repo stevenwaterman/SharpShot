@@ -33,6 +33,7 @@ class SelectionPositioner : View() {
     }
 
     override val root = pane {
+        id = "Selection Positioner"
         add(selectionMenu)
     }
 }

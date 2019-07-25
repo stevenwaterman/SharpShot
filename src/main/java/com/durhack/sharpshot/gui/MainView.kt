@@ -8,7 +8,7 @@ import javafx.scene.input.KeyEvent
 import tornadofx.*
 
 class MainView : View() {
-    private val scrollPane: ContainerScrollPane by inject()
+    private val scrollZoomPane: ScrollZoomPane by inject()
     private val inputLayer: ContainerInputLayer by inject()
     private val playback: Playback by inject()
     private val output: Output by inject()
@@ -18,7 +18,7 @@ class MainView : View() {
     override val root = borderpane {
         id = "Main View"
 
-        center { add(scrollPane) }
+        center { add(scrollZoomPane) }
         bottom { add(playback) }
         right {
             vbox(4.0) {
@@ -32,7 +32,7 @@ class MainView : View() {
         }
 
         addEventFilter(KeyEvent.KEY_PRESSED) {
-            if (it.target == scrollPane.root) {
+            if (it.target == scrollZoomPane.root) {
                 redirect(it)
             }
         }

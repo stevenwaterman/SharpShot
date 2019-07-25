@@ -1,7 +1,7 @@
 package com.durhack.sharpshot.gui.controls
 
 import com.durhack.sharpshot.gui.container.ContainerView
-import com.durhack.sharpshot.gui.container.ResizingWrapper
+import com.durhack.sharpshot.gui.container.input.layers.LayerContainer
 import com.durhack.sharpshot.util.*
 import javafx.geometry.Point2D
 import javafx.geometry.Pos
@@ -15,14 +15,15 @@ import tornadofx.*
 import java.lang.Math.pow
 import kotlin.math.roundToInt
 
-class ContainerScrollPane : View() {
-    private val wrapper: ResizingWrapper by inject()
+class ScrollZoomPane : View() {
+    private val layers: LayerContainer by inject()
     private val zoomPerStep: Double = 1.05
     private var dragging = false
     private val containerView: ContainerView by inject()
 
     private val inner: StackPane = stackpane {
-        add(wrapper)
+        id = "Scroll Zoom Pane"
+        add(layers)
         alignment = Pos.CENTER
 
         addEventHandler(MouseEvent.ANY) {

@@ -2,7 +2,6 @@ package com.durhack.sharpshot.gui.container.input.selector
 
 import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.gui.container.ContainerView
-import com.durhack.sharpshot.gui.container.input.layers.CreateNodeClickLayer
 import com.durhack.sharpshot.gui.util.addClickHandler
 import com.durhack.sharpshot.gui.util.point
 import javafx.scene.input.MouseButton
@@ -12,7 +11,6 @@ import kotlin.math.abs
 import kotlin.math.min
 
 class BoardSelector : View() {
-    val nodeCreator: CreateNodeClickLayer by inject()
     val containerView: ContainerView by inject()
     val selectionPositioner: SelectionPositioner by inject()
 
@@ -26,13 +24,10 @@ class BoardSelector : View() {
         hgrow = Priority.ALWAYS
         vgrow = Priority.ALWAYS
 
-        add(nodeCreator)
-
         addClickHandler {
             if (selectionPositioner.isSelected && it.button == MouseButton.SECONDARY) {
                 selectionPositioner.clear()
             }
-
         }
 
         setOnMousePressed {
@@ -47,7 +42,7 @@ class BoardSelector : View() {
 
         setOnMouseReleased {
             if (it.button == MouseButton.PRIMARY) {
-                val start = dragStart;
+                val start = dragStart
                 val end = dragEnd
 
                 if (start != null && end != null) {

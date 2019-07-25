@@ -13,6 +13,8 @@ class SelectionMenu : View() {
     private val containerView: ContainerView by inject()
 
     override val root = stackpane {
+        id = "Selection Menu"
+
         background = Background(BackgroundFill(Color(1.0, 0.0, 0.0, 0.2), CornerRadii.EMPTY, Insets.EMPTY))
         border = Border(BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths(3.0)))
 

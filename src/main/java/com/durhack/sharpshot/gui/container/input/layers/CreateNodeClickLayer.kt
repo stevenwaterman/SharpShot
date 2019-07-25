@@ -11,7 +11,6 @@ import javafx.scene.layout.Priority
 import tornadofx.*
 
 class CreateNodeClickLayer : View() {
-    private val viewPopover: ViewPopover by inject()
     private val boardSelector: BoardSelector by inject()
     private val nodeCreatorMenu: CreateNodeMenu by inject()
 
@@ -19,8 +18,6 @@ class CreateNodeClickLayer : View() {
         id = "Create Node Click Layer"
         hgrow = Priority.ALWAYS
         vgrow = Priority.ALWAYS
-
-        add(viewPopover)
 
         addClickHandler { event ->
             if (event.button == MouseButton.PRIMARY) {

@@ -9,6 +9,8 @@ class ViewPopover : View() {
     val createNodePositioner: CreateNodePositioner by inject()
 
     override val root = stackpane {
+        id = "View Popover"
+
         add(selectionPositioner)
         add(createNodePositioner)
     }

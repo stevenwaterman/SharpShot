@@ -2,7 +2,6 @@ package com.durhack.sharpshot.gui.container.input.layers
 
 import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.gui.container.ContainerView
-import com.durhack.sharpshot.gui.container.input.selector.BoardSelector
 import com.durhack.sharpshot.gui.util.addClickHandler
 import com.durhack.sharpshot.gui.util.coord
 import com.durhack.sharpshot.util.container
@@ -15,7 +14,6 @@ import tornadofx.*
 
 class SingleNodeEdit : View() {
     private val containerView: ContainerView by inject()
-    private val boardSelector: BoardSelector by inject()
 
     private var mouseX = 0.0
     private var mouseY = 0.0
@@ -25,8 +23,6 @@ class SingleNodeEdit : View() {
         id = "Single Node Edit"
         hgrow = Priority.ALWAYS
         vgrow = Priority.ALWAYS
-
-        add(boardSelector)
 
         addClickHandler {
             if (it.button == MouseButton.PRIMARY) {
