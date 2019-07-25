@@ -62,4 +62,4 @@ val MouseEvent.point: Point2D
     get() = Point2D(x, y)
 
 val MouseEvent.coord: Coordinate?
-    get() = containerView.getCoord(x, y)
+    get() = containerView.getCoord(x, y).validCoord

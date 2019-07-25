@@ -1,8 +1,8 @@
 package com.durhack.sharpshot.gui.container.input.layers.popovers.selector
 
-import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.gui.util.CoordinateRange2D
+import com.durhack.sharpshot.gui.util.FractionalCoordinate
 import javafx.geometry.Insets
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.*
@@ -32,8 +32,8 @@ class SelectionMenu : View() {
         val yCoordMin = yRange.first
         val yCoordMax = yRange.endInclusive
 
-        val minCoord = Coordinate(xCoordMin, yCoordMin)
-        val maxCoord = Coordinate(xCoordMax, yCoordMax)
+        val minCoord = FractionalCoordinate(xCoordMin, yCoordMin)
+        val maxCoord = FractionalCoordinate(xCoordMax, yCoordMax)
 
         val minPoint = containerView.getPoint(minCoord)
         val maxPoint = containerView.getPoint(maxCoord)

@@ -17,7 +17,7 @@ class SingleNodeEdit : View() {
 
     private var mouseX = 0.0
     private var mouseY = 0.0
-    private val hoverCoord: Coordinate? get() = containerView.getCoord(mouseX, mouseY)
+    private val hoverCoord: Coordinate? get() = containerView.getCoord(mouseX, mouseY).validCoord
 
     override val root = stackpane {
         id = "Single Node Edit"

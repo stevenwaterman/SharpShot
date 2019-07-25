@@ -1,13 +1,13 @@
 package com.durhack.sharpshot.gui.container
 
 import com.durhack.sharpshot.core.control.CollisionReport
-import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.core.state.tick.BulletMovement
+import com.durhack.sharpshot.gui.container.input.layers.popovers.dragbox.DragBoxPositioner
 import com.durhack.sharpshot.gui.container.input.layers.popovers.selector.SelectionPositioner
 import com.durhack.sharpshot.gui.graphics.BulletGraphic
+import com.durhack.sharpshot.gui.util.FractionalCoordinate
 import com.durhack.sharpshot.gui.util.ui
 import com.durhack.sharpshot.util.MinMaxIntProperty
-import com.durhack.sharpshot.util.clamp
 import com.durhack.sharpshot.util.container
 import javafx.animation.Interpolator
 import javafx.animation.Transition
@@ -30,6 +30,8 @@ class ContainerView : View() {
     }
 
     private val selectionPositioner: SelectionPositioner by inject()
+    private val dragBoxPositioner: DragBoxPositioner by inject()
+
     private val nodeLayer: ContainerStaticView by inject()
     private val bulletLayer = pane {
         id = "Bullet Layer"
@@ -68,6 +70,7 @@ class ContainerView : View() {
             bulletLayer.children += bullets
 
             selectionPositioner.render()
+            dragBoxPositioner.render()
         }
     }
 
@@ -117,23 +120,16 @@ class ContainerView : View() {
 
     fun getCoord(point: Point2D) = getCoord(point.x, point.y)
 
-    fun getCoord(x: Double, y: Double): Coordinate? {
+    fun getCoord(x: Double, y: Double): FractionalCoordinate {
         val scale = ContainerView.innerScaleProp.get()
-        val xClicked = (x / scale).toInt().clamp(0, container.width - 1)
-        val yClicked = (y / scale).toInt().clamp(0, container.height - 1)
-
-        val coord = Coordinate(xClicked, yClicked)
-        if (coord.exists) {
-            return coord
-        }
-        else {
-            return null
-        }
+        val xClicked = x / scale
+        val yClicked = y / scale
+        return FractionalCoordinate(xClicked, yClicked)
     }
 
-    fun getPoint(coord: Coordinate): Point2D {
-        val x = coord.x * scale
-        val y = coord.y * scale
-        return Point2D(x.toDouble(), y.toDouble())
+    fun getPoint(coord: FractionalCoordinate): Point2D {
+        val pointX = coord.x * scale
+        val pointY = coord.y * scale
+        return Point2D(pointX, pointY)
     }
 }
