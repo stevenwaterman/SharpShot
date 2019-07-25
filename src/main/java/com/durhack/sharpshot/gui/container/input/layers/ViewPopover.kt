@@ -1,8 +1,8 @@
 package com.durhack.sharpshot.gui.container.input.layers
 
-import com.durhack.sharpshot.gui.container.input.layers.popovers.createnode.CreateNodePositioner
-import com.durhack.sharpshot.gui.container.input.layers.popovers.dragbox.DragBoxPositioner
-import com.durhack.sharpshot.gui.container.input.layers.popovers.selector.SelectionPositioner
+import com.durhack.sharpshot.gui.container.input.layers.popovers.CreateNodeMenu
+import com.durhack.sharpshot.gui.container.input.layers.popovers.DragBox
+import com.durhack.sharpshot.gui.container.input.layers.popovers.SelectionMenu
 import tornadofx.*
 
 /**
@@ -11,21 +11,15 @@ import tornadofx.*
  *
  */
 class ViewPopover : View() {
-    val selectionPositioner: SelectionPositioner by inject()
-    val createNodePositioner: CreateNodePositioner by inject()
-    val dragBoxPositioner: DragBoxPositioner by inject()
+    val createNodeMenu: CreateNodeMenu by inject()
+    val dragBox: DragBox by inject()
+    val selectionMenu: SelectionMenu by inject()
 
-    private val layers = listOf(
-            selectionPositioner,
-            createNodePositioner,
-            dragBoxPositioner
-                               )
-
-    override val root = stackpane {
+    override val root = pane {
         id = "View Popover"
 
-        layers.forEach {
-            add(it)
-        }
+        add(createNodeMenu)
+        add(dragBox)
+        add(selectionMenu)
     }
 }

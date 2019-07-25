@@ -1,8 +1,8 @@
 package com.durhack.sharpshot.gui.container.input.layers
 
 import com.durhack.sharpshot.gui.container.ContainerView
-import com.durhack.sharpshot.gui.container.input.layers.popovers.dragbox.DragBoxPositioner
-import com.durhack.sharpshot.gui.container.input.layers.popovers.selector.SelectionPositioner
+import com.durhack.sharpshot.gui.container.input.layers.popovers.DragBox
+import com.durhack.sharpshot.gui.container.input.layers.popovers.SelectionMenu
 import com.durhack.sharpshot.gui.util.FractionalCoordinate
 import com.durhack.sharpshot.gui.util.addClickHandler
 import com.durhack.sharpshot.gui.util.point
@@ -12,8 +12,8 @@ import tornadofx.*
 
 class BoardSelector : View() {
     private val containerView: ContainerView by inject()
-    private val selectionPositioner: SelectionPositioner by inject()
-    private val dragBoxPositioner: DragBoxPositioner by inject()
+    private val selectionMenu: SelectionMenu by inject()
+    private val dragBox: DragBox by inject()
 
     private var dragStart: FractionalCoordinate? = null
     private var dragEnd: FractionalCoordinate? = null
@@ -26,8 +26,8 @@ class BoardSelector : View() {
         vgrow = Priority.ALWAYS
 
         addClickHandler {
-            if (selectionPositioner.isSelected && it.button == MouseButton.SECONDARY) {
-                selectionPositioner.clear()
+            if (selectionMenu.isSelected && it.button == MouseButton.SECONDARY) {
+                selectionMenu.hide()
             }
         }
 
@@ -35,7 +35,7 @@ class BoardSelector : View() {
             if (it.button == MouseButton.PRIMARY) {
                 val point = it.point
                 val coord = containerView.getCoord(point)
-                selectionPositioner.clear()
+                selectionMenu.hide()
                 dragStart = coord
             }
         }
@@ -46,8 +46,8 @@ class BoardSelector : View() {
                 val end = dragEnd
 
                 if (start != null && end != null) {
-                    selectionPositioner.select(start, end)
-                    dragBoxPositioner.hide()
+                    selectionMenu.show(start, end)
+                    dragBox.hide()
                 }
 
                 dragStart = null
@@ -63,7 +63,7 @@ class BoardSelector : View() {
                 dragging = true
                 val point = it.point
                 dragEnd = containerView.getCoord(point)
-                dragBoxPositioner.show(start, point)
+                dragBox.show(start, point)
             }
         }
     }

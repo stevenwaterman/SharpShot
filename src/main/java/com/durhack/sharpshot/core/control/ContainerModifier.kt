@@ -4,13 +4,12 @@ import com.durhack.sharpshot.core.state.Container
 import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.core.state.Direction
 import com.durhack.sharpshot.gui.container.Extract
-import com.durhack.sharpshot.gui.container.input.layers.popovers.selector.SelectionPositioner
-import tornadofx.*
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.set
 
 fun Container.minCoord() = Coordinate(0, 0)
 fun Container.maxCoord() = Coordinate(width - 1, height - 1)
-
-private val SELECTION_POSITIONER: SelectionPositioner = find(SelectionPositioner::class)
 
 /**
  * Increasing size RIGHT means adding a column on the rightmost edge
@@ -28,8 +27,6 @@ fun Container.increaseSize(direction: Direction) {
         val placeLocation = minCoord() - direction
         paste(extract, placeLocation)
     }
-
-    SELECTION_POSITIONER.clear()
 }
 
 fun Container.canDecreaseSize(direction: Direction) =
@@ -56,8 +53,6 @@ fun Container.decreaseSize(direction: Direction) {
         val placeLocation = minCoord() - direction
         paste(extract, placeLocation)
     }
-
-    SELECTION_POSITIONER.clear()
 }
 
 fun Container.copy(low: Coordinate, high: Coordinate) = Extract(nodes, low, high)
