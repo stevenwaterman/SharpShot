@@ -41,7 +41,7 @@ class Extract(allNodes: Map<Coordinate, AbstractNode>, range: CoordinateRange2D)
     fun rotateClockwise() {
         val newNodes = nodes.mapKeys { (coord, _) ->
             val newX = height - coord.y - 1
-            val newY = width - coord.x - 1
+            val newY = coord.x
             return@mapKeys Coordinate(newX, newY)
         }
         newNodes.forEach { (_, node) -> node.clockwise() }
