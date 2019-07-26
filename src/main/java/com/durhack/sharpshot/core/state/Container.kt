@@ -6,6 +6,7 @@ import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.nodes.input.AbstractInputNode
 import com.durhack.sharpshot.core.nodes.other.HaltNode
 import com.durhack.sharpshot.core.state.tick.*
+import com.durhack.sharpshot.gui.container.Extract
 import com.durhack.sharpshot.gui.util.ui
 import com.durhack.sharpshot.util.IdiotProgrammerException
 import com.durhack.sharpshot.util.filterType
@@ -186,10 +187,10 @@ class Container(initWidth: Int, initHeight: Int) {
 
     fun isInside(coord: Coordinate) = coord.x in (0 until width) && coord.y in (0 until height)
 
-    fun setTo(oth: Container) {
+    fun setTo(extract: Extract) {
         clear()
-        nodes.putAll(oth.nodes)
-        width = oth.width
-        height = oth.height
+        nodes.putAll(extract.nodes)
+        width = extract.width
+        height = extract.height
     }
 }

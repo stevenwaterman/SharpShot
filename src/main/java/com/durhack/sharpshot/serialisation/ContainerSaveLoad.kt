@@ -1,7 +1,10 @@
 package com.durhack.sharpshot.serialisation
 
 import com.durhack.sharpshot.gui.container.ContainerStaticRenderer
+import com.durhack.sharpshot.gui.container.Extract
+import com.durhack.sharpshot.gui.util.CoordinateRange2D
 import com.durhack.sharpshot.util.globalContainer
+import com.durhack.sharpshot.util.globalExtract
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Scene
 import javafx.scene.SceneAntialiasing
@@ -24,7 +27,7 @@ object ContainerSaveLoad {
      * If title is null, a text start will pop up
      * If title is blank (empty space only), no title will be added
      */
-    fun save(): Boolean {
+    fun save(source: SaveLoadType): Boolean {
         val file =
                 chooseFile("Save Location",
                            listOf(FileChooser.ExtensionFilter("Png Images", "*.png")).toTypedArray(),
@@ -33,38 +36,57 @@ object ContainerSaveLoad {
                     initialDirectory = File(System.getProperty("user.dir"))
                     initialFileName = "export"
                 }.firstOrNull() ?: return false
-        return saveToFile(file)
+        return saveToFile(source, file)
     }
 
     private val renderer = ContainerStaticRenderer()
     private val pane = Pane().apply { add(renderer) }
-    private val scene = Scene(pane, pane.width, pane.height, true, SceneAntialiasing.BALANCED)
-    private fun saveToFile(file: File): Boolean {
-        renderer.renderContainer(24)
+
+    init {
+        Scene(pane, pane.width, pane.height, true, SceneAntialiasing.BALANCED)
+    }
+
+    private fun saveToFile(source: SaveLoadType, file: File): Boolean {
+        val extract = when (source) {
+            SaveLoadType.CONTAINER -> {
+                renderer.renderContainer(24)
+                Extract(globalContainer.nodes, CoordinateRange2D(globalContainer.width, globalContainer.height))
+            }
+            SaveLoadType.EXTRACT -> {
+                renderer.renderExtract(24)
+                globalExtract
+            }
+        } ?: return false
+
         val tempImage = pane.snapshot(snapshotParams, null)
         val image = SwingFXUtils.fromFXImage(tempImage, null)
 
-        val json = Serialiser.saveContainer(globalContainer)
+        val json = Serialiser.save(extract)
         runAsync {
             Png.write(file.absolutePath, image, json)
         }
         return true
     }
 
-    fun load(): Boolean {
+    fun load(target: SaveLoadType): Boolean {
         val file = chooseFile("Select Image",
                               listOf(FileChooser.ExtensionFilter("Png Images", "*.png")).toTypedArray(),
                               FileChooserMode.Single)
         {
             initialDirectory = File(System.getProperty("user.dir"))
         }.firstOrNull() ?: return false
-        loadFromFile(file)
+        loadFromFile(target, file)
         return true
     }
 
-    private fun loadFromFile(file: File) {
+    private fun loadFromFile(target: SaveLoadType, file: File) {
         val json = Png.read(file.absolutePath)
-        val newContainer = Serialiser.loadContainer(json)
-        globalContainer.setTo(newContainer)
+
+        val extract = Serialiser.load(json)
+
+        when (target) {
+            SaveLoadType.CONTAINER -> globalContainer.setTo(extract)
+            SaveLoadType.EXTRACT -> globalExtract = extract
+        }
     }
 }

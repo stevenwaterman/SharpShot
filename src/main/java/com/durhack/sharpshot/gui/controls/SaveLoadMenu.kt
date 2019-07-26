@@ -3,6 +3,7 @@ package com.durhack.sharpshot.gui.controls
 import com.durhack.sharpshot.gui.container.ContainerController
 import com.durhack.sharpshot.gui.util.not
 import com.durhack.sharpshot.serialisation.ContainerSaveLoad
+import com.durhack.sharpshot.serialisation.SaveLoadType
 import com.durhack.sharpshot.util.globalContainer
 import javafx.geometry.Pos
 import javafx.scene.text.Font
@@ -22,14 +23,14 @@ class SaveLoadMenu : View() {
             button("Load") {
                 isFocusTraversable = false
                 action {
-                    val success = ContainerSaveLoad.load()
+                    val success = ContainerSaveLoad.load(SaveLoadType.CONTAINER)
                     if (success) controller.view.render()
                 }
             }
             button("Save") {
                 isFocusTraversable = false
                 action {
-                    ContainerSaveLoad.save()
+                    ContainerSaveLoad.save(SaveLoadType.CONTAINER)
                 }
             }
         }

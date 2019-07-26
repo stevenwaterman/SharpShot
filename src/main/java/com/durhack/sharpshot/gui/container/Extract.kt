@@ -6,7 +6,7 @@ import com.durhack.sharpshot.gui.util.CoordinateRange2D
 
 class Extract(allNodes: Map<Coordinate, AbstractNode>, range: CoordinateRange2D) {
     private constructor(extractNodes: Map<Coordinate, AbstractNode>, width: Int, height: Int) :
-            this(extractNodes, CoordinateRange2D(0 until width, 0 until height))
+            this(extractNodes, CoordinateRange2D(width, height))
 
     val nodes: Map<Coordinate, AbstractNode>
     val width: Int

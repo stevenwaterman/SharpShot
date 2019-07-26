@@ -1,7 +1,8 @@
 package com.durhack.sharpshot.serialisation
 
-import com.durhack.sharpshot.core.state.Container
 import com.durhack.sharpshot.core.state.Coordinate
+import com.durhack.sharpshot.gui.container.Extract
+import com.durhack.sharpshot.gui.util.CoordinateRange2D
 import com.durhack.sharpshot.registry.NodeRegistry
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
@@ -9,9 +10,9 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 
 internal object Serialiser {
-    fun saveContainer(container: Container): String {
+    fun save(extract: Extract): String {
         val nodes = JsonArray()
-        container.nodes.forEach { coordinate, node ->
+        extract.nodes.forEach { coordinate, node ->
             val nodeJson = JsonObject()
             nodeJson.add("coordinate", coordinate.toJson())
             nodeJson.add("node", NodeRegistry.toJson(node))
@@ -19,31 +20,31 @@ internal object Serialiser {
         }
 
         val containerJson = JsonObject()
-        containerJson.addProperty("width", container.width)
-        containerJson.addProperty("height", container.height)
+        containerJson.addProperty("width", extract.width)
+        containerJson.addProperty("height", extract.height)
         containerJson.add("nodes", nodes)
 
         val gson = GsonBuilder().create()
         return gson.toJson(containerJson)
     }
 
-    fun loadContainer(jsonString: String): Container {
+    fun load(jsonString: String): Extract {
         val json = JsonParser().parse(jsonString).asJsonObject
 
         val width = json["width"].asInt
         val height = json["height"].asInt
-        val newContainer = Container(width, height)
 
         val nodesJson = json["nodes"].asJsonArray
-        nodesJson.forEach { jsonElement ->
+        val nodes = nodesJson.map { jsonElement ->
             val jsonObject = jsonElement.asJsonObject
             val coordinateJson = jsonObject["coordinate"].asJsonObject
             val nodeJson = jsonObject["node"].asJsonObject
 
             val coordinate = Coordinate.fromJson(coordinateJson)
             val node = NodeRegistry.create(nodeJson)
-            newContainer.nodes[coordinate] = node
-        }
-        return newContainer
+            coordinate to node
+        }.toMap()
+
+        return Extract(nodes, CoordinateRange2D(width, height))
     }
 }

@@ -1,6 +1,9 @@
 package com.durhack.sharpshot.gui.controls.extract
 
+import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.gui.input.layers.popovers.PasteHover
+import com.durhack.sharpshot.serialisation.ContainerSaveLoad
+import com.durhack.sharpshot.serialisation.SaveLoadType
 import com.durhack.sharpshot.util.globalExtract
 import com.durhack.sharpshot.util.globalExtractProp
 import javafx.geometry.Pos
@@ -14,6 +17,7 @@ class ExtractInfo : View() {
     private val extractHeight = globalExtractProp.integerBinding(globalExtractProp) { it?.height ?: 0 }
 
     private val extractPreview: SmallExtractPreview by inject()
+    private val containerView: ContainerView by inject()
 
     private val transformContext = contextmenu {
         item("Rotate").action {
@@ -75,15 +79,18 @@ class ExtractInfo : View() {
         hbox {
             button("Load") {
                 enableWhen(extractSet)
+                isFocusTraversable = false
                 action {
-                    //TODO
+                    val success = ContainerSaveLoad.load(SaveLoadType.EXTRACT)
+                    if (success) containerView.render()
                 }
             }
 
             button("Save") {
                 enableWhen(extractSet)
+                isFocusTraversable = false
                 action {
-                    //TODO
+                    ContainerSaveLoad.save(SaveLoadType.EXTRACT)
                 }
             }
         }

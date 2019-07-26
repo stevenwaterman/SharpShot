@@ -5,8 +5,8 @@ import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.gui.input.layers.popovers.PasteCoord
 import com.durhack.sharpshot.gui.input.layers.popovers.PasteHover
+import com.durhack.sharpshot.gui.util.addClickHandler
 import com.durhack.sharpshot.gui.util.point
-import com.durhack.sharpshot.util.clamp
 import com.durhack.sharpshot.util.globalExtract
 import javafx.scene.input.MouseButton
 import tornadofx.*
@@ -22,21 +22,18 @@ class PastePositioner : View() {
             if (PasteHover.pasting) {
                 val point = it.point
                 val newCoord = containerView.getCoord(point).floor
-
-                val clampedX = newCoord.x.clamp(0, captValidPasteArea.width)
-                val clampedY = newCoord.y.clamp(0, captValidPasteArea.height)
-                val clampedCoord = Coordinate(clampedX, clampedY)
+                val clampedCoord = captValidPasteArea.clamp(newCoord)
 
                 if (clampedCoord != PasteHover.lastCoord?.coord) {
-                    PasteHover.lastCoord = PasteCoord(newCoord, pastable(newCoord))
+                    PasteHover.lastCoord = PasteCoord(clampedCoord, pastable(newCoord))
                 }
             }
         }
 
-        setOnMousePressed {
+        addClickHandler {
             if (PasteHover.pasting) {
                 if (it.button == MouseButton.PRIMARY) {
-                    val captLastCoord = PasteHover.lastCoord ?: return@setOnMousePressed
+                    val captLastCoord = PasteHover.lastCoord ?: return@addClickHandler
                     if (captLastCoord.valid) {
                         GlobalContainerModifier.paste(globalExtract!!, captLastCoord.coord)
 

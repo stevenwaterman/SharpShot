@@ -2,6 +2,7 @@ package com.durhack.sharpshot.gui.input.layers
 
 import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.gui.input.layers.popovers.DragBox
+import com.durhack.sharpshot.gui.input.layers.popovers.PasteHover
 import com.durhack.sharpshot.gui.util.CoordinateRange2D
 import com.durhack.sharpshot.gui.util.FractionalCoordinate
 import com.durhack.sharpshot.gui.util.addClickHandler
@@ -35,7 +36,7 @@ class BoardSelector : View() {
         }
 
         setOnMousePressed {
-            if (it.button == MouseButton.PRIMARY) {
+            if (it.button == MouseButton.PRIMARY && !PasteHover.pasting) {
                 val point = it.point
                 val coord = containerView.getCoord(point)
                 hideSelection()
