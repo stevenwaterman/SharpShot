@@ -14,7 +14,7 @@ class ExtractInfo : View() {
     var extract: Extract? = null
         set(extract) {
             field = extract
-            if (extract == null) {
+            if (extract == null || extract.isEmpty) {
                 extractSet.set(false)
                 renderer.clear()
             }
@@ -83,6 +83,45 @@ class ExtractInfo : View() {
                 val capt = extract
                 if (capt != null) {
                     capt.rotateClockwise()
+                    extractWidth.set(capt.width)
+                    extractHeight.set(capt.height)
+                    render()
+                }
+            }
+        }
+
+        button("Flip Horiz") {
+            enableWhen(extractSet)
+            action {
+                val capt = extract
+                if (capt != null) {
+                    capt.mirrorHorizontal()
+                    extractWidth.set(capt.width)
+                    extractHeight.set(capt.height)
+                    render()
+                }
+            }
+        }
+
+        button("Flip Vert") {
+            enableWhen(extractSet)
+            action {
+                val capt = extract
+                if (capt != null) {
+                    capt.mirrorVertical()
+                    extractWidth.set(capt.width)
+                    extractHeight.set(capt.height)
+                    render()
+                }
+            }
+        }
+
+        button("Trim") {
+            enableWhen(extractSet)
+            action {
+                val capt = extract
+                if (capt != null) {
+                    capt.trim()
                     extractWidth.set(capt.width)
                     extractHeight.set(capt.height)
                     render()

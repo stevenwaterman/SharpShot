@@ -5,6 +5,7 @@ import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.gui.util.CoordinateRange2D
 
 class Extract(allNodes: Map<Coordinate, AbstractNode>, range: CoordinateRange2D) {
+    val isEmpty: Boolean get() = nodes.isEmpty()
     var nodes: Map<Coordinate, AbstractNode> private set
     var width: Int private set
     var height: Int private set
@@ -31,7 +32,7 @@ class Extract(allNodes: Map<Coordinate, AbstractNode>, range: CoordinateRange2D)
     fun mirrorVertical() {
         val newNodes =
                 nodes.mapKeys { (coord, _) ->
-                    val newY = height - coord.x - 1
+                    val newY = height - coord.y - 1
                     return@mapKeys Coordinate(coord.x, newY)
                 }
         newNodes.values.forEach { it.direction = it.direction.mirrorVertical }

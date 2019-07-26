@@ -2,7 +2,7 @@ package com.durhack.sharpshot.gui.controls
 
 import com.durhack.sharpshot.core.control.ContainerModifier
 import com.durhack.sharpshot.gui.container.ContainerView
-import com.durhack.sharpshot.gui.container.input.layers.popovers.SelectionMenu
+import com.durhack.sharpshot.gui.container.input.layers.popovers.SelectionBox
 import com.durhack.sharpshot.gui.util.CoordinateRange2D
 import javafx.geometry.Pos
 import javafx.scene.text.Font
@@ -12,8 +12,8 @@ class SelectionInfo : View() {
     private val extractInfo: ExtractInfo by inject()
     private val containerView: ContainerView by inject()
 
-    private val selectionMenu: SelectionMenu by inject()
-    private val selectionProp = selectionMenu.selectionProp
+    private val selectionBox: SelectionBox by inject()
+    private val selectionProp = selectionBox.selectionProp
     private val selection: CoordinateRange2D? get() = selectionProp.value
     private val isSelected = selectionProp.booleanBinding(selectionProp) {
         it != null

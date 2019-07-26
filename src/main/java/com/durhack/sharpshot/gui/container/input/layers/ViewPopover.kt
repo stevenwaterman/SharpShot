@@ -2,7 +2,7 @@ package com.durhack.sharpshot.gui.container.input.layers
 
 import com.durhack.sharpshot.gui.container.input.layers.popovers.CreateNodeMenu
 import com.durhack.sharpshot.gui.container.input.layers.popovers.DragBox
-import com.durhack.sharpshot.gui.container.input.layers.popovers.SelectionMenu
+import com.durhack.sharpshot.gui.container.input.layers.popovers.SelectionBox
 import tornadofx.*
 
 /**
@@ -13,13 +13,13 @@ import tornadofx.*
 class ViewPopover : View() {
     private val createNodeMenu: CreateNodeMenu by inject()
     private val dragBox: DragBox by inject()
-    private val selectionMenu: SelectionMenu by inject()
+    private val selectionBox: SelectionBox by inject()
 
     override val root = pane {
         id = "View Popover"
 
         add(createNodeMenu)
         add(dragBox)
-        add(selectionMenu)
+        add(selectionBox)
     }
 }

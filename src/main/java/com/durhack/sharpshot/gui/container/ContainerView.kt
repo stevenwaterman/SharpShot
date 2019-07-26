@@ -3,7 +3,7 @@ package com.durhack.sharpshot.gui.container
 import com.durhack.sharpshot.core.control.CollisionReport
 import com.durhack.sharpshot.core.state.tick.BulletMovement
 import com.durhack.sharpshot.gui.container.input.layers.popovers.DragBox
-import com.durhack.sharpshot.gui.container.input.layers.popovers.SelectionMenu
+import com.durhack.sharpshot.gui.container.input.layers.popovers.SelectionBox
 import com.durhack.sharpshot.gui.graphics.BulletGraphic
 import com.durhack.sharpshot.gui.util.FractionalCoordinate
 import com.durhack.sharpshot.gui.util.ui
@@ -29,7 +29,7 @@ class ContainerView : View() {
         var scale by innerScaleProp
     }
 
-    private val selectionMenu: SelectionMenu by inject()
+    private val selectionBox: SelectionBox by inject()
     private val dragBox: DragBox by inject()
 
     private val nodeLayer: ContainerStaticView by inject()
@@ -69,7 +69,7 @@ class ContainerView : View() {
             bulletLayer.clear()
             bulletLayer.children += bullets
 
-            selectionMenu.render()
+            selectionBox.render()
             dragBox.hide()
         }
     }
