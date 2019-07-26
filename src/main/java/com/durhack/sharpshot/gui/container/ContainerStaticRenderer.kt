@@ -17,7 +17,7 @@ class ContainerStaticRenderer : Canvas() {
         clear()
         updateSize(scale, width, height)
         drawNodes(scale, nodes)
-        drawGrid(scale)
+        drawGrid(scale, width, height)
     }
 
     private fun updateSize(scale: Int, width: Int, height: Int) {
@@ -37,16 +37,16 @@ class ContainerStaticRenderer : Canvas() {
         }
     }
 
-    private fun drawGrid(scale: Int) {
+    private fun drawGrid(scale: Int, width: Int, height: Int) {
         gc.stroke = Color.GRAY
         gc.lineWidth = 1.0
 
-        (0..container.width).map { it * scale }.forEach {
-            gc.strokeLine(it + 0.5, 0.0, it + 0.5, height)
+        (0..width).map { it * scale }.forEach {
+            gc.strokeLine(it + 0.5, 0.0, it + 0.5, this.height)
         }
 
-        (0..container.height).map { it * scale }.forEach {
-            gc.strokeLine(0.0, it + 0.5, width, it + 0.5)
+        (0..height).map { it * scale }.forEach {
+            gc.strokeLine(0.0, it + 0.5, this.width, it + 0.5)
         }
     }
 }

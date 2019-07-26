@@ -18,7 +18,6 @@ class LayerContainer : View() {
     val viewPopover: ViewPopover by inject()
 
     val layers = listOf(
-            containerView,
             containerInputLayer,
             singleNodeEdit,
             boardSelector,
@@ -46,6 +45,7 @@ class LayerContainer : View() {
         add(topArrow.root, 0, 0)
         add(bottomArrow.root, 2, 2)
         add(containerView.root, 1, 1)
+        add(layeredPane, 1, 1)
 
         maxWidthProperty().bind(topArrow.root.maxWidthProperty() + containerView.root.maxWidthProperty() + bottomArrow.root.maxWidthProperty() + paddingAmnt)
         maxHeightProperty().bind(topArrow.root.maxHeightProperty() + containerView.root.maxHeightProperty() + bottomArrow.root.maxHeightProperty() + paddingAmnt)

@@ -11,9 +11,9 @@ import tornadofx.*
  *
  */
 class ViewPopover : View() {
-    val createNodeMenu: CreateNodeMenu by inject()
-    val dragBox: DragBox by inject()
-    val selectionMenu: SelectionMenu by inject()
+    private val createNodeMenu: CreateNodeMenu by inject()
+    private val dragBox: DragBox by inject()
+    private val selectionMenu: SelectionMenu by inject()
 
     override val root = pane {
         id = "View Popover"

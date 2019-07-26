@@ -16,11 +16,17 @@ class MainView : View() {
     private val saveLoadMenu: SaveLoadMenu by inject()
     private val extract: ExtractInfo by inject()
     private val selectionInfo: SelectionInfo by inject()
+    private val extractPreview: ExtractPreview by inject()
 
     override val root = borderpane {
         id = "Main View"
 
-        center { add(scrollZoomPane) }
+        center {
+            stackpane {
+                add(scrollZoomPane)
+                add(extractPreview)
+            }
+        }
         bottom { add(playback) }
         left {
             paddingAll = 12.0

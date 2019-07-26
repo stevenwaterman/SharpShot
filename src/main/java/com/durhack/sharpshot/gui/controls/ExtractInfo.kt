@@ -1,5 +1,6 @@
 package com.durhack.sharpshot.gui.controls
 
+import com.durhack.sharpshot.gui.ExtractPreview
 import com.durhack.sharpshot.gui.container.ContainerStaticRenderer
 import com.durhack.sharpshot.gui.container.Extract
 import javafx.beans.property.SimpleBooleanProperty
@@ -7,10 +8,12 @@ import javafx.beans.property.SimpleIntegerProperty
 import javafx.geometry.Pos
 import javafx.scene.text.Font
 import tornadofx.*
+import kotlin.math.min
 
 class ExtractInfo : View() {
     var extract: Extract? = null
         set(extract) {
+            field = extract
             if (extract == null) {
                 extractSet.set(false)
                 renderer.clear()
@@ -19,10 +22,8 @@ class ExtractInfo : View() {
                 extractSet.set(true)
                 extractWidth.set(extract.width)
                 extractHeight.set(extract.height)
-                renderer.renderExtract(extract, renderScale)
+                render()
             }
-
-            field = extract
         }
 
 
@@ -30,7 +31,9 @@ class ExtractInfo : View() {
     private val extractWidth = SimpleIntegerProperty(0)
     private val extractHeight = SimpleIntegerProperty(0)
 
-    private val renderScale = 8
+    private val extractPreview: ExtractPreview by inject()
+
+    private val renderSize = 60.0
     private val renderer = ContainerStaticRenderer()
 
     override val root = vbox(8.0, Pos.CENTER) {
@@ -52,7 +55,20 @@ class ExtractInfo : View() {
             }
         }
 
-        add(renderer)
+        stackpane {
+            id = "Small Extract Preview"
+            prefWidth = renderSize
+            prefHeight = renderSize
+
+            setOnMouseEntered {
+                extractPreview.show()
+            }
+            setOnMouseExited {
+                extractPreview.hide()
+            }
+
+            add(renderer)
+        }
 
         button("Place") {
             enableWhen(extractSet)
@@ -69,7 +85,7 @@ class ExtractInfo : View() {
                     capt.rotateClockwise()
                     extractWidth.set(capt.width)
                     extractHeight.set(capt.height)
-                    renderer.renderExtract(capt, renderScale)
+                    render()
                 }
             }
         }
@@ -87,5 +103,13 @@ class ExtractInfo : View() {
                 //TODO
             }
         }
+    }
+
+    private fun render() {
+        val capt = extract ?: return
+        val requiredWidth = renderSize / capt.width
+        val requiredHeight = renderSize / capt.height
+        val scale = min(requiredWidth, requiredHeight).toInt()
+        renderer.renderExtract(capt, scale)
     }
 }
