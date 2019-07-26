@@ -4,6 +4,7 @@ import com.durhack.sharpshot.gui.container.ContainerStaticRenderer
 import com.durhack.sharpshot.util.globalExtract
 import com.durhack.sharpshot.util.globalExtractProp
 import javafx.geometry.Insets
+import javafx.scene.input.MouseButton
 import javafx.scene.layout.*
 import javafx.scene.paint.Color
 import tornadofx.*
@@ -25,11 +26,15 @@ class SmallExtractPreview : View() {
         background = Background(BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY))
         border = Border(BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT))
 
-        setOnMouseEntered {
-            largeExtractPreview.show()
+        setOnMousePressed {
+            if (it.button == MouseButton.PRIMARY) {
+                largeExtractPreview.show()
+            }
         }
-        setOnMouseExited {
-            largeExtractPreview.hide()
+        setOnMouseReleased {
+            if (it.button == MouseButton.PRIMARY) {
+                largeExtractPreview.hide()
+            }
         }
 
         add(renderer)
