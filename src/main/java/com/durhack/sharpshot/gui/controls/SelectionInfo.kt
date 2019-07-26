@@ -55,6 +55,7 @@ class SelectionInfo : View() {
             enableWhen(isSelected)
             action {
                 ContainerModifier.clear(globalSelection!!)
+                globalSelection = null
                 containerView.render()
             }
         }
@@ -64,6 +65,7 @@ class SelectionInfo : View() {
             action {
                 val extract = ContainerModifier.cut(globalSelection!!)
                 globalExtract = extract
+                globalSelection = null
                 containerView.render()
             }
         }
@@ -72,6 +74,7 @@ class SelectionInfo : View() {
             enableWhen(isSelected)
             action {
                 val extract = ContainerModifier.copy(globalSelection!!)
+                globalSelection = null
                 globalExtract = extract
             }
         }
