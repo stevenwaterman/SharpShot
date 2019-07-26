@@ -50,8 +50,12 @@ class SelectionBox : View() {
         val validY = 0..container.height
         val clampY = yRange.intersect(validY)
 
-        selection = CoordinateRange2D(clampX, clampY)
-        render()
+        val range = CoordinateRange2D(clampX, clampY)
+        //Don't allow selecting an empty range because there's no point
+        if (container.nodes.keys.any { it in range }) {
+            selection = range
+            render()
+        }
     }
 
     private fun intRange(a: Double, b: Double): IntRange {
