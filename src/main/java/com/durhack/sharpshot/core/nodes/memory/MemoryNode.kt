@@ -24,4 +24,6 @@ class MemoryNode(direction: Direction) : AbstractNode(direction) {
     }
 
     override val type = "memory"
+
+    override fun copyWithDirection(direction: Direction) = MemoryNode(direction)
 }

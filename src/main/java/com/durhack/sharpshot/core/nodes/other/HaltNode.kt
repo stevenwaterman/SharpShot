@@ -8,4 +8,5 @@ class HaltNode(direction: Direction) : AbstractNode(direction) {
     override fun process(relativeDirection: Direction, value: BigInteger?) = mapOf<Direction, BigInteger?>()
     override val type = "halt"
     override fun reset() {}
+    override fun copyWithDirection(direction: Direction) = HaltNode(direction)
 }

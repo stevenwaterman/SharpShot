@@ -3,15 +3,23 @@ package com.durhack.sharpshot.gui.container
 import com.durhack.sharpshot.core.nodes.AbstractNode
 import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.registry.NodeRegistry
-import com.durhack.sharpshot.util.container
+import com.durhack.sharpshot.util.globalContainer
+import com.durhack.sharpshot.util.globalExtract
 import javafx.scene.canvas.Canvas
 import javafx.scene.paint.Color
 
 class ContainerStaticRenderer : Canvas() {
     private val gc = graphicsContext2D
 
-    fun renderContainer(scale: Int) = render(scale, container.width, container.height, container.nodes)
-    fun renderExtract(extract: Extract, scale: Int) = render(scale, extract.width, extract.height, extract.nodes)
+    fun renderContainer(scale: Int) = render(scale,
+                                             globalContainer.width,
+                                             globalContainer.height,
+                                             globalContainer.nodes)
+
+    fun renderExtract(scale: Int) {
+        val capt = globalExtract ?: return
+        render(scale, capt.width, capt.height, capt.nodes)
+    }
 
     fun render(scale: Int, width: Int, height: Int, nodes: Map<Coordinate, AbstractNode>) {
         clear()

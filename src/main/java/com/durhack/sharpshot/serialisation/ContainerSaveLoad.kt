@@ -1,7 +1,7 @@
 package com.durhack.sharpshot.serialisation
 
 import com.durhack.sharpshot.gui.container.ContainerStaticRenderer
-import com.durhack.sharpshot.util.container
+import com.durhack.sharpshot.util.globalContainer
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Scene
 import javafx.scene.SceneAntialiasing
@@ -44,7 +44,7 @@ object ContainerSaveLoad {
         val tempImage = pane.snapshot(snapshotParams, null)
         val image = SwingFXUtils.fromFXImage(tempImage, null)
 
-        val json = Serialiser.saveContainer(container)
+        val json = Serialiser.saveContainer(globalContainer)
         runAsync {
             Png.write(file.absolutePath, image, json)
         }
@@ -65,6 +65,6 @@ object ContainerSaveLoad {
     private fun loadFromFile(file: File) {
         val json = Png.read(file.absolutePath)
         val newContainer = Serialiser.loadContainer(json)
-        container.setTo(newContainer)
+        globalContainer.setTo(newContainer)
     }
 }

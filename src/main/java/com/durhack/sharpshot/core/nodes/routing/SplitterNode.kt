@@ -13,4 +13,6 @@ class SplitterNode(direction: Direction) : AbstractNode(direction) {
 
     override fun reset() {}
     override val type = "splitter"
+
+    override fun copyWithDirection(direction: Direction) = SplitterNode(direction)
 }

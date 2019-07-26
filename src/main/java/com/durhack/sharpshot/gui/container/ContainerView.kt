@@ -2,13 +2,12 @@ package com.durhack.sharpshot.gui.container
 
 import com.durhack.sharpshot.core.control.CollisionReport
 import com.durhack.sharpshot.core.state.tick.BulletMovement
-import com.durhack.sharpshot.gui.container.input.layers.popovers.DragBox
-import com.durhack.sharpshot.gui.container.input.layers.popovers.SelectionBox
-import com.durhack.sharpshot.gui.graphics.BulletGraphic
+import com.durhack.sharpshot.gui.input.layers.popovers.DragBox
+import com.durhack.sharpshot.gui.input.layers.popovers.SelectionBox
 import com.durhack.sharpshot.gui.util.FractionalCoordinate
 import com.durhack.sharpshot.gui.util.ui
 import com.durhack.sharpshot.util.MinMaxIntProperty
-import com.durhack.sharpshot.util.container
+import com.durhack.sharpshot.util.globalContainer
 import javafx.animation.Interpolator
 import javafx.animation.Transition
 import javafx.animation.TranslateTransition
@@ -45,8 +44,8 @@ class ContainerView : View() {
         background = Background(BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY))
     }
 
-    val width get() = (scale * container.width + 1).toDouble()
-    val height get() = (scale * container.height + 1).toDouble()
+    val width get() = (scale * globalContainer.width + 1).toDouble()
+    val height get() = (scale * globalContainer.height + 1).toDouble()
 
     init {
         render()
@@ -55,7 +54,7 @@ class ContainerView : View() {
 
     fun render() {
         val bullets = mutableListOf<Node>()
-        container.bullets.forEach { bullet ->
+        globalContainer.bullets.forEach { bullet ->
             val graphic = BulletGraphic(bullet = bullet, scale = scale)
             bullets.add(graphic)
         }
@@ -69,7 +68,7 @@ class ContainerView : View() {
             bulletLayer.clear()
             bulletLayer.children += bullets
 
-            selectionBox.render()
+            //This mitigates the issue where the drag box wouldn't appear at the mouse location after zooming
             dragBox.hide()
         }
     }

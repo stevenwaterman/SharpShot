@@ -11,4 +11,6 @@ class BranchNode(direction: Direction) : AbstractNode(direction) {
 
     override fun reset() {}
     override val type = "branch"
+
+    override fun copyWithDirection(direction: Direction) = BranchNode(direction)
 }

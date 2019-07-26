@@ -2,23 +2,18 @@ package com.durhack.sharpshot.gui.controls
 
 import com.durhack.sharpshot.core.control.ContainerModifier
 import com.durhack.sharpshot.gui.container.ContainerView
-import com.durhack.sharpshot.gui.container.input.layers.popovers.SelectionBox
-import com.durhack.sharpshot.gui.util.CoordinateRange2D
+import com.durhack.sharpshot.util.globalExtract
+import com.durhack.sharpshot.util.globalSelection
+import com.durhack.sharpshot.util.globalSelectionProp
 import javafx.geometry.Pos
 import javafx.scene.text.Font
 import tornadofx.*
 
 class SelectionInfo : View() {
-    private val extractInfo: ExtractInfo by inject()
     private val containerView: ContainerView by inject()
 
-    private val selectionBox: SelectionBox by inject()
-    private val selectionProp = selectionBox.selectionProp
-    private val selection: CoordinateRange2D? get() = selectionProp.value
-    private val isSelected = selectionProp.booleanBinding(selectionProp) {
-        it != null
-    }
-    private val selectionWidth = selectionProp.integerBinding(selectionProp) {
+    private val isSelected = globalSelectionProp.booleanBinding(globalSelectionProp) { it != null }
+    private val selectionWidth = globalSelectionProp.integerBinding(globalSelectionProp) {
         if (it == null) {
             0
         }
@@ -27,7 +22,7 @@ class SelectionInfo : View() {
             range.endInclusive - range.start
         }
     }
-    private val selectionHeight = selectionProp.integerBinding(selectionProp) {
+    private val selectionHeight = globalSelectionProp.integerBinding(globalSelectionProp) {
         if (it == null) {
             0
         }
@@ -59,7 +54,7 @@ class SelectionInfo : View() {
         button("Delete") {
             enableWhen(isSelected)
             action {
-                ContainerModifier.clear(selection!!)
+                ContainerModifier.clear(globalSelection!!)
                 containerView.render()
             }
         }
@@ -67,8 +62,8 @@ class SelectionInfo : View() {
         button("Cut") {
             enableWhen(isSelected)
             action {
-                val extract = ContainerModifier.cut(selection!!)
-                extractInfo.extract = extract
+                val extract = ContainerModifier.cut(globalSelection!!)
+                globalExtract = extract
                 containerView.render()
             }
         }
@@ -76,8 +71,8 @@ class SelectionInfo : View() {
         button("Copy") {
             enableWhen(isSelected)
             action {
-                val extract = ContainerModifier.copy(selection!!)
-                extractInfo.extract = extract
+                val extract = ContainerModifier.copy(globalSelection!!)
+                globalExtract = extract
             }
         }
     }

@@ -28,11 +28,7 @@ abstract class RegistryEntry<T : AbstractNode>(val example: T, val name: String,
     open fun create(json: JsonObject): T {
         val quarters = json["direction"].asInt
         val direction = Direction.ofQuarters(quarters)
-
-        val node = example::class.java.getConstructor(Direction::class.java).newInstance(direction)
-        val rotation = json["direction"].asInt
-        node.direction = Direction.ofQuarters(rotation)
-        return node
+        return example::class.java.getConstructor(Direction::class.java).newInstance(direction)
     }
 
     fun unsafeDraw(node: AbstractNode,

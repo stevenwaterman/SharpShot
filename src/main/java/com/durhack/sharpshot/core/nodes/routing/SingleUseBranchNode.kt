@@ -23,4 +23,6 @@ class SingleUseBranchNode(direction: Direction) : AbstractNode(direction) {
     }
 
     override val type = "single use branch"
+
+    override fun copyWithDirection(direction: Direction) = SingleUseBranchNode(direction)
 }

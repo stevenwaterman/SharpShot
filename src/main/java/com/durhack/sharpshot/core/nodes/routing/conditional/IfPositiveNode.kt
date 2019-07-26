@@ -6,4 +6,5 @@ import java.math.BigInteger
 class IfPositiveNode(direction: Direction) : AbstractConditionalNode(direction) {
     override fun branch(value: BigInteger?) = value?.signum() == 1
     override val type = "branch if positive"
+    override fun copyWithDirection(direction: Direction) = IfPositiveNode(direction)
 }

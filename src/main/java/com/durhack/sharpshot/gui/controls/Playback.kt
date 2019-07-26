@@ -2,7 +2,7 @@ package com.durhack.sharpshot.gui.controls
 
 import com.durhack.sharpshot.gui.container.ContainerController
 import com.durhack.sharpshot.gui.util.not
-import com.durhack.sharpshot.util.container
+import com.durhack.sharpshot.util.globalContainer
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleStringProperty
@@ -18,7 +18,7 @@ class Playback : View() {
     private val runningLayer = hbox(8.0, Pos.CENTER) {
         id = "Running Layer"
 
-        visibleWhen(container.runningProp)
+        visibleWhen(globalContainer.runningProp)
 
         val animateProp = SimpleBooleanProperty(true)
         val speedSettingProp = SimpleIntegerProperty(2)
@@ -98,7 +98,7 @@ class Playback : View() {
         id = "Stopped Layer"
 
         alignment = Pos.CENTER
-        visibleWhen(container.runningProp.not())
+        visibleWhen(globalContainer.runningProp.not())
 
         val inputsProp = SimpleStringProperty("")
         textfield(inputsProp) {

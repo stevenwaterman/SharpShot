@@ -8,4 +8,5 @@ class VoidNode(direction: Direction) : AbstractNode(direction) {
     override fun process(relativeDirection: Direction, value: BigInteger?): Map<Direction, BigInteger?> = mapOf()
     override fun reset() {}
     override val type = "void"
+    override fun copyWithDirection(direction: Direction) = VoidNode(direction)
 }

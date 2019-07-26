@@ -6,4 +6,5 @@ import java.math.BigInteger
 class IfZeroNode(direction: Direction) : AbstractConditionalNode(direction) {
     override fun branch(value: BigInteger?) = value?.signum() == 0
     override val type = "branch if zero"
+    override fun copyWithDirection(direction: Direction) = IfZeroNode(direction)
 }

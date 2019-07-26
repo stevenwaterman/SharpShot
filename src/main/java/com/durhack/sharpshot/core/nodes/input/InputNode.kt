@@ -18,6 +18,8 @@ class InputNode(val index: Int?, direction: Direction) : AbstractInputNode(direc
                     )
     }
 
+    override fun copyWithDirection(direction: Direction) = InputNode(index, direction)
+
     override fun reset() {}
 
     override val type = "input"

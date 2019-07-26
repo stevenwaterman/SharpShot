@@ -35,4 +35,6 @@ class RandomNode(direction: Direction) : AbstractNode(direction) {
     override val type = "random"
 
     override fun reset() {}
+
+    override fun copyWithDirection(direction: Direction) = RandomNode(direction)
 }

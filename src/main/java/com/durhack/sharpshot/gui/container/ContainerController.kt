@@ -3,7 +3,7 @@ package com.durhack.sharpshot.gui.container
 import com.durhack.sharpshot.gui.util.ObservableOutput
 import com.durhack.sharpshot.gui.util.ui
 import com.durhack.sharpshot.util.KTimer
-import com.durhack.sharpshot.util.container
+import com.durhack.sharpshot.util.globalContainer
 import javafx.beans.binding.BooleanExpression
 import javafx.beans.property.ReadOnlyBooleanWrapper
 import javafx.beans.property.SimpleBooleanProperty
@@ -51,12 +51,12 @@ class ContainerController : Controller() {
     fun start(input: List<BigInteger?>) {
         innerOutputProp.clear()
         ticks = 0
-        container.start(input)
+        globalContainer.start(input)
         view.render()
     }
 
     fun quickTick() {
-        val report = container.tick()
+        val report = globalContainer.tick()
         view.render()
 
         ticks++
@@ -65,7 +65,7 @@ class ContainerController : Controller() {
 
     fun animatedTick(lengthMs: Long, onFinish: () -> Unit = {}) {
         animating = true
-        val report = container.tick()
+        val report = globalContainer.tick()
         view.animate(report.collisionReport, lengthMs)
         timer.schedule(lengthMs) {
             view.render()
@@ -83,7 +83,7 @@ class ContainerController : Controller() {
             val innerOut = mutableListOf<BigInteger?>()
             var innerTicks = 0
             for (i in (1..simulationTicks)) {
-                val report = container.tick()
+                val report = globalContainer.tick()
                 innerTicks++
                 innerOut.addAll(report.outputs)
                 if (report.halted) break
@@ -97,12 +97,12 @@ class ContainerController : Controller() {
     }
 
     fun reset() {
-        container.reset()
+        globalContainer.reset()
         view.render()
     }
 
     fun clear() {
-        container.clear()
+        globalContainer.clear()
         innerOutputProp.clear()
         ticks = 0
         view.render()
@@ -110,7 +110,7 @@ class ContainerController : Controller() {
 
     private fun recursiveAnimate(lengthMs: Long) {
         animatedTick(lengthMs) {
-            if (container.running && !stopping) {
+            if (globalContainer.running && !stopping) {
                 recursiveAnimate(lengthMs)
             }
             else {

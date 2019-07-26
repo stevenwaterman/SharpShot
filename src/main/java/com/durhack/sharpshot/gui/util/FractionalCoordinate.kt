@@ -3,11 +3,11 @@ package com.durhack.sharpshot.gui.util
 import com.durhack.sharpshot.core.state.Coordinate
 
 data class FractionalCoordinate(val x: Double, val y: Double) {
-    val validCoord: Coordinate?
+    val validInGlobalContainer: Coordinate?
         get() {
             val coord = Coordinate(x.toInt(), y.toInt())
             return when {
-                coord.exists -> coord
+                coord.existsInGlobalContainer -> coord
                 else -> null
             }
         }

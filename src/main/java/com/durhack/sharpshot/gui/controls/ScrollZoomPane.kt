@@ -1,7 +1,7 @@
 package com.durhack.sharpshot.gui.controls
 
 import com.durhack.sharpshot.gui.container.ContainerView
-import com.durhack.sharpshot.gui.container.input.layers.LayerContainer
+import com.durhack.sharpshot.gui.input.layers.LayerContainer
 import com.durhack.sharpshot.util.*
 import javafx.geometry.Point2D
 import javafx.geometry.Pos

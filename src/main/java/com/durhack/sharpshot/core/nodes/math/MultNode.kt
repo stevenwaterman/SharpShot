@@ -6,4 +6,6 @@ import java.math.BigInteger
 class MultNode(direction: Direction) : AbstractMathNode(direction) {
     public override fun operation(val1: BigInteger, val2: BigInteger): BigInteger? = val1.multiply(val2)
     override val type = "multiply"
+
+    override fun copyWithDirection(direction: Direction) = MultNode(direction)
 }

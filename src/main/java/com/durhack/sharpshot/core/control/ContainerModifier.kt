@@ -4,12 +4,12 @@ import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.core.state.Direction
 import com.durhack.sharpshot.gui.container.Extract
 import com.durhack.sharpshot.gui.util.CoordinateRange2D
-import com.durhack.sharpshot.util.container
+import com.durhack.sharpshot.util.globalContainer
 
 object ContainerModifier {
     private val fullRange: CoordinateRange2D
-        get() = CoordinateRange2D(0 until container.width,
-                                  0 until container.height)
+        get() = CoordinateRange2D(0 until globalContainer.width,
+                                  0 until globalContainer.height)
     private val minCoord = Coordinate(0, 0)
 
     /**
@@ -21,8 +21,8 @@ object ContainerModifier {
             extract = cut(fullRange)
         }
 
-        if (direction.deltaX != 0) container.width++
-        if (direction.deltaY != 0) container.height++
+        if (direction.deltaX != 0) globalContainer.width++
+        if (direction.deltaY != 0) globalContainer.height++
 
         if (extract != null) {
             val placeLocation = minCoord - direction
@@ -32,10 +32,10 @@ object ContainerModifier {
 
     fun canDecreaseSize(direction: Direction) =
             when (direction) {
-                Direction.UP -> container.nodes.keys.none { it.y == container.height - 1 } && container.height > 1
-                Direction.LEFT -> container.nodes.keys.none { it.x == container.width - 1 } && container.width > 1
-                Direction.DOWN -> container.nodes.keys.none { it.y == 0 } && container.height > 1
-                Direction.RIGHT -> container.nodes.keys.none { it.x == 0 } && container.width > 1
+                Direction.UP -> globalContainer.nodes.keys.none { it.y == globalContainer.height - 1 } && globalContainer.height > 1
+                Direction.LEFT -> globalContainer.nodes.keys.none { it.x == globalContainer.width - 1 } && globalContainer.width > 1
+                Direction.DOWN -> globalContainer.nodes.keys.none { it.y == 0 } && globalContainer.height > 1
+                Direction.RIGHT -> globalContainer.nodes.keys.none { it.x == 0 } && globalContainer.width > 1
             }
 
     /**
@@ -47,8 +47,8 @@ object ContainerModifier {
             extract = cut(fullRange)
         }
 
-        if (direction.deltaX != 0) container.width--
-        if (direction.deltaY != 0) container.height--
+        if (direction.deltaX != 0) globalContainer.width--
+        if (direction.deltaY != 0) globalContainer.height--
 
         if (extract != null) {
             val placeLocation = minCoord - direction
@@ -56,10 +56,10 @@ object ContainerModifier {
         }
     }
 
-    fun copy(range: CoordinateRange2D) = Extract(container.nodes, range)
+    fun copy(range: CoordinateRange2D) = Extract(globalContainer.nodes, range)
 
     fun clear(range: CoordinateRange2D) {
-        container.nodes.keys.removeAll { range.contains(it) }
+        globalContainer.nodes.keys.removeAll { range.contains(it) }
     }
 
     fun cut(range: CoordinateRange2D): Extract {
@@ -70,7 +70,7 @@ object ContainerModifier {
 
     fun canPlace(extract: Extract, location: Coordinate): Boolean {
         val extractNodes = extract.nodes.keys.map { it + location }.toSet()
-        val containerNodes = container.nodes.keys.toSet()
+        val containerNodes = globalContainer.nodes.keys.toSet()
         val overlap = extractNodes.intersect(containerNodes)
         return overlap.isEmpty()
     }
@@ -78,6 +78,6 @@ object ContainerModifier {
     fun paste(extract: Extract, location: Coordinate) {
         val extractNodes = extract.nodes
                 .mapKeys { (relativeCoord, _) -> relativeCoord + location }
-        extractNodes.forEach { absCoord, node -> container.nodes[absCoord] = node }
+        extractNodes.forEach { absCoord, node -> globalContainer.nodes[absCoord] = node }
     }
 }

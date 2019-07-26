@@ -10,4 +10,6 @@ class RotateNode(direction: Direction) : AbstractNode(direction) {
 
     override fun reset() {}
     override val type = "rotate"
+
+    override fun copyWithDirection(direction: Direction) = RotateNode(direction)
 }

@@ -1,7 +1,9 @@
 package com.durhack.sharpshot.gui
 
-import com.durhack.sharpshot.gui.container.input.layers.ContainerInputLayer
 import com.durhack.sharpshot.gui.controls.*
+import com.durhack.sharpshot.gui.controls.extract.ExtractInfo
+import com.durhack.sharpshot.gui.controls.extract.LargeExtractPreview
+import com.durhack.sharpshot.gui.input.layers.ContainerInputLayer
 import javafx.event.Event
 import javafx.event.EventTarget
 import javafx.scene.input.KeyEvent
@@ -16,7 +18,7 @@ class MainView : View() {
     private val saveLoadMenu: SaveLoadMenu by inject()
     private val extract: ExtractInfo by inject()
     private val selectionInfo: SelectionInfo by inject()
-    private val extractPreview: ExtractPreview by inject()
+    private val largeExtractPreview: LargeExtractPreview by inject()
 
     override val root = borderpane {
         id = "Main View"
@@ -24,7 +26,7 @@ class MainView : View() {
         center {
             stackpane {
                 add(scrollZoomPane)
-                add(extractPreview)
+                add(largeExtractPreview)
             }
         }
         bottom { add(playback) }

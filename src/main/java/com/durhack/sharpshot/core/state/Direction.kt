@@ -14,8 +14,8 @@ enum class Direction(val deltaX: Int, val deltaY: Int, val quarters: Int) {
     val inverse get() = plusQuarters(2)
     val clockwise get() = plusQuarters(1)
     val antiClockwise get() = plusQuarters(-1)
-    val mirrorHorizontal get() = if (deltaX != 0) inverse else this
-    val mirrorVertical get() = if (deltaY != 0) inverse else this
+    val mirroredHorizontal get() = if (deltaX != 0) inverse else this
+    val mirroredVertical get() = if (deltaY != 0) inverse else this
     val others get() = (1..3).map(::plusQuarters)
     val degrees get() = quarters * 90.0
 

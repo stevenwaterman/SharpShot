@@ -5,10 +5,14 @@ import com.durhack.sharpshot.core.state.Coordinate
 import com.durhack.sharpshot.gui.util.CoordinateRange2D
 
 class Extract(allNodes: Map<Coordinate, AbstractNode>, range: CoordinateRange2D) {
+    private constructor(extractNodes: Map<Coordinate, AbstractNode>, width: Int, height: Int) :
+            this(extractNodes, CoordinateRange2D(0 until width, 0 until height))
+
+    val nodes: Map<Coordinate, AbstractNode>
+    val width: Int
+    val height: Int
+
     val isEmpty: Boolean get() = nodes.isEmpty()
-    var nodes: Map<Coordinate, AbstractNode> private set
-    var width: Int private set
-    var height: Int private set
 
     init {
         //Normalisation
@@ -19,49 +23,48 @@ class Extract(allNodes: Map<Coordinate, AbstractNode>, range: CoordinateRange2D)
         height = range.height
     }
 
-    fun mirrorHorizontal() {
-        val newNodes =
-                nodes.mapKeys { (coord, _) ->
-                    val newX = width - coord.x - 1
-                    return@mapKeys Coordinate(newX, coord.y)
-                }
-        newNodes.values.forEach { it.direction = it.direction.mirrorHorizontal }
-        nodes = newNodes
-    }
+    val mirroredHorizontal: Extract
+        get() {
+            val newNodes =
+                    nodes.mapKeys { (coord, _) ->
+                        val newX = width - coord.x - 1
+                        return@mapKeys Coordinate(newX, coord.y)
+                    }.mapValues { (_, node) -> node.mirroredHorizontal }
+            return Extract(newNodes, width, height)
+        }
 
-    fun mirrorVertical() {
-        val newNodes =
-                nodes.mapKeys { (coord, _) ->
-                    val newY = height - coord.y - 1
-                    return@mapKeys Coordinate(coord.x, newY)
-                }
-        newNodes.values.forEach { it.direction = it.direction.mirrorVertical }
-        nodes = newNodes
-    }
+    val mirroredVertical: Extract
+        get() {
+            val newNodes =
+                    nodes.mapKeys { (coord, _) ->
+                        val newY = height - coord.y - 1
+                        return@mapKeys Coordinate(coord.x, newY)
+                    }.mapValues { (_, node) -> node.mirroredVertical }
+            return Extract(newNodes, width, height)
+        }
 
-    fun rotateClockwise() {
+    val rotatedClockwise: Extract
+        get() {
         val newNodes = nodes.mapKeys { (coord, _) ->
             val newX = height - coord.y - 1
             val newY = coord.x
             return@mapKeys Coordinate(newX, newY)
-        }
-        newNodes.forEach { (_, node) -> node.clockwise() }
-        nodes = newNodes
+        }.mapValues { (_, node) -> node.clockwise }
 
         val oldWidth = width
         val oldHeight = height
-        width = oldHeight
-        height = oldWidth
+            val newWidth = oldHeight
+            val newHeight = oldWidth
+
+            return Extract(newNodes, newWidth, newHeight)
     }
 
-    fun trim() {
-        val minX = nodes.keys.map(Coordinate::x).min()!!
-        val minY = nodes.keys.map(Coordinate::y).min()!!
-        val minCoord = Coordinate(minX, minY)
-        nodes = nodes.mapKeys { (coord, _) -> coord - minCoord }
-        val maxX = nodes.keys.map(Coordinate::x).max()!!
-        val maxY = nodes.keys.map(Coordinate::y).max()!!
-        width = maxX + 1
-        height = maxY + 1
-    }
+    val trimmed: Extract
+        get() {
+            val minX = nodes.keys.map(Coordinate::x).min()!!
+            val minY = nodes.keys.map(Coordinate::y).min()!!
+            val maxX = nodes.keys.map(Coordinate::x).max()!!
+            val maxY = nodes.keys.map(Coordinate::y).max()!!
+            return Extract(nodes, CoordinateRange2D(minX..maxX, minY..maxY))
+        }
 }

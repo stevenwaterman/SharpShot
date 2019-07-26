@@ -22,6 +22,8 @@ class ListNode(direction: Direction) : AbstractInputNode(direction) {
         return bullets
     }
 
+    override fun copyWithDirection(direction: Direction) = ListNode(direction)
+
     override fun reset() {
         inputs.clear()
         nextIndex = 0

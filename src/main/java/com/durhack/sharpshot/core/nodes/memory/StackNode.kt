@@ -27,4 +27,6 @@ class StackNode(direction: Direction) : AbstractNode(direction) {
     }
 
     override val type = "stack"
+
+    override fun copyWithDirection(direction: Direction) = StackNode(direction)
 }

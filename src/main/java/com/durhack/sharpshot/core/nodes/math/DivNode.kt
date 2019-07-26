@@ -12,4 +12,6 @@ class DivNode(direction: Direction) : AbstractMathNode(direction) {
     }
 
     override val type = "divide"
+
+    override fun copyWithDirection(direction: Direction) = DivNode(direction)
 }
