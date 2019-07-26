@@ -15,6 +15,7 @@ class LayerContainer : View() {
     val singleNodeEdit: SingleNodeEdit by inject()
     val boardSelector: BoardSelector by inject()
     val createNodeClickLayer: CreateNodeClickLayer by inject()
+    val pastePositioner: PastePositioner by inject()
     val viewPopover: ViewPopover by inject()
 
     val layers = listOf(
@@ -22,6 +23,7 @@ class LayerContainer : View() {
             singleNodeEdit,
             boardSelector,
             createNodeClickLayer,
+            pastePositioner,
             viewPopover
                        )
 

@@ -6,7 +6,7 @@ import com.durhack.sharpshot.gui.container.Extract
 import com.durhack.sharpshot.gui.util.CoordinateRange2D
 import com.durhack.sharpshot.util.globalContainer
 
-object ContainerModifier {
+object GlobalContainerModifier {
     private val fullRange: CoordinateRange2D
         get() = CoordinateRange2D(0 until globalContainer.width,
                                   0 until globalContainer.height)

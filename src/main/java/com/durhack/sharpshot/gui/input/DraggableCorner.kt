@@ -1,6 +1,6 @@
 package com.durhack.sharpshot.gui.input
 
-import com.durhack.sharpshot.core.control.ContainerModifier
+import com.durhack.sharpshot.core.control.GlobalContainerModifier
 import com.durhack.sharpshot.core.state.Direction
 import com.durhack.sharpshot.gui.container.ContainerView
 import com.durhack.sharpshot.gui.shapes.Draw
@@ -20,13 +20,13 @@ class DraggableCorner(val vertical: Direction, val horizontal: Direction) : Frag
             Draw.rightAngleTriangle(graphicsContext2D, vertical, 0.0, 0.0, 20, Color.BLACK)
             makeDraggable(ContainerView.innerScaleProp.divide(2)) { _, _, direction ->
                 if (direction == vertical || direction == horizontal) {
-                    ContainerModifier.increaseSize(direction)
+                    GlobalContainerModifier.increaseSize(direction)
                     containerView.render()
                     true
                 }
                 else {
-                    if (ContainerModifier.canDecreaseSize(direction)) {
-                        ContainerModifier.decreaseSize(direction)
+                    if (GlobalContainerModifier.canDecreaseSize(direction)) {
+                        GlobalContainerModifier.decreaseSize(direction)
                         containerView.render()
                         true
                     }

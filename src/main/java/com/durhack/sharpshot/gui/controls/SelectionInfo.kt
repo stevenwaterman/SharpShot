@@ -1,7 +1,8 @@
 package com.durhack.sharpshot.gui.controls
 
-import com.durhack.sharpshot.core.control.ContainerModifier
+import com.durhack.sharpshot.core.control.GlobalContainerModifier
 import com.durhack.sharpshot.gui.container.ContainerView
+import com.durhack.sharpshot.gui.util.range
 import com.durhack.sharpshot.util.globalExtract
 import com.durhack.sharpshot.util.globalSelection
 import com.durhack.sharpshot.util.globalSelectionProp
@@ -14,22 +15,10 @@ class SelectionInfo : View() {
 
     private val isSelected = globalSelectionProp.booleanBinding(globalSelectionProp) { it != null }
     private val selectionWidth = globalSelectionProp.integerBinding(globalSelectionProp) {
-        if (it == null) {
-            0
-        }
-        else {
-            val range = it.xRange
-            range.endInclusive - range.start
-        }
+        it?.xRange?.range ?: 0
     }
     private val selectionHeight = globalSelectionProp.integerBinding(globalSelectionProp) {
-        if (it == null) {
-            0
-        }
-        else {
-            val range = it.yRange
-            range.endInclusive - range.start
-        }
+        it?.yRange?.range ?: 0
     }
 
     override val root = vbox(8.0, Pos.CENTER) {
@@ -54,7 +43,7 @@ class SelectionInfo : View() {
         button("Delete") {
             enableWhen(isSelected)
             action {
-                ContainerModifier.clear(globalSelection!!)
+                GlobalContainerModifier.clear(globalSelection!!)
                 globalSelection = null
                 containerView.render()
             }
@@ -63,7 +52,7 @@ class SelectionInfo : View() {
         button("Cut") {
             enableWhen(isSelected)
             action {
-                val extract = ContainerModifier.cut(globalSelection!!)
+                val extract = GlobalContainerModifier.cut(globalSelection!!)
                 globalExtract = extract
                 globalSelection = null
                 containerView.render()
@@ -73,7 +62,7 @@ class SelectionInfo : View() {
         button("Copy") {
             enableWhen(isSelected)
             action {
-                val extract = ContainerModifier.copy(globalSelection!!)
+                val extract = GlobalContainerModifier.copy(globalSelection!!)
                 globalSelection = null
                 globalExtract = extract
             }

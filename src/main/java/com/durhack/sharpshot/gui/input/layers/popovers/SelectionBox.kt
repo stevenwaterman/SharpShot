@@ -44,7 +44,7 @@ class SelectionBox : View() {
             val yCoordMax = yRange.endInclusive
 
             val minCoord = FractionalCoordinate(xCoordMin, yCoordMin)
-            val maxCoord = FractionalCoordinate(xCoordMax, yCoordMax)
+            val maxCoord = FractionalCoordinate(xCoordMax + 1, yCoordMax + 1)
 
             val minPoint = containerView.getPoint(minCoord)
             val maxPoint = containerView.getPoint(maxCoord)

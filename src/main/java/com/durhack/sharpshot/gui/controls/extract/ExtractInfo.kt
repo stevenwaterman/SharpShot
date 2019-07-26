@@ -1,5 +1,6 @@
 package com.durhack.sharpshot.gui.controls.extract
 
+import com.durhack.sharpshot.gui.input.layers.popovers.PasteHover
 import com.durhack.sharpshot.util.globalExtract
 import com.durhack.sharpshot.util.globalExtractProp
 import javafx.geometry.Pos
@@ -56,7 +57,7 @@ class ExtractInfo : View() {
         button("Place") {
             enableWhen(extractSet)
             action {
-                //TODO
+                PasteHover.pasting = true
             }
         }
 

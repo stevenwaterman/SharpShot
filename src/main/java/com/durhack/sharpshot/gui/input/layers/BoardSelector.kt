@@ -11,7 +11,8 @@ import com.durhack.sharpshot.util.globalSelection
 import javafx.scene.input.MouseButton
 import javafx.scene.layout.Priority
 import tornadofx.*
-import kotlin.math.*
+import kotlin.math.max
+import kotlin.math.min
 
 class BoardSelector : View() {
     private val containerView: ContainerView by inject()
@@ -83,13 +84,13 @@ class BoardSelector : View() {
         val startX = start.x
         val endX = end.x
         val xRange = intRange(startX, endX)
-        val validX = 0..globalContainer.width
+        val validX = 0 until globalContainer.width
         val clampX = xRange.intersect(validX)
 
         val startY = start.y
         val endY = end.y
         val yRange = intRange(startY, endY)
-        val validY = 0..globalContainer.height
+        val validY = 0 until globalContainer.height
         val clampY = yRange.intersect(validY)
 
         val range = CoordinateRange2D(clampX, clampY)
@@ -100,13 +101,10 @@ class BoardSelector : View() {
     }
 
     private fun intRange(a: Double, b: Double): IntRange {
-        val min = min(a, b)
-        val max = max(a, b)
+        val min = min(a, b).toInt()
+        val max = max(a, b).toInt()
 
-        val floor = floor(min).roundToInt()
-        val ceil = ceil(max).roundToInt()
-
-        return floor..ceil
+        return min..max
     }
 
     private fun IntRange.intersect(oth: IntRange): IntRange {

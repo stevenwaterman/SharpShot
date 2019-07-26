@@ -1,5 +1,6 @@
 package com.durhack.sharpshot.core.state
 
+import com.durhack.sharpshot.gui.util.FractionalCoordinate
 import com.durhack.sharpshot.util.globalContainer
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
@@ -52,6 +53,7 @@ class Coordinate(val x: Int, val y: Int) {
     override fun toString() = "Coordinate(x=$x, y=$y)"
 
     val existsInGlobalContainer get() = globalContainer.isInside(this)
+    val fractional get() = FractionalCoordinate(x, y)
 
     companion object {
         fun fromJson(json: JsonObject): Coordinate {

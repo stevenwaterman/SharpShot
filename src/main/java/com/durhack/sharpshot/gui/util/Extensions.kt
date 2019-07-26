@@ -12,6 +12,7 @@ import javafx.scene.Node
 import javafx.scene.input.MouseEvent
 import javafx.scene.input.ScrollEvent
 import tornadofx.*
+import kotlin.math.abs
 
 fun ui(function: () -> Unit) = Platform.runLater(function)
 
@@ -67,3 +68,5 @@ val MouseEvent.point: Point2D
 
 val MouseEvent.coord: Coordinate?
     get() = containerView.getCoord(x, y).validInGlobalContainer
+
+val IntRange.range: Int get() = abs(start - endInclusive) + 1

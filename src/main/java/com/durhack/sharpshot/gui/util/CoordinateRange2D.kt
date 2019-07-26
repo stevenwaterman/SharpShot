@@ -7,8 +7,8 @@ data class CoordinateRange2D(val xRange: IntRange, val yRange: IntRange) {
         return it.x in xRange && it.y in yRange
     }
 
-    val width = xRange.endInclusive - xRange.start + 1
-    val height = yRange.endInclusive - yRange.start + 1
+    val width = xRange.range
+    val height = yRange.range
 
     val low = Coordinate(xRange.start, yRange.start)
     val high = Coordinate(xRange.endInclusive, yRange.endInclusive)
